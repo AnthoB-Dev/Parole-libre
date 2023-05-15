@@ -343,6 +343,6 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
         {% endblock %}
     </body>
 </html>
-", "base.html.twig", "C:\\wamp64\\www\\parole_libre\\templates\\base.html.twig");
+", "base.html.twig", "C:\\wamp64\\www\\parole-libre\\templates\\base.html.twig");
     }
 }

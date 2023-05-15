@@ -204,6 +204,6 @@ class __TwigTemplate_ad1840ec76ab3375d91bec03bc56cce3 extends Template
     </button>
 </form>
 {% endblock %}
-", "security/login.html.twig", "C:\\wamp64\\www\\parole_libre\\templates\\security\\login.html.twig");
+", "security/login.html.twig", "C:\\wamp64\\www\\parole-libre\\templates\\security\\login.html.twig");
     }
 }
