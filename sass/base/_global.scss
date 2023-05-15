@@ -23,7 +23,13 @@
 
     --clr-body-content: #F4F4F4;
 
+    --clr-brand-twitter: #1da1f2;
+    --clr-brand-facebook: #1877f2;
+    --clr-brand-tiktok: #000000;
+
     // Others //
+    --clr-black: #0E0F19;
+    --clr-grey: #87878C;
 
     //- Widths
     --icons-w50: 50px;
@@ -43,8 +49,16 @@
     box-sizing: border-box;
 }
 
-.body {
+.body-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#main-container {
     max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 html {

@@ -16,7 +16,9 @@
 @import "./layout/nav";
 
 // From "pages"
+@import "./pages/global";
 @import "./pages/admin";
+@import "./pages/accueil";
 
 // From "utils"
 @import "./utils/classes";

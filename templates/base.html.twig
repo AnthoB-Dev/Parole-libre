@@ -5,8 +5,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Parole Libre{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        <link href="node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet"> 
+        <link rel="shortcut icon" href="{{asset("favicon.ico")}}" type="image/x-icon">
+        <link href="../node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet"> 
+        <link rel="stylesheet" href="{{asset("assets/css/style.css")}}">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -24,21 +25,45 @@
 
                 <div class="container-header-content">
 
+                    <div class="container-header-icons">
+                        <div class="container-boxes">
+                            <div class="social-box"><a href="#" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a></div>
+                            <div class="social-box"><a href="#" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a></div>
+                            <div class="social-box"><a href="#" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a></div>
+                        </div>
+                    </div>
+                    <div class="container-header-logo">
+                        <img src="{{asset("assets/img/2-logo-no-background-315x106.png")}}" alt="Logo du site d'informations 'Parole Libre'">
+                    </div>
+                    <div class="container-header-icons">
+                        <div class="container-boxes no-shadows">
+                            <div class="social-box"><a href="#" class="icon-search"><i class="fa-solid fa-magnifying-glass"></i></a></div>
+                            <div class="social-box"><a href="#" class="icon-user"><i class="fa-solid fa-user"></i></a></div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <nav class="container-header-nav">
-
+                    <ul class="header-navlinks">
+                        <li><a href="">Politique</a></li>
+                        <li><a href="">Géopolitique</a></li>
+                        <li><a href="">Économie</a></li>
+                        <li><a href="">Société</a></li>
+                        <li><a href="">Arts & Littératures</a></li>
+                        <li><a href="">Parole Libre</a></li>
+                    </ul>
                 </nav>
 
             </header>
 
         {% endblock %}
 
-        <div class="body-container">
+        <main class="body-container">
 
             {% block body %}
 
-                <div id="main">
+                <div id="main-container">
 
                     {% block main %}{% endblock %}
 
@@ -46,7 +71,7 @@
 
             {% endblock %}
 
-        </div>
+        </main>
 
         {% block footer %}
 
