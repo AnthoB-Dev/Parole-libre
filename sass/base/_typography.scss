@@ -1,0 +1,72 @@
+// Roboto
+@font-face {
+   font-family: 'roboto-regular';
+   src: url('../../public/assets/fonts/Roboto-webfontkit/roboto-regular-webfont.woff2') format('woff2'),
+        url('../../public/assets/fonts/Roboto-webfontkit/roboto-regular-webfont.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'roboto-bold';
+   src: url('../../public/assets/fonts/Roboto-webfontkit/roboto-bold-webfont.woff2') format('woff2'),
+        url('../../public/assets/fonts/Roboto-webfontkit/roboto-bold-webfont.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+// Roboto Slab
+@font-face {
+   font-family: 'roboto_slabregular';
+   src: url('../../public/assets/fonts/Roboto_Slab-webfontkit/robotoslab-regular-webfont.woff2') format('woff2'),
+        url('../../public/assets/fonts/Roboto_Slab-webfontkit/robotoslab-regular-webfont.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'roboto_slabmedium';
+   src: url('../../public/assets/fonts/Roboto_Slab-webfontkit/robotoslab-medium-webfont.woff2') format('woff2'),
+        url('../../public/assets/fonts/Roboto_Slab-webfontkit/robotoslab-medium-webfont.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'roboto_slabbold';
+   src: url('../../public/assets/fonts/Roboto_Slab-webfontkit/robotoslab-bold-webfont.woff2') format('woff2'),
+        url('../../public/assets/fonts/Roboto_Slab-webfontkit/robotoslab-bold-webfont.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+
+:root {
+   font-family: "roboto-regular";
+   font-size: 16px;
+}
+
+h1 {
+   font-family: "roboto_slabbold";
+   font-size: 48px;
+}
+
+h2 {
+   font-family: "roboto_slabbold";
+   font-size: 36px;
+}
+
+h3 {
+   font-family: "roboto_slabbold";
+   font-size: 24px;
+}
+
+h4 {
+   font-family: "roboto_slabbold";
+   font-size: 16px;
+}
+
+a {
+   font-family: "roboto_slabbold";
+   font-size: 20px;
+}
