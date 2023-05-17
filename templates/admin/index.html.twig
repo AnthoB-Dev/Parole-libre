@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+
+<aside class="sidebar-admin">
+   {% include "components/_sidebar-admin.html.twig" %}
+</aside>
+
+<div class="container-admin d-flex f-col">
+   <a href="{{path("app_admin_content")}}" class="mb-3">Modifier les contenus présents sur le site</a>
+   <a href="{{path("app_admin_structure")}}">Modifier la structure de certains éléments du site</a>
+</div>
+
+
+{% endblock %}

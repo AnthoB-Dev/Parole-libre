@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Modifier les catégories{% endblock %}
+
+{% block body %}
+
+   <div>
+      <a href="{{path("app_admin_structure_categories_add")}}">Ajouter une catégorie</a>
+   </div>
+
+   {% if categories is defined %}
+      <div>
+         <h2>Catégories existante :</h2>
+
+         {% for category in categories %}
+            <p>{{category.name}}</p>   
+         {% endfor %}
+      </div>
+   {% endif %}
+
+{% endblock %}

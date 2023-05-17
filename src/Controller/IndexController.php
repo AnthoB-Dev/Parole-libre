@@ -14,10 +14,4 @@ class IndexController extends AbstractController
         return $this->render('index/index.html.twig');
     }
 
-    // Test d'une autre route (pour l'affichage dynamique JS)
-    #[Route("/politique", name:"politique")]
-    public function politique(): Response
-    {
-        return $this->render('index/politique.html.twig');
-    }
 }

@@ -36,6 +36,7 @@
 .body-container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -128,7 +129,7 @@ a {
 }
 
 #header-container {
-  height: 220px;
+  height: 130px;
 }
 #header-container .container-header-content {
   width: 100%;
@@ -207,16 +208,27 @@ a {
   height: 50px;
   border-radius: 50%;
 }
-#header-container .container-header-nav {
+
+.container-header-nav {
   margin-top: 2.5rem;
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  padding: 0.7rem 0;
+  box-shadow: 0 2px 3px -2px;
+  background: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(9px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
-#header-container .container-header-nav .header-navlinks {
+.container-header-nav .header-navlinks {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
 }
-#header-container .container-header-nav .header-navlinks li a {
+.container-header-nav .header-navlinks li a {
   color: #0E0F19;
   padding: 0.5rem;
   text-transform: uppercase;
@@ -227,7 +239,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding-top: 280px;
+  padding-top: 150px;
   margin-bottom: var(--spacing-categories);
 }
 .container-content-header .container-title-header {
@@ -588,16 +600,114 @@ a {
   font-family: "roboto_slabmedium";
   font-size: 11px;
 }
-.container-content-body .wrapper-body-sidebar .container-body-sidebar-title {
+.container-content-body .wrapper-body-sidebar {
+  flex-basis: 23%;
+  width: 100%;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  border-bottom: solid 2px var(--clr-black);
-  padding: 1rem 1rem 0.5rem;
+  flex-direction: column;
+  padding: 0 1rem;
 }
-.container-content-body .wrapper-body-sidebar .container-body-sidebar-title h2 {
+.container-content-body .wrapper-body-sidebar .container-sidebar {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 7px -1px;
+  border-radius: 5px 5px 0 0;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--clr-logo-green);
+  padding: 0.5rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  border-radius: 5px 5px 0 0;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card {
+  padding: 0 1rem;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card:last-child {
+  padding-bottom: 1rem;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards {
+  display: flex;
+  border: solid 1px #87878C;
+  border-radius: 5px 5px 0 0;
+  box-shadow: 0 1px 2px 0px;
+  min-height: 75px;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-author {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-author .body-sidebar-cards-author-spans {
+  display: flex;
+  flex-wrap: wrap;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-author .body-sidebar-cards-author-spans p {
+  font-family: "roboto_slabmedium";
+  font-size: 10px;
+  color: var(--clr-logo-red);
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-left: dashed 1px #D0D0D2;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content p {
+  padding: 5px;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-title {
+  background-color: var(--clr-economie);
+  border-radius: 0 5px 0 0;
+  color: #ffffff;
   text-transform: uppercase;
 }
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-title h5 {
+  padding: 5px;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-content p {
+  font-family: "roboto_slabmedium";
+  font-size: 11px;
+}
+#body-admin {
+  display: flex;
+}
+#body-admin .sidebar-admin {
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+#body-admin .sidebar-placeholder {
+  width: 280px;
+  height: 100vh;
+  flex-basis: 15%;
+}
+#body-admin .body-container-admin {
+  flex-basis: 85%;
+  width: 100%;
+  padding: 3rem;
+}
+
 .container-body-authors {
   width: 100%;
   display: flex;

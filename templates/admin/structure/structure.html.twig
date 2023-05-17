@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Structure du site{% endblock %}
+
+{% block body %}
+
+{% block main %}
+
+   <h1>Accueil - Structure du site</h1>
+
+   <a href="{{path("app_admin_structure_categories")}}">Catégories</a>
+   <a href="{{path("app_admin_structure_reportReasons")}}">Raisons de signalement</a>
+   
+{% endblock %}
+
+
+{% endblock %}

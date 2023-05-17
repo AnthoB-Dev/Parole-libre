@@ -1,1 +1,24 @@
+#body-admin {
+   display: flex;
+
+   .sidebar-admin {
+      display: flex;
+      position: fixed;
+      left: 0;
+      top: 0;
+   }
+
+   .sidebar-placeholder {
+      width: 280px;
+      height: 100vh;
+      flex-basis: 15%;
+   }
+
+   .body-container-admin {
+      flex-basis: 85%;
+      width: 100%;  
+      padding: 3rem;
+   }
+}
+
 

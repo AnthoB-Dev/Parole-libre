@@ -1,0 +1,52 @@
+<aside class="sidebar-admin">
+
+   <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;">
+      <a href="{{path("app_admin_index")}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+         <span class="fs-4">Panel Admin</span>
+      </a>
+      <hr>
+      <div class="d-flex flex-column ms-3 mb-auto">
+         
+         <div class="dropdown mb-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+               Contenu
+            </button>
+            <ul class="dropdown-menu">
+               <li>
+                  <a href="{{path("app_admin_content")}}" class="dropdown-item">Accueil</a>
+               </li>
+               <li>
+                  <a href="{{path("app_admin_users")}}" class="dropdown-item">- Utilisateurs</a>
+               </li>
+               <li>
+                  <a href="{{path("app_admin_articles")}}" class="dropdown-item">- Articles</a>
+               </li>
+               <li>
+                  <a href="{{path("app_admin_commentaries")}}" class="dropdown-item">- Commentaires</a>
+               </li>
+               <li>
+                  <a href="{{path("app_admin_reports")}}" class="dropdown-item">- Signalements</a>
+               </li>
+            </ul>
+         </div>
+
+         <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+               Structure
+            </button>
+            <ul class="dropdown-menu">
+               <li>
+                  <a href="{{path("app_admin_structure")}}" class="dropdown-item">Accueil</a>
+               </li>
+               <li>
+                  <a href="{{path("app_admin_structure_categories")}}" class="dropdown-item">- Catégories</a>
+               </li>
+               <li>
+                  <a href="{{path("app_admin_structure_reportReasons")}}" class="dropdown-item">- Raisons de signalement</a>
+               </li>
+            </ul>
+         </div>
+
+      </div>
+      <a href="{{path("accueil")}}" class="btn btn-danger mb-5">Sortir du panel admin</a>
+</aside>

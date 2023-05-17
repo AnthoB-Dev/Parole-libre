@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Ajouter une catégorie{% endblock %}
+
+{% block body %}
+   <h1>Ajouter une catégorie</h1>
+
+   <div>
+      {{form_start(form)}}
+
+         {{form_row(form.name)}}
+
+         <button type="submit">Ajouter</button>
+      {{form_end(form)}}
+   </div>
+
+{% if categories %}
+   <div>
+      <h2>Catégories existante :</h2>
+
+      {% for category in categories %}
+         <p>{{category.name}}</p>   
+      {% endfor %}
+   </div>
+{% endif %}
+
+{% endblock %}

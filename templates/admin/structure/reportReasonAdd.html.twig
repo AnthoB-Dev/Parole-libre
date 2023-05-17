@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Ajouter un type de signalement{% endblock %}
+
+{% block body %}
+   <h1>Ajouter un type de signalement</h1>
+
+   <div>
+      {{form_start(form)}}
+
+         {{form_row(form.title)}}
+
+         <button type="submit">Ajouter</button>
+      {{form_end(form)}}
+   </div>
+
+   {% if reportReasons is defined %}
+      <div>
+         <h2>Signalement existant :</h2>
+
+         {% for reportReason in reportReasons %}
+            <p>{{reportReason.title}}</p>   
+         {% endfor %}
+      </div>
+   {% endif %}
+
+{% endblock %}

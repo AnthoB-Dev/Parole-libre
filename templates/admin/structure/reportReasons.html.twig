@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Raisons de signalement{% endblock %}
+
+{% block body %}
+
+   <div>
+      <a href="{{path("app_admin_structure_reportReasons_add")}}">Ajouter un type de signalement</a>
+   </div>
+
+   {% if reportReasons is defined %}
+      <div>
+         <h2>Signalement existant :</h2>
+
+         {% for reportReason in reportReasons %}
+            <p>{{reportReason.title}}</p>   
+         {% endfor %}
+      </div>
+   {% endif %}
+
+{% endblock %}
