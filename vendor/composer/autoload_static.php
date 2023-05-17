@@ -33,6 +33,7 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         'T' => 
         array (
             'Twig\\Extra\\TwigExtraBundle\\' => 27,
+            'Twig\\Extra\\Intl\\' => 16,
             'Twig\\' => 5,
         ),
         'S' => 
@@ -164,6 +165,10 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         'Twig\\Extra\\TwigExtraBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/extra-bundle',
+        ),
+        'Twig\\Extra\\Intl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twig/intl-extra',
         ),
         'Twig\\' => 
         array (
@@ -553,13 +558,35 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
     );
 
     public static $classMap = array (
+        'App\\Controller\\AdminController' => __DIR__ . '/../..' . '/src/Controller/AdminController.php',
+        'App\\Controller\\ArticleController' => __DIR__ . '/../..' . '/src/Controller/ArticleController.php',
+        'App\\Controller\\BlogController' => __DIR__ . '/../..' . '/src/Controller/BlogController.php',
+        'App\\Controller\\IndexController' => __DIR__ . '/../..' . '/src/Controller/IndexController.php',
         'App\\Controller\\RegistrationController' => __DIR__ . '/../..' . '/src/Controller/RegistrationController.php',
         'App\\Controller\\SecurityController' => __DIR__ . '/../..' . '/src/Controller/SecurityController.php',
+        'App\\Entity\\Article' => __DIR__ . '/../..' . '/src/Entity/Article.php',
+        'App\\Entity\\ArticleComment' => __DIR__ . '/../..' . '/src/Entity/ArticleComment.php',
+        'App\\Entity\\ArticleLike' => __DIR__ . '/../..' . '/src/Entity/ArticleLike.php',
+        'App\\Entity\\Category' => __DIR__ . '/../..' . '/src/Entity/Category.php',
+        'App\\Entity\\CommentLike' => __DIR__ . '/../..' . '/src/Entity/CommentLike.php',
+        'App\\Entity\\Report' => __DIR__ . '/../..' . '/src/Entity/Report.php',
+        'App\\Entity\\ReportReason' => __DIR__ . '/../..' . '/src/Entity/ReportReason.php',
         'App\\Entity\\User' => __DIR__ . '/../..' . '/src/Entity/User.php',
+        'App\\Form\\ArticleType' => __DIR__ . '/../..' . '/src/Form/ArticleType.php',
+        'App\\Form\\CategoryType' => __DIR__ . '/../..' . '/src/Form/CategoryType.php',
         'App\\Form\\RegistrationFormType' => __DIR__ . '/../..' . '/src/Form/RegistrationFormType.php',
+        'App\\Form\\ReportReasonType' => __DIR__ . '/../..' . '/src/Form/ReportReasonType.php',
         'App\\Kernel' => __DIR__ . '/../..' . '/src/Kernel.php',
+        'App\\Repository\\ArticleCommentRepository' => __DIR__ . '/../..' . '/src/Repository/ArticleCommentRepository.php',
+        'App\\Repository\\ArticleLikeRepository' => __DIR__ . '/../..' . '/src/Repository/ArticleLikeRepository.php',
+        'App\\Repository\\ArticleRepository' => __DIR__ . '/../..' . '/src/Repository/ArticleRepository.php',
+        'App\\Repository\\CategoryRepository' => __DIR__ . '/../..' . '/src/Repository/CategoryRepository.php',
+        'App\\Repository\\CommentLikeRepository' => __DIR__ . '/../..' . '/src/Repository/CommentLikeRepository.php',
+        'App\\Repository\\ReportReasonRepository' => __DIR__ . '/../..' . '/src/Repository/ReportReasonRepository.php',
+        'App\\Repository\\ReportRepository' => __DIR__ . '/../..' . '/src/Repository/ReportRepository.php',
         'App\\Repository\\UserRepository' => __DIR__ . '/../..' . '/src/Repository/UserRepository.php',
         'App\\Security\\AppCustomAuthenticator' => __DIR__ . '/../..' . '/src/Security/AppCustomAuthenticator.php',
+        'App\\Twig\\AppExtension' => __DIR__ . '/../..' . '/src/Twig/AppExtension.php',
         'Collator' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Collator.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
@@ -5931,6 +5958,7 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         'Twig\\Extension\\SandboxExtension' => __DIR__ . '/..' . '/twig/twig/src/Extension/SandboxExtension.php',
         'Twig\\Extension\\StagingExtension' => __DIR__ . '/..' . '/twig/twig/src/Extension/StagingExtension.php',
         'Twig\\Extension\\StringLoaderExtension' => __DIR__ . '/..' . '/twig/twig/src/Extension/StringLoaderExtension.php',
+        'Twig\\Extra\\Intl\\IntlExtension' => __DIR__ . '/..' . '/twig/intl-extra/IntlExtension.php',
         'Twig\\Extra\\TwigExtraBundle\\DependencyInjection\\Compiler\\MissingExtensionSuggestorPass' => __DIR__ . '/..' . '/twig/extra-bundle/DependencyInjection/Compiler/MissingExtensionSuggestorPass.php',
         'Twig\\Extra\\TwigExtraBundle\\DependencyInjection\\Configuration' => __DIR__ . '/..' . '/twig/extra-bundle/DependencyInjection/Configuration.php',
         'Twig\\Extra\\TwigExtraBundle\\DependencyInjection\\TwigExtraExtension' => __DIR__ . '/..' . '/twig/extra-bundle/DependencyInjection/TwigExtraExtension.php',
