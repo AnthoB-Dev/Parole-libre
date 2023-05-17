@@ -20,8 +20,8 @@
             gap: 15px;
 
             .social-box {
-               width: 40px;
-               height: 40px;
+               width: 35px;
+               height: 35px;
                border-radius: 50%;
                box-shadow: 0px 1px 3px 0px;
                display: flex;
@@ -39,7 +39,7 @@
                   color: #ffffff;
 
                   i {
-                     font-size: 35px;
+                     font-size: 25px;
                   }
                }
                
@@ -87,9 +87,12 @@
          justify-content: center;
          align-items: center;
 
-         img {
-            object-fit: contain;
-            object-position: center;
+         a {
+
+            img {
+               object-fit: contain;
+               object-position: center;
+            }
          }
       }
 

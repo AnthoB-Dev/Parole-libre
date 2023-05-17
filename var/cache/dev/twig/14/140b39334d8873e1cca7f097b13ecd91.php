@@ -82,21 +82,21 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
         ";
         // line 22
         $this->displayBlock('header', $context, $blocks);
-        // line 61
+        // line 64
         echo "
         <main class=\"body-container\">
 
             ";
-        // line 64
+        // line 67
         $this->displayBlock('body', $context, $blocks);
-        // line 73
+        // line 76
         echo "
         </main>
 
         ";
-        // line 76
+        // line 79
         $this->displayBlock('footer', $context, $blocks);
-        // line 83
+        // line 86
         echo "    </body>
 </html>
 ";
@@ -197,10 +197,15 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
                         </div>
                     </div>
                     <div class=\"container-header-logo\">
-                        <img src=\"";
+                        <a href=\"";
         // line 36
+        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("accueil");
+        echo "\">
+                            <img src=\"";
+        // line 37
         echo twig_escape_filter($this->env, $this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("assets/img/2-logo-no-background-315x106.png"), "html", null, true);
         echo "\" alt=\"Logo du site d'informations 'Parole Libre'\">
+                        </a>
                     </div>
                     <div class=\"container-header-icons\">
                         <div class=\"container-boxes no-shadows\">
@@ -213,7 +218,14 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
 
                 <nav class=\"container-header-nav\">
                     <ul class=\"header-navlinks\">
-                        <li><a href=\"\">Politique</a></li>
+                        <li><a href=\"";
+        // line 51
+        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("accueil");
+        echo "\">Accueil</a></li>
+                        <li><a href=\"";
+        // line 52
+        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("politique");
+        echo "\">Politique</a></li>
                         <li><a href=\"\">Géopolitique</a></li>
                         <li><a href=\"\">Économie</a></li>
                         <li><a href=\"\">Société</a></li>
@@ -233,7 +245,7 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
 
     }
 
-    // line 64
+    // line 67
     public function block_body($context, array $blocks = [])
     {
         $macros = $this->macros;
@@ -243,14 +255,14 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
-        // line 65
+        // line 68
         echo "
                 <div id=\"main-container\">
 
                     ";
-        // line 68
+        // line 71
         $this->displayBlock('main', $context, $blocks);
-        // line 69
+        // line 72
         echo "
                 </div>
 
@@ -263,7 +275,7 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
 
     }
 
-    // line 68
+    // line 71
     public function block_main($context, array $blocks = [])
     {
         $macros = $this->macros;
@@ -281,7 +293,7 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
 
     }
 
-    // line 76
+    // line 79
     public function block_footer($context, array $blocks = [])
     {
         $macros = $this->macros;
@@ -291,7 +303,7 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "footer"));
 
-        // line 77
+        // line 80
         echo "
             <footer id=\"footer-container\">
             
@@ -318,7 +330,7 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
 
     public function getDebugInfo()
     {
-        return array (  295 => 77,  285 => 76,  267 => 68,  254 => 69,  252 => 68,  247 => 65,  237 => 64,  202 => 36,  187 => 23,  177 => 22,  164 => 16,  154 => 15,  141 => 12,  131 => 11,  112 => 7,  100 => 83,  98 => 76,  93 => 73,  91 => 64,  86 => 61,  84 => 22,  78 => 18,  76 => 15,  73 => 14,  71 => 11,  67 => 10,  62 => 8,  58 => 7,  50 => 1,);
+        return array (  307 => 80,  297 => 79,  279 => 71,  266 => 72,  264 => 71,  259 => 68,  249 => 67,  227 => 52,  223 => 51,  206 => 37,  202 => 36,  187 => 23,  177 => 22,  164 => 16,  154 => 15,  141 => 12,  131 => 11,  112 => 7,  100 => 86,  98 => 79,  93 => 76,  91 => 67,  86 => 64,  84 => 22,  78 => 18,  76 => 15,  73 => 14,  71 => 11,  67 => 10,  62 => 8,  58 => 7,  50 => 1,);
     }
 
     public function getSourceContext()
@@ -358,7 +370,9 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
                         </div>
                     </div>
                     <div class=\"container-header-logo\">
-                        <img src=\"{{asset(\"assets/img/2-logo-no-background-315x106.png\")}}\" alt=\"Logo du site d'informations 'Parole Libre'\">
+                        <a href=\"{{path(\"accueil\")}}\">
+                            <img src=\"{{asset(\"assets/img/2-logo-no-background-315x106.png\")}}\" alt=\"Logo du site d'informations 'Parole Libre'\">
+                        </a>
                     </div>
                     <div class=\"container-header-icons\">
                         <div class=\"container-boxes no-shadows\">
@@ -371,7 +385,8 @@ class __TwigTemplate_08c04a31d586f1d1312d09dccbc545dd extends Template
 
                 <nav class=\"container-header-nav\">
                     <ul class=\"header-navlinks\">
-                        <li><a href=\"\">Politique</a></li>
+                        <li><a href=\"{{path(\"accueil\")}}\">Accueil</a></li>
+                        <li><a href=\"{{path(\"politique\")}}\">Politique</a></li>
                         <li><a href=\"\">Géopolitique</a></li>
                         <li><a href=\"\">Économie</a></li>
                         <li><a href=\"\">Société</a></li>

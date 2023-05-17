@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Parole Libre - Politique{% endblock %}
+
+{% block javascripts %}
+    <script src="{{asset("assets/js/home.js")}}" defer></script>
+{% endblock %}
+
+{% block main %}
+
+    <section class="container-content-header">
+    
+        <div class="container-title-header">
+            <h2>Dernières publications ajoutés</h2>
+            <a href="#" class="btnShowMore">voir plus</a>
+        </div>
+
+        <div class="container-carrousel-header">
+
+            <div class="wrapper-carrousel-chevrons chevron-left">
+                <i class="fa-solid fa-chevron-left"></i>
+            </div>
+
+            <div class="wrapper-carrousel-mid">
+                <div class="container-carrousel-groups">
+                    <div class="carrousel-group-1">
+                        {# for article in articles #}
+                            <article class="container-carrousel-cards">
+
+                                <div class="carrousel-article-category">
+                                    <h4>Politique</h4>
+                                    <h5>Sous-titre</h5>
+                                </div>
+
+                                <div class="carrousel-article-image">
+                                    <img src="https://via.placeholder.com/480x320" alt="">
+                                    <span>Légende de l'image</span>
+                                </div>
+
+                                <div class="carrousel-article-title">
+                                    <h3>Titre de l'article</h3>
+                                </div>
+
+                                <div class="carrousel-article-content">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis voluptas, nobis doloribus sapiente sequi expedita sit eum temporibus et maiores? Soluta dolorem saepe enim repellendus! Accusamus dolores placeat tenetur repudiandae!
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore fuga animi magni odit dolore labore assumenda, earum quibusdam eveniet voluptatem cupiditate, laudantium aspernatur itaque explicabo, officia facere doloribus autem eius.
+                                </div>
+
+                                <div class="carrousel-article-actions">
+                                    <div class="article-action author"><span class="greyedOut">Auteur</span> Anthobdev</div>
+                                    <div class="article-action publishedAt"><span class="greyedOut">le</span> 15 mai 2023</div>
+                                    <div class="article-action likes">
+                                        <div>
+                                            <p>43</p><i class="fa-regular fa-comment-dots"></i>
+                                        </div>
+                                        <div>
+                                            <p>256</p><i class="fa-regular fa-thumbs-up"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="container-carrousel-cards">
+
+                                <div class="carrousel-article-category">
+                                    <h4>Politique</h4>
+                                    <h5>Sous-titre</h5>
+                                </div>
+
+                                <div class="carrousel-article-image">
+                                    <img src="https://via.placeholder.com/480x320" alt="">
+                                    <span>Légende de l'image</span>
+                                </div>
+
+                                <div class="carrousel-article-title">
+                                    <h3>Titre de l'article</h3>
+                                </div>
+
+                                <div class="carrousel-article-content">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis voluptas, nobis doloribus sapiente sequi expedita sit eum temporibus et maiores? Soluta dolorem saepe enim repellendus! Accusamus dolores placeat tenetur repudiandae!
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore fuga animi magni odit dolore labore assumenda, earum quibusdam eveniet voluptatem cupiditate, laudantium aspernatur itaque explicabo, officia facere doloribus autem eius.
+                                </div>
+
+                                <div class="carrousel-article-actions">
+                                    <div class="article-action author"><span>Auteur</span> Anthobdev</div>
+                                    <div class="article-action publishedAt"><span>le</span> 15 mai 2023</div>
+                                    <div class="article-action likes">
+                                        <div>
+                                            <p>43</p><i class="fa-regular fa-comment-dots"></i>
+                                        </div>
+                                        <div>
+                                            <p>256</p><i class="fa-regular fa-thumbs-up"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="container-carrousel-cards">
+
+                                <div class="carrousel-article-category">
+                                    <h4>Politique</h4>
+                                    <h5>Sous-titre</h5>
+                                </div>
+
+                                <div class="carrousel-article-image">
+                                    <img src="https://via.placeholder.com/480x320" alt="">
+                                    <span>Légende de l'image</span>
+                                </div>
+
+                                <div class="carrousel-article-title">
+                                    <h3>Titre de l'article</h3>
+                                </div>
+
+                                <div class="carrousel-article-content">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis voluptas, nobis doloribus sapiente sequi expedita sit eum temporibus et maiores? Soluta dolorem saepe enim repellendus! Accusamus dolores placeat tenetur repudiandae!
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore fuga animi magni odit dolore labore assumenda, earum quibusdam eveniet voluptatem cupiditate, laudantium aspernatur itaque explicabo, officia facere doloribus autem eius.
+                                </div>
+
+                                <div class="carrousel-article-actions">
+                                    <div class="article-action author"><span>Auteur</span> Anthobdev</div>
+                                    <div class="article-action publishedAt"><span>le</span> 15 mai 2023</div>
+                                    <div class="article-action likes">
+                                        <div>
+                                            <p>43</p><i class="fa-regular fa-comment-dots"></i>
+                                        </div>
+                                        <div>
+                                            <p>256</p><i class="fa-regular fa-thumbs-up"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        {# endfor #}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wrapper-carrousel-chevrons chevron-right">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        
+        </div>
+    
+    </section>
+
+    <section class="container-content-body">
+    
+        <div class="wrapper-body-content">
+
+            <div class="container-body-categories">
+
+                <div class="container-categories-title">
+                    <h2>économie</h2>
+                    <a href="#" class="btnShowMore">voir plus</a>
+                </div>
+
+                <div class="container-categories-content">
+
+                    <div class="wrapper-body-categories-content">
+
+                        <div class="container-body-category-title">
+                            <h3>Derniers ajouts</h3>
+                        </div>
+
+                        <div class="container-body-category-content">
+
+                            <div class="body-categories-chevrons chevron-left">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </div>
+
+                            <div class="body-categories-cards">
+                                <article class="body-categories-cards-container">
+
+                                    <div class="container-card-image">
+                                        <img src="https://via.placeholder.com/480x320" alt="">
+                                    </div>
+                                    <div class="container-card-title">
+                                        <h4>Titre de l'article</h4>
+                                    </div>
+                                    <div class="container-card-content">
+                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam odit explicabo inventore est temporibus voluptas exercitationem accusamus iusto modi? Ex ducimus asperiores perspiciatis doloremque, quasi voluptatibus. Ducimus temporibus autem omnis!
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+                                    </div>
+                                    <div class="container-card-actions">
+                                        <p><span class="greyedOut">Auteur </span>Charles Gave <span class="greyedOut">le </span>6 mars 2023</p>
+                                    </div>
+
+                                </article>
+
+                                <article class="body-categories-cards-container">
+
+                                    <div class="container-card-image">
+                                        <img src="https://via.placeholder.com/480x320" alt="">
+                                    </div>
+                                    <div class="container-card-title">
+                                        <h4>Titre de l'article</h4>
+                                    </div>
+                                    <div class="container-card-content">
+                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam odit explicabo inventore est temporibus voluptas exercitationem accusamus iusto modi? Ex ducimus asperiores perspiciatis doloremque, quasi voluptatibus. Ducimus temporibus autem omnis!
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+                                    </div>
+                                    <div class="container-card-actions">
+                                        <p><span class="greyedOut">Auteur </span>Charles Gave <span class="greyedOut">le </span>6 mars 2023</p>
+                                    </div>
+
+                                </article>
+                            </div>
+
+                            <div class="body-categories-chevrons chevron-right">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <aside class="wrapper-body-sidebar">
+
+        </aside>
+    
+    </section>
+
+{% endblock %}

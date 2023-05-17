@@ -33,7 +33,9 @@
                         </div>
                     </div>
                     <div class="container-header-logo">
-                        <img src="{{asset("assets/img/2-logo-no-background-315x106.png")}}" alt="Logo du site d'informations 'Parole Libre'">
+                        <a href="{{path("accueil")}}">
+                            <img src="{{asset("assets/img/2-logo-no-background-315x106.png")}}" alt="Logo du site d'informations 'Parole Libre'">
+                        </a>
                     </div>
                     <div class="container-header-icons">
                         <div class="container-boxes no-shadows">
@@ -46,7 +48,8 @@
 
                 <nav class="container-header-nav">
                     <ul class="header-navlinks">
-                        <li><a href="">Politique</a></li>
+                        <li><a href="{{path("accueil")}}">Accueil</a></li>
+                        <li><a href="{{path("politique")}}">Politique</a></li>
                         <li><a href="">Géopolitique</a></li>
                         <li><a href="">Économie</a></li>
                         <li><a href="">Société</a></li>
