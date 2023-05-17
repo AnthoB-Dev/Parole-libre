@@ -27,6 +27,8 @@ return [
     'app_admin_structure_categories_add' => [[], ['_controller' => 'App\\Controller\\AdminController::addCategories'], [], [['text', '/admin/structure/categories/add']], [], [], []],
     'app_admin_structure_reportReasons' => [[], ['_controller' => 'App\\Controller\\AdminController::reportReasons'], [], [['text', '/admin/structure/signalements']], [], [], []],
     'app_admin_structure_reportReasons_add' => [[], ['_controller' => 'App\\Controller\\AdminController::addReportReasons'], [], [['text', '/admin/structure/signalements/add']], [], [], []],
+    'app_articles_index' => [[], ['_controller' => 'App\\Controller\\ArticleController::indexArticles'], [], [['text', '/articles/']], [], [], []],
+    'app_articles_add' => [[], ['_controller' => 'App\\Controller\\ArticleController::addArticle'], [], [['text', '/articles/ajouter-article']], [], [], []],
     'app_blog' => [[], ['_controller' => 'App\\Controller\\BlogController::index'], [], [['text', '/blog']], [], [], []],
     'politique' => [[], ['_controller' => 'App\\Controller\\BlogController::politique'], [], [['text', '/politique']], [], [], []],
     'economie' => [[], ['_controller' => 'App\\Controller\\BlogController::economie'], [], [['text', '/economie']], [], [], []],

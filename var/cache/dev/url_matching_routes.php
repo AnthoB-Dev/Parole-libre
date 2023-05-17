@@ -25,6 +25,8 @@ return [
         '/admin/structure/categories/add' => [[['_route' => 'app_admin_structure_categories_add', '_controller' => 'App\\Controller\\AdminController::addCategories'], null, null, null, false, false, null]],
         '/admin/structure/signalements' => [[['_route' => 'app_admin_structure_reportReasons', '_controller' => 'App\\Controller\\AdminController::reportReasons'], null, null, null, false, false, null]],
         '/admin/structure/signalements/add' => [[['_route' => 'app_admin_structure_reportReasons_add', '_controller' => 'App\\Controller\\AdminController::addReportReasons'], null, null, null, false, false, null]],
+        '/articles' => [[['_route' => 'app_articles_index', '_controller' => 'App\\Controller\\ArticleController::indexArticles'], null, null, null, true, false, null]],
+        '/articles/ajouter-article' => [[['_route' => 'app_articles_add', '_controller' => 'App\\Controller\\ArticleController::addArticle'], null, null, null, false, false, null]],
         '/blog' => [[['_route' => 'app_blog', '_controller' => 'App\\Controller\\BlogController::index'], null, null, null, false, false, null]],
         '/politique' => [[['_route' => 'politique', '_controller' => 'App\\Controller\\BlogController::politique'], null, null, null, false, false, null]],
         '/economie' => [[['_route' => 'economie', '_controller' => 'App\\Controller\\BlogController::economie'], null, null, null, false, false, null]],

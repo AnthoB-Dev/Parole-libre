@@ -2,19 +2,34 @@
 
    const categoryPolitique = "politique";
    const clrPolitique = "#FF4E00";
+
    const categoryEconomie = "économie";
    const clrEconomie = "#FFB100";
+
    const categoryGeopolitique = "géopolitique";
    const clrGeopolitique = "#3581B8";
 
+   const categorySociete = "société";
+   const clrSociete = "#C0C781";
+
+   const categoryArtsLitteratures = "arts & littératures";
+   const clrArtsLitteratures = "#C47AC0";
+
+   const categoryParoleLibre = "parole libre";
+   const clrParoleLibre = "#33673B";
+
    const coloringCarrousel = document.querySelector(".container-carrousel-header")
    const coloringCategory = document.querySelectorAll(".carrousel-article-category");
+   const nav = document.querySelector('.container-header-nav');
 
-
+   // Change la couleur dynamiquement du fond de chaque catégorie
    coloringCategory.forEach(e => {
-      const politique = categoryPolitique.toUpperCase()
-      const economie = categoryEconomie.toUpperCase()
-      const geopolitique = categoryGeopolitique.toUpperCase()
+      const politique = categoryPolitique.toUpperCase();
+      const economie = categoryEconomie.toUpperCase();
+      const geopolitique = categoryGeopolitique.toUpperCase();
+      const societe = categorySociete.toUpperCase();
+      const artsLitteratures = categoryArtsLitteratures.toUpperCase();
+      const paroleLibre = categoryParoleLibre.toUpperCase();
 
       if(e.firstElementChild.textContent.toUpperCase() === politique) {
          e.style="background-color: " + clrPolitique + ";";
@@ -22,6 +37,12 @@
          e.style="background-color: " + clrEconomie + ";";
       } else if(e.firstElementChild.textContent.toUpperCase() === geopolitique) {
          e.style="background-color: " + clrGeopolitique + ";";
+      } else if(e.firstElementChild.textContent.toUpperCase() === societe) {
+         e.style="background-color: " + clrSociete + ";";
+      } else if(e.firstElementChild.textContent.toUpperCase() === artsLitteratures) {
+         e.style="background-color: " + clrArtsLitteratures + ";";
+      } else if(e.firstElementChild.textContent.toUpperCase() === paroleLibre) {
+         e.style="background-color: " + clrParoleLibre + ";";
       }
    })
 
@@ -54,6 +75,15 @@
       } else if (pathname === '/parole-libre/public/parole-libre') {
          container.classList.add('paroleLibre');
       }   
+   }
+
+   // Sur scoll vers le bas, ajoute la classe "sticky à la nav" après 240px parcouru
+   window.onscroll = () => {
+      if (window.scrollY >= 240) { 
+         nav.classList.add('sticky');
+      } else {
+         nav.classList.remove('sticky');
+      }
    }
 
 }())

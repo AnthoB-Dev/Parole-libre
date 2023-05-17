@@ -216,11 +216,6 @@ a {
   top: 0;
   z-index: 1000;
   padding: 0.7rem 0;
-  box-shadow: 0 2px 3px -2px;
-  background: rgba(255, 255, 255, 0.75);
-  -webkit-backdrop-filter: blur(7px);
-  backdrop-filter: blur(9px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 .container-header-nav .header-navlinks {
   display: flex;
@@ -232,6 +227,14 @@ a {
   color: #0E0F19;
   padding: 0.5rem;
   text-transform: uppercase;
+}
+
+.sticky {
+  box-shadow: 0 2px 15px -5px;
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(9px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .container-content-header {
