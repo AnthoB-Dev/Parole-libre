@@ -18,10 +18,12 @@
             {% if app.user %}
                <div class="social-box"><a href="#" class="icon-user"><i class="fa-solid fa-user"></i></a></div>
                <div class="social-box"><a href="{{path("app_logout")}}" class="icon-user"><i class="fa-solid fa-right-from-bracket"></i></a></div>
+               {% if "ROLE_ADMIN" in app.user.roles or "ROLE_SUPERADMIN" in app.user.roles %}
+                  <div class="social-box"><a href="{{path("app_admin_index")}}" class="icon-user"><i class="fa-solid fa-gear"></i></i></a></div>
+               {% endif %}
             {% else %}
                <div class="social-box"><a href="{{path("app_login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>
             {% endif %}
       </div>
    </div>
-
 </div>

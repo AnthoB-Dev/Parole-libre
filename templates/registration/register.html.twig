@@ -3,16 +3,41 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
+    {# {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.pseudo) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
+        {{ form_row(registrationForm.plainPassword) }}
         {{ form_row(registrationForm.isWriter) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        <button type="submit" class="btn">S'inscrire</button>
+    {{ form_end(registrationForm) }} #}
+
+    <div class="d-flex f-col m-auto">
+        
+        <div class="form-signin">
+            {{ form_start(registrationForm) }}
+            <div class="form-signin">
+                <h1 class="h3 mb-3 fw-normal text-center">S'inscrire</h1>
+
+                <div class="form-floating mb-1 d-flex f-col">
+                    {{ form_row(registrationForm.email) }}
+                </div>
+                <div class="form-floating mb-1">
+                    {{ form_row(registrationForm.pseudo) }}
+                </div>
+                <div class="form-floating mb-1">
+                    {{ form_row(registrationForm.plainPassword) }}
+                </div>
+                <div class="checkbox mb-3">
+                    {{ form_row(registrationForm.isWriter) }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-success mb-3">S'inscrire</button>
+            {{ form_end(registrationForm) }}
+            <div class="m-3">
+                <a href="{{path("app_login")}}" class="text-primary">Vous avez un compte ? Connectez-vous !</a>
+            </div>
+        </div>
+    </div> 
 {% endblock %}

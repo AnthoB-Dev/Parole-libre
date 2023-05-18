@@ -76,11 +76,11 @@ class ArticleRepository extends ServiceEntityRepository
      * 
      * @return array
      */
-    public function findAllArticlesByCategoryId($value): ?array
+    public function findAllArticlesByCategoryId($categoryId): ?array
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.category = :category')
-            ->setParameter('category', $value)
+            ->setParameter('category', $categoryId)
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -104,9 +104,21 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-
-    // findArticlesByRecentlyPublishedAndByCategories(value, value)
-    // findArticlesByRecentlyPublishedAndByCategory(value)
+    /**
+     * Récupère dans la bdd 6 articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre une catégorie (category.id)
+     */
+    public function findArticlesByRecentlyPublishedAndByCategory($categoryId): ?array
+    {
+        return $this->createQueryBuilder("a")
+            ->andWhere('a.category = :category')
+            ->setParameter('category', $categoryId)
+            ->orderBy('a.createdAt', 'DESC')
+            ->setMaxResults(6)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
     // findArticlesByPopularityAndByCategory(value)
     // findSuperAuthors()
 }
