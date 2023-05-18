@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{article.category.name}} | {{article.title}} {% endblock %}
+
+{% block body %}
+
+   <h1>Modification de l'article "{{article.title}}"</h1>
+   
+   <div>
+      {{form_start(form)}}
+
+         {{form_row(form.category)}}
+         {{form_row(form.title)}}
+         {{form_row(form.subtitle)}}
+         {{form_row(form.image)}}
+         {{form_row(form.content)}}
+
+         <button type="submit">Modier l'article</button>
+      {{form_end(form)}}
+   </div>
+
+{% endblock %}

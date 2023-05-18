@@ -16,7 +16,8 @@ return [
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/admin' => [[['_route' => 'app_admin_index', '_controller' => 'App\\Controller\\AdminController::index'], null, null, null, true, false, null]],
         '/admin/contenu' => [[['_route' => 'app_admin_content', '_controller' => 'App\\Controller\\AdminController::content'], null, null, null, false, false, null]],
-        '/admin/contenu/articles' => [[['_route' => 'app_admin_articles', '_controller' => 'App\\Controller\\AdminController::articles'], null, null, null, false, false, null]],
+        '/admin/contenu/articles' => [[['_route' => 'app_admin_content_articles_index', '_controller' => 'App\\Controller\\AdminController::indexArticles'], null, null, null, true, false, null]],
+        '/admin/contenu/articles/ajouter-article' => [[['_route' => 'app_admin_content_article_add', '_controller' => 'App\\Controller\\AdminController::addArticle'], null, null, null, false, false, null]],
         '/admin/contenu/commentaires' => [[['_route' => 'app_admin_commentaries', '_controller' => 'App\\Controller\\AdminController::commentaries'], null, null, null, false, false, null]],
         '/admin/contenu/utilisateurs' => [[['_route' => 'app_admin_users', '_controller' => 'App\\Controller\\AdminController::users'], null, null, null, false, false, null]],
         '/admin/contenu/signalements' => [[['_route' => 'app_admin_reports', '_controller' => 'App\\Controller\\AdminController::reports'], null, null, null, false, false, null]],
@@ -25,8 +26,7 @@ return [
         '/admin/structure/categories/add' => [[['_route' => 'app_admin_structure_categories_add', '_controller' => 'App\\Controller\\AdminController::addCategories'], null, null, null, false, false, null]],
         '/admin/structure/signalements' => [[['_route' => 'app_admin_structure_reportReasons', '_controller' => 'App\\Controller\\AdminController::reportReasons'], null, null, null, false, false, null]],
         '/admin/structure/signalements/add' => [[['_route' => 'app_admin_structure_reportReasons_add', '_controller' => 'App\\Controller\\AdminController::addReportReasons'], null, null, null, false, false, null]],
-        '/articles' => [[['_route' => 'app_articles_index', '_controller' => 'App\\Controller\\ArticleController::indexArticles'], null, null, null, true, false, null]],
-        '/articles/ajouter-article' => [[['_route' => 'app_articles_add', '_controller' => 'App\\Controller\\ArticleController::addArticle'], null, null, null, false, false, null]],
+        '/' => [[['_route' => 'app_articles_index', '_controller' => 'App\\Controller\\ArticleController::indexArticles'], null, null, null, false, false, null]],
         '/blog' => [[['_route' => 'app_blog', '_controller' => 'App\\Controller\\BlogController::index'], null, null, null, false, false, null]],
         '/politique' => [[['_route' => 'politique', '_controller' => 'App\\Controller\\BlogController::politique'], null, null, null, false, false, null]],
         '/economie' => [[['_route' => 'economie', '_controller' => 'App\\Controller\\BlogController::economie'], null, null, null, false, false, null]],
@@ -56,6 +56,7 @@ return [
                         .'|(*:159)'
                     .')'
                 .')'
+                .'|/admin/contenu/articles/modifier\\-article/([^/]++)(*:219)'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
@@ -65,8 +66,9 @@ return [
         116 => [[['_route' => '_profiler_router', '_controller' => 'web_profiler.controller.router::panelAction'], ['token'], null, null, false, false, null]],
         136 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
         149 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
-        159 => [
-            [['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null],
+        159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
+        219 => [
+            [['_route' => 'app_admin_content_article_edit', '_controller' => 'App\\Controller\\AdminController::editArticle'], ['id'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

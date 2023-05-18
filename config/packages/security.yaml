@@ -16,7 +16,11 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            user_checker: App\Security\CustomUserChecker
             custom_authenticator: App\Security\AppCustomAuthenticator
+            remember_me:
+                secret: '%kernel.secret%'
+                always_remember_me: true
             logout:
                 path: app_logout
                 # where to redirect after logout

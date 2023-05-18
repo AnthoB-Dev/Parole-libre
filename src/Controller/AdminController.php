@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\ReportReason;
 use App\Form\CategoryType;
 use App\Form\ReportReasonType;
+use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ReportReasonRepository;
+use DateTimeImmutable;
+use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,19 +29,102 @@ class AdminController extends AbstractController
         return $this->render('admin/index.html.twig');
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// CONTENU //////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
 
-    //      Partie "contenu"
+    //----- /CONTENU -----//
+
     #[Route('/contenu', name: 'content')]
     public function content(): Response
     {
         return $this->render('admin/content/content.html.twig');
     }
 
-    #[Route('/contenu/articles', name: 'articles')]
-    public function articles(): Response
+
+    //----------------- /ARTICLES -----------------//
+
+    #[Route("/contenu/articles/", name:"content_articles_index")]
+    public function indexArticles(ArticleRepository $articleRepository): Response
     {
-        return $this->render('admin/content/articles.html.twig');
+        $articles = $articleRepository->findAllArticles();
+
+        return $this->render("admin/content/articles/index.html.twig", [
+            "articles" => $articles,
+        ]);
     }
+
+    #[Route("/contenu/articles/ajouter-article", name:"content_article_add")]
+    public function addArticle(ArticleRepository $articleRepository, Request $request, Security $security): Response
+    {
+        $article = new Article();
+        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
+        $user = $security->getUser();
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $article->setUser($user);
+            $article->setCreatedAt($date);
+
+            // Défini l'image
+            $file = $form->get("image")->getData();
+            if($file) {
+                $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $fileExtension = $file->guessExtension();
+                $newFileName = $originalFileName . "_" . uniqid() . "." . $fileExtension;
+                $file -> move($this->getParameter("upload_directory"), $newFileName);
+                $article -> setImage($newFileName);
+            } else {
+                $article->setImage("default.png");
+            }
+
+            $articleRepository->save($article, true);
+
+            return $this->redirectToRoute("app_admin_articles_index");
+        }
+        
+        return $this->render("admin/content/articles/addArticle.html.twig", [
+            "form" => $form->createView(),
+        ]);
+    }
+
+    #[Route("/contenu/articles/modifier-article/{id}", name:"content_article_edit")]
+    public function editArticle(ArticleRepository $articleRepository, $id, Request $request): Response
+    {
+        $article = $articleRepository->findOneBy(["id" => $id]);
+        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $article->setUpdatedAt($date);
+
+            // Défini l'image
+            $file = $form->get("image")->getData();
+            if($file) {
+                $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $fileExtension = $file->guessExtension();
+                $newFileName = $originalFileName . "_" . uniqid() . "." . $fileExtension;
+                $file -> move($this->getParameter("upload_directory"), $newFileName);
+                $article -> setImage($newFileName);
+            }
+            
+            $articleRepository->save($article, true);
+
+            return $this->redirectToRoute("app_articles_index");
+        }
+        
+        return $this->render("admin/content/articles/editArticle.html.twig", [
+            "form" => $form->createView(),
+            "article" => $article,
+        ]);
+    }
+
+    //----------------- /COMMENTAIRES -----------------//
 
     #[Route('/contenu/commentaires ', name: 'commentaries')]
     public function commentaries(): Response
@@ -45,11 +132,15 @@ class AdminController extends AbstractController
         return $this->render('admin/content/commentaries.html.twig');
     }
 
+    //----------------- /UTILISATEURS -----------------//
+
     #[Route('/contenu/utilisateurs ', name: 'users')]
     public function users(): Response
     {
         return $this->render('admin/content/users.html.twig');
     }
+
+    //----------------- /SIGNALEMENTS -----------------//
 
     #[Route('/contenu/signalements', name: 'reports')]
     public function reports(): Response
@@ -58,12 +149,19 @@ class AdminController extends AbstractController
     }
 
 
-    //      Partie "structure"
+    /////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////// STRUCTURE //////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    //----- /STRUCTURE -----//
+
     #[Route('/structure', name: 'structure')]
     public function structure(): Response
     {
         return $this->render('admin/structure/structure.html.twig');
     }
+
+    //----------------- /CATEGORIES -----------------//
 
     #[Route('/structure/categories', name: 'structure_categories')]
     public function categories(CategoryRepository $categoryRepository): Response
@@ -97,6 +195,8 @@ class AdminController extends AbstractController
             "categories" => $categories,
         ]);
     }
+
+    //----------------- /SIGNALEMENTS -----------------//
 
     #[Route('/structure/signalements', name: 'structure_reportReasons')]
     public function reportReasons(ReportReasonRepository $reportReasonRepository): Response

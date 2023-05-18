@@ -46,7 +46,11 @@
 
         <main class="{% if app.request.attributes.get('_route')|starts_with('app_admin') %}body-container-admin{% else %}body-container{% endif %}"{% if app.request.attributes.get('_route') == 'app_login' %} style="height: 100vh;" {% endif %}>
 
-            {% include "components/_generic-navlinks.html.twig" %}
+            {% if app.request.attributes.get('_route')|starts_with('app_admin') or app.request.attributes.get('_route') == 'app_login' %}
+                
+            {% else %}
+                {% include "components/_generic-navlinks.html.twig" %}
+            {% endif %}
 
 
             {% block body %}

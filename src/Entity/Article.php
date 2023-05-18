@@ -75,12 +75,12 @@ class Article
         return $this;
     }
 
-    public function getCategory(): ?category
+    public function getCategory(): ?string
     {
         return $this->category;
     }
 
-    public function setCategory(?category $category): self
+    public function setCategory(?string $category): self
     {
         $this->category = $category;
 

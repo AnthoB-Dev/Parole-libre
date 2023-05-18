@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Articles{% endblock %}
+
+{% block body %}
+
+   <h1>Articles</h1>
+
+   <div style="max-width: 900px; margin: auto;">
+      <div style="display: flex; flex-direction: column; gap: 2rem;padding: 2rem 0 0;"> 
+         {% for article in articles %}
+            <article class="container-carrousel-cards" style="border: solid 1px #00000036; box-shadow: 0 5px 18px -5px; padding: 1rem; border-radius: 5px;">
+
+                <div class="carrousel-article-category" style="display:flex; gap:1rem; align-items:baseline;">
+                    <h4> {{article.name}} </h4>
+                    <h5> {{article.subtitle}} </h5>
+                </div>
+
+                <div class="carrousel-article-image">
+                    <img src="{{article.image}}" alt="Photo représentant le sujet de l'article '{{article.title}}'">
+                </div>
+
+                <div class="carrousel-article-title">
+                    <h3> {{article.title}} </h3>
+                </div>
+
+                <div class="carrousel-article-content">
+                    <p> {{article.content}} </p>
+                </div>
+
+                <div class="carrousel-article-actions" style="display:flex; align-items: baseline; gap: 1rem; justify-content: flex-start;">
+                    <div class="article-action author"><span class="greyedOut">Auteur</span> {{article.pseudo}}</div>
+                    <div class="article-action publishedAt"><span class="greyedOut">le</span> {{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</div>
+                    <div class="article-action likes" style="display:flex; gap: 0.6rem;">
+                    <div class="article-action likes" style="display: flex; margin-left: auto; padding-right: 1rem;">
+                    <div>
+                        <p>43</p><i class="fa-regular fa-comment-dots"></i>
+                    </div>
+                    <div>
+                        <p>256</p><i class="fa-regular fa-thumbs-up"></i>
+                    </div>
+                    
+                    </div>
+                </div>
+
+                <div style="margin-left: auto; padding-right: 1rem; display:flex; gap:.5rem;">
+                    <a href="{{ path("app_admin_content_article_edit", {"id": article.id} ) }}" style="padding: .5rem; color: green; border: solid 1px; border-radius: 5px; text-decoration: none;">Modifier</a>
+                    <a href="" style="padding: .5rem; color: red; border: solid 1px; border-radius: 5px; text-decoration: none;">Supprimer</a></div>
+                </div>
+            </article>
+         {% endfor %}
+      </div>
+   </div>
+
+{% endblock %}

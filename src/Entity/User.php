@@ -56,6 +56,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Report::class, orphanRemoval: true)]
     private Collection $reports;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updated_date = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?ReportReason $banReason = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -298,6 +304,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $report->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUpdatedDate(): ?\DateTimeInterface
+    {
+        return $this->updated_date;
+    }
+
+    public function setUpdatedDate(?\DateTimeInterface $updated_date): self
+    {
+        $this->updated_date = $updated_date;
+
+        return $this;
+    }
+
+    public function getBanReason(): ?ReportReason
+    {
+        return $this->banReason;
+    }
+
+    public function setBanReason(?ReportReason $banReason): self
+    {
+        $this->banReason = $banReason;
 
         return $this;
     }

@@ -51,11 +51,9 @@
 
       // Obtention du chemin de la page actuelle
       const pathname = window.location.pathname;
-      console.log(pathname)
 
       // Sélection de l'élément à modifier
       const container = document.querySelector('.container-carrousel-header');
-      console.log(container)
 
       // Suppression toutes les classes de page précédentes
       container.classList.remove('accueil', 'politique', 'economie', 'geopolitique', 'societe', 'arts', 'paroleLibre');
