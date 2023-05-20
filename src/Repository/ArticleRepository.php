@@ -88,32 +88,36 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd 9 articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre(s) une ou plusieurs catégories (category.id)
+     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre(s) une ou plusieurs catégories (category.id)
      * 
      * @return array
      */
-    public function findArticlesByRecentlyPublishedAndByCategories(...$categories): ?array
+    public function findArticlesByRecentlyPublishedAndByCategories($maxResults, ...$categories): ?array
     {
         return $this->createQueryBuilder('a')
+            ->leftJoin('a.category', 'c')
+            ->addSelect('c')
             ->andWhere('a.category IN (:categories)')
             ->setParameter('categories', $categories)
             ->orderBy('a.createdAt', 'DESC')
-            ->setMaxResults(9)
+            ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
         ;
     }
 
     /**
-     * Récupère dans la bdd 6 articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre une catégorie (category.id)
+     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre une catégorie (category.id)
+     * 
+     * @return array
      */
-    public function findArticlesByRecentlyPublishedAndByCategory($categoryId): ?array
+    public function findArticlesByRecentlyPublishedAndByCategory($maxResults, $categoryId): ?array
     {
         return $this->createQueryBuilder("a")
             ->andWhere('a.category = :category')
             ->setParameter('category', $categoryId)
             ->orderBy('a.createdAt', 'DESC')
-            ->setMaxResults(6)
+            ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
         ;

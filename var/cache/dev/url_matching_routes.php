@@ -26,14 +26,12 @@ return [
         '/admin/structure/categories/add' => [[['_route' => 'app_admin_structure_categories_add', '_controller' => 'App\\Controller\\AdminController::addCategories'], null, null, null, false, false, null]],
         '/admin/structure/signalements' => [[['_route' => 'app_admin_structure_reportReasons', '_controller' => 'App\\Controller\\AdminController::reportReasons'], null, null, null, false, false, null]],
         '/admin/structure/signalements/add' => [[['_route' => 'app_admin_structure_reportReasons_add', '_controller' => 'App\\Controller\\AdminController::addReportReasons'], null, null, null, false, false, null]],
-        '/' => [[['_route' => 'app_articles_index', '_controller' => 'App\\Controller\\ArticleController::indexArticles'], null, null, null, false, false, null]],
-        '/blog' => [[['_route' => 'app_blog', '_controller' => 'App\\Controller\\BlogController::index'], null, null, null, false, false, null]],
-        '/politique' => [[['_route' => 'politique', '_controller' => 'App\\Controller\\BlogController::politique'], null, null, null, false, false, null]],
-        '/economie' => [[['_route' => 'economie', '_controller' => 'App\\Controller\\BlogController::economie'], null, null, null, false, false, null]],
-        '/geopolitique' => [[['_route' => 'geopolitique', '_controller' => 'App\\Controller\\BlogController::geopolitique'], null, null, null, false, false, null]],
-        '/societe' => [[['_route' => 'societe', '_controller' => 'App\\Controller\\BlogController::societe'], null, null, null, false, false, null]],
-        '/arts-litteratures' => [[['_route' => 'artsLitteratures', '_controller' => 'App\\Controller\\BlogController::artsLitteratures'], null, null, null, false, false, null]],
-        '/parole-libre' => [[['_route' => 'paroleLibre', '_controller' => 'App\\Controller\\BlogController::paroleLibre'], null, null, null, false, false, null]],
+        '/politique' => [[['_route' => 'app_category_politique', '_controller' => 'App\\Controller\\BlogController::politique'], null, null, null, false, false, null]],
+        '/economie' => [[['_route' => 'app_category_economie', '_controller' => 'App\\Controller\\BlogController::economie'], null, null, null, false, false, null]],
+        '/geopolitique' => [[['_route' => 'app_category_geopolitique', '_controller' => 'App\\Controller\\BlogController::geopolitique'], null, null, null, false, false, null]],
+        '/societe' => [[['_route' => 'app_category_societe', '_controller' => 'App\\Controller\\BlogController::societe'], null, null, null, false, false, null]],
+        '/arts-litteratures' => [[['_route' => 'app_category_artsLitteratures', '_controller' => 'App\\Controller\\BlogController::artsLitteratures'], null, null, null, false, false, null]],
+        '/parole-libre' => [[['_route' => 'app_category_paroleLibre', '_controller' => 'App\\Controller\\BlogController::paroleLibre'], null, null, null, false, false, null]],
         '/accueil' => [[['_route' => 'accueil', '_controller' => 'App\\Controller\\IndexController::index'], null, null, null, false, false, null]],
         '/register' => [[['_route' => 'app_register', '_controller' => 'App\\Controller\\RegistrationController::register'], null, null, null, false, false, null]],
         '/login' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
@@ -57,6 +55,7 @@ return [
                     .')'
                 .')'
                 .'|/admin/contenu/articles/modifier\\-article/([^/]++)(*:219)'
+                .'|/([^/]++)/article/([^/]++)(*:253)'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
@@ -67,8 +66,9 @@ return [
         136 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
         149 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
         159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
-        219 => [
-            [['_route' => 'app_admin_content_article_edit', '_controller' => 'App\\Controller\\AdminController::editArticle'], ['id'], null, null, false, true, null],
+        219 => [[['_route' => 'app_admin_content_article_edit', '_controller' => 'App\\Controller\\AdminController::editArticle'], ['id'], null, null, false, true, null]],
+        253 => [
+            [['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['category', 'id'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

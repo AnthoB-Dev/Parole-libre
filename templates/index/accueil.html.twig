@@ -24,31 +24,31 @@
             <div class="wrapper-carrousel-mid">
                 <div class="container-carrousel-groups">
                     <div class="carrousel-group-1">
-                        {# for article in articles #}
+                       
+                        {% for heroArticle in recentHeroArticles %}
                             <article class="container-carrousel-cards">
 
                                 <div class="carrousel-article-category">
-                                    <h4>Politique</h4>
-                                    <h5>Sous-titre</h5>
+                                    <h4>{{heroArticle.category.name}}</h4>
+                                    <h5> {{heroArticle.subtitle}} </h5>
                                 </div>
 
                                 <div class="carrousel-article-image">
-                                    <img src="https://via.placeholder.com/480x320" alt="">
+                                    <img src="https://via.placeholder.com/480x320" alt="Image de présentation de l'article '{{heroArticle.title}}'">
                                     <span>Légende de l'image</span>
                                 </div>
 
                                 <div class="carrousel-article-title">
-                                    <h3>Titre de l'article</h3>
+                                    <h3> {{heroArticle.title}} </h3>
                                 </div>
 
                                 <div class="carrousel-article-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis voluptas, nobis doloribus sapiente sequi expedita sit eum temporibus et maiores? Soluta dolorem saepe enim repellendus! Accusamus dolores placeat tenetur repudiandae!
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore fuga animi magni odit dolore labore assumenda, earum quibusdam eveniet voluptatem cupiditate, laudantium aspernatur itaque explicabo, officia facere doloribus autem eius.
+                                    <p> {{heroArticle.content}} </p>
                                 </div>
 
                                 <div class="carrousel-article-actions">
-                                    <div class="article-action author"><span class="greyedOut">Auteur</span> Anthobdev</div>
-                                    <div class="article-action publishedAt"><span class="greyedOut">le</span> 15 mai 2023</div>
+                                    <div class="article-action author"><span class="greyedOut">Auteur</span> {{heroArticle.user.pseudo}}</div>
+                                    <div class="article-action publishedAt"><span class="greyedOut">le</span> {{ heroArticle.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</div>
                                     <div class="article-action likes">
                                         <div>
                                             <p>43</p><i class="fa-regular fa-comment-dots"></i>
@@ -58,78 +58,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category='{{heroArticle.category.name}}'">
+
                             </article>
-
-                            <article class="container-carrousel-cards">
-
-                                <div class="carrousel-article-category">
-                                    <h4>Économie</h4>
-                                    <h5>Sous-titre</h5>
-                                </div>
-
-                                <div class="carrousel-article-image">
-                                    <img src="https://via.placeholder.com/480x320" alt="">
-                                    <span>Légende de l'image</span>
-                                </div>
-
-                                <div class="carrousel-article-title">
-                                    <h3>Titre de l'article</h3>
-                                </div>
-
-                                <div class="carrousel-article-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis voluptas, nobis doloribus sapiente sequi expedita sit eum temporibus et maiores? Soluta dolorem saepe enim repellendus! Accusamus dolores placeat tenetur repudiandae!
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore fuga animi magni odit dolore labore assumenda, earum quibusdam eveniet voluptatem cupiditate, laudantium aspernatur itaque explicabo, officia facere doloribus autem eius.
-                                </div>
-
-                                <div class="carrousel-article-actions">
-                                    <div class="article-action author"><span>Auteur</span> Anthobdev</div>
-                                    <div class="article-action publishedAt"><span>le</span> 15 mai 2023</div>
-                                    <div class="article-action likes">
-                                        <div>
-                                            <p>43</p><i class="fa-regular fa-comment-dots"></i>
-                                        </div>
-                                        <div>
-                                            <p>256</p><i class="fa-regular fa-thumbs-up"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="container-carrousel-cards">
-
-                                <div class="carrousel-article-category">
-                                    <h4>Géopolitique</h4>
-                                    <h5>Sous-titre</h5>
-                                </div>
-
-                                <div class="carrousel-article-image">
-                                    <img src="https://via.placeholder.com/480x320" alt="">
-                                    <span>Légende de l'image</span>
-                                </div>
-
-                                <div class="carrousel-article-title">
-                                    <h3>Titre de l'article</h3>
-                                </div>
-
-                                <div class="carrousel-article-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis voluptas, nobis doloribus sapiente sequi expedita sit eum temporibus et maiores? Soluta dolorem saepe enim repellendus! Accusamus dolores placeat tenetur repudiandae!
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore fuga animi magni odit dolore labore assumenda, earum quibusdam eveniet voluptatem cupiditate, laudantium aspernatur itaque explicabo, officia facere doloribus autem eius.
-                                </div>
-
-                                <div class="carrousel-article-actions">
-                                    <div class="article-action author"><span>Auteur</span> Anthobdev</div>
-                                    <div class="article-action publishedAt"><span>le</span> 15 mai 2023</div>
-                                    <div class="article-action likes">
-                                        <div>
-                                            <p>43</p><i class="fa-regular fa-comment-dots"></i>
-                                        </div>
-                                        <div>
-                                            <p>256</p><i class="fa-regular fa-thumbs-up"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                        {# endfor #}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -231,7 +163,7 @@
             <div class="container-body-categories">
 
                 <div class="container-categories-title">
-                    <h2>Politique</h2>
+                    <h2> {{categoryPolitique}} </h2>
                     <a href="#" class="btnShowMore">voir plus</a>
                 </div>
 
@@ -250,41 +182,25 @@
                             </div>
 
                             <div class="body-categories-cards">
-                                <article class="body-categories-cards-container">
+                                
+                                {% for politiqueArticle in recentPolitiqueArticles %}
+                                    <article class="body-categories-cards-container">
 
-                                    <div class="container-card-image">
-                                        <img src="https://via.placeholder.com/480x320" alt="">
-                                    </div>
-                                    <div class="container-card-title">
-                                        <h4>Titre de l'article</h4>
-                                    </div>
-                                    <div class="container-card-content">
-                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam odit explicabo inventore est temporibus voluptas exercitationem accusamus iusto modi? Ex ducimus asperiores perspiciatis doloremque, quasi voluptatibus. Ducimus temporibus autem omnis!
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                                    </div>
-                                    <div class="container-card-actions">
-                                        <p><span class="greyedOut">Auteur </span>Prénom Nom <span class="greyedOut">le </span>6 mars 2023</p>
-                                    </div>
+                                        <div class="container-card-image">
+                                            <img src="https://via.placeholder.com/480x320" alt="Image de présentation de l'article '{{politiqueArticle.title}}'">
+                                        </div>
+                                        <div class="container-card-title">
+                                            <h4> {{politiqueArticle.title}} </h4>
+                                        </div>
+                                        <div class="container-card-content">
+                                            <p> {{politiqueArticle.content}} </p>
+                                        </div>
+                                        <div class="container-card-actions">
+                                            <p><span class="greyedOut">Auteur </span>{{politiqueArticle.user.pseudo}} <span class="greyedOut">le </span>{{ politiqueArticle.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</p>
+                                        </div>
 
-                                </article>
-
-                                <article class="body-categories-cards-container">
-
-                                    <div class="container-card-image">
-                                        <img src="https://via.placeholder.com/480x320" alt="">
-                                    </div>
-                                    <div class="container-card-title">
-                                        <h4>Titre de l'article</h4>
-                                    </div>
-                                    <div class="container-card-content">
-                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam odit explicabo inventore est temporibus voluptas exercitationem accusamus iusto modi? Ex ducimus asperiores perspiciatis doloremque, quasi voluptatibus. Ducimus temporibus autem omnis!
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                                    </div>
-                                    <div class="container-card-actions">
-                                        <p><span class="greyedOut">Auteur </span>Prénom Nom <span class="greyedOut">le </span>6 mars 2023</p>
-                                    </div>
-
-                                </article>
+                                    </article>
+                                {% endfor %}
                             </div>
 
                             <div class="body-categories-chevrons chevron-right">
@@ -312,7 +228,7 @@
                                 </div>
                                 <div class="body-sidebar-cards-content">
                                     <div class="body-sidebar-cards-content-title">
-                                        <h5>Catégorie</h5>
+                                        <h5> {{recentPolitiqueArticles[0].category.name}} </h5>
                                     </div>
                                     <div class="body-sidebar-cards-content-content">
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
@@ -1240,77 +1156,7 @@
         
         {# Sidebar #}
         <aside class="wrapper-body-sidebar">
-
-            <div class="container-sidebar">
-
-                {# Sidebar Parole Libre #}
-                <div class="wrapper-sidebar-parole">
-
-                    <div class="container-parole-title">
-                        <h4>Dernières "Parole Libre"</h4>
-                    </div>
-
-                    <div class="container-parole-cards">
-
-                        {# Articles #}
-                        <article class="parole-card">
-                            
-                            <div class="container-body-sidebar-cards">
-                                <div class="body-sidebar-cards-author">
-                                    <div class="body-sidebar-cards-author-spans">
-                                        <span class="greyedOut">Par</span>
-                                        <p>Pseudo1234</p>
-                                    </div>
-                                    <div class="body-sidebar-cards-author-spans">
-                                        <span class="greyedOut">le</span>
-                                        <p>jj/mm/yyyy</p>
-                                    </div>
-                                </div>
-                                <div class="body-sidebar-cards-content">
-                                    <div class="body-sidebar-cards-content-title">
-                                        <h5>Titre de l'article, ceci est un exemple de titre</h5>
-                                    </div>
-                                    <div class="body-sidebar-cards-content-content">
-                                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet expedita distinctio sed. Cupiditate ullam autem nemo vitae eum atque nesciunt ut expedita facilis sequi minus, optio itaque obcaecati porro fugit?</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                        
-                        <article class="parole-card">
-                            
-                            <div class="container-body-sidebar-cards">
-                                <div class="body-sidebar-cards-author">
-                                    <div class="body-sidebar-cards-author-spans">
-                                        <span class="greyedOut">Par</span>
-                                        <p>Pseudo1234</p>
-                                    </div>
-                                    <div class="body-sidebar-cards-author-spans">
-                                        <span class="greyedOut">le</span>
-                                        <p>jj/mm/yyyy</p>
-                                    </div>
-                                </div>
-                                <div class="body-sidebar-cards-content">
-                                    <div class="body-sidebar-cards-content-title">
-                                        <h5>Titre de l'article, ceci est un exemple de titre</h5>
-                                    </div>
-                                    <div class="body-sidebar-cards-content-content">
-                                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet expedita distinctio sed. Cupiditate ullam autem nemo vitae eum atque nesciunt ut expedita facilis sequi minus, optio itaque obcaecati porro fugit?</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-
-                {# Séparateur #}
-                <div class="parole-separator"></div>
-
-                {# Sidebar Commentaires #}
-                <div class="wrapper-sidebar-comments">
-                
-                </div>
-            </div>
+            {% include "components/_generic-sidebar.html.twig" %}
         </aside>
     
     </section>

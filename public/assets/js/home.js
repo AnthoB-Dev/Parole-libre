@@ -21,15 +21,20 @@
    const coloringCarrousel = document.querySelector(".container-carrousel-header")
    const coloringCategory = document.querySelectorAll(".carrousel-article-category");
    const nav = document.querySelector('.container-header-nav');
+   const articlesId = document.querySelectorAll(".articleId");
+   const articles = document.querySelectorAll("article");
+   
+   const articleCategorySpan = document.querySelector("#article-category-span");
+   
+   const politique = categoryPolitique.toUpperCase();
+   const economie = categoryEconomie.toUpperCase();
+   const geopolitique = categoryGeopolitique.toUpperCase();
+   const societe = categorySociete.toUpperCase();
+   const artsLitteratures = categoryArtsLitteratures.toUpperCase();
+   const paroleLibre = categoryParoleLibre.toUpperCase();
 
    // Change la couleur dynamiquement du fond de chaque catégorie
    coloringCategory.forEach(e => {
-      const politique = categoryPolitique.toUpperCase();
-      const economie = categoryEconomie.toUpperCase();
-      const geopolitique = categoryGeopolitique.toUpperCase();
-      const societe = categorySociete.toUpperCase();
-      const artsLitteratures = categoryArtsLitteratures.toUpperCase();
-      const paroleLibre = categoryParoleLibre.toUpperCase();
 
       if(e.firstElementChild.textContent.toUpperCase() === politique) {
          e.style="background-color: " + clrPolitique + ";";
@@ -46,12 +51,39 @@
       }
    })
 
+   articles.forEach(e => {
+      if(e.lastElementChild.classList.contains("articleId") && e.lastElementChild.hasAttribute("data-category")) {
+
+         let articleId = e.lastElementChild.value; 
+         let categoryName = e.lastElementChild.getAttribute("data-category");
+         const categoryToLower = categoryName.toLowerCase();
+         let categoryFormated = "";
+         
+         if(categoryToLower === "arts & littératures") {
+            categoryFormated = "arts-litteratures";
+         } else if(categoryToLower === "géopolitique") {
+            categoryFormated = "geopolitique";
+         } else if(categoryToLower === "économie") {
+            categoryFormated = "economie";
+         } else if(categoryToLower === "société") {
+            categoryFormated = "societe";
+         } else if(categoryToLower === "parole libre") {
+            categoryFormated = "parole-libre";
+         } else {
+            categoryFormated = categoryToLower;
+         }
+
+         e.addEventListener("click", () => {
+            window.location.href= categoryFormated + "/article/" + articleId;
+         })
+      }
+   })
+
    // Sur chargement de la page, changement de la couleur de la bande de fond de l'élément du haut de la page
    window.onload = function() {
-
       // Obtention du chemin de la page actuelle
       const pathname = window.location.pathname;
-
+      
       // Sélection de l'élément à modifier
       const container = document.querySelector('.container-carrousel-header');
 
@@ -60,18 +92,25 @@
 
       if (pathname === '/parole-libre/public/accueil') {
          container.classList.add('accueil');
-      } else if (pathname === '/parole-libre/public/politique') {
+
+      } else if (pathname.startsWith('/parole-libre/public/politique')) {
          container.classList.add('politique');
+
       } else if (pathname === '/parole-libre/public/economie') {
          container.classList.add('economie');
+
       } else if (pathname === '/parole-libre/public/geopolitique') {
          container.classList.add('geopolitique');
+
       } else if (pathname === '/parole-libre/public/societe') {
          container.classList.add('societe');
+
       } else if (pathname === '/parole-libre/public/arts-litteratures') {
          container.classList.add('arts');
-      } else if (pathname === '/parole-libre/public/parole-libre') {
+
+      } else if (pathname.startsWith('/parole-libre/public/parole-libre')) {
          container.classList.add('paroleLibre');
+         articleCategorySpan.style= "background-color: " + clrArtsLitteratures + ";";
       }   
    }
 
