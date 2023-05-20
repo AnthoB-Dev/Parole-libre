@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Titre de l'article affiché{% endblock %}
+{% block title %}{{article.title}}{% endblock %}
+
+{% block javascripts %}
+   <script src="{{asset("assets/js/article.js")}}" defer></script>
+{% endblock %}
 
 {% block main %}
-
-<pre>
-   {{ dump(article) }}
-</pre>
 
    <section class="container-content-body" style="padding-top: 7rem !important;">
    

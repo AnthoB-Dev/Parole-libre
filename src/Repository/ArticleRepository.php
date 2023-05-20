@@ -39,20 +39,6 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Article[] Returns an array of Article objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
     /**
      * Récupère dans la bdd tous les articles ainsi que la category.name (récupérable avec article.name) et user.pseudo (récupérable avec article.pseudo)
@@ -88,7 +74,7 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre(s) une ou plusieurs catégories (category.id)
+     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre(s) une ou plusieurs id(s) de catégories (category.id)
      * 
      * @return array
      */
@@ -107,20 +93,36 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre une catégorie (category.id)
+     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre l'id d'une catégorie (category.id)
      * 
      * @return array
      */
-    public function findArticlesByRecentlyPublishedAndByCategory($maxResults, $categoryId): ?array
+    public function findArticlesByRecentlyPublishedAndByCategory($maxResults, $category): ?array
     {
-        return $this->createQueryBuilder("a")
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.category', 'c')
+            ->addSelect('c')
             ->andWhere('a.category = :category')
-            ->setParameter('category', $categoryId)
+            ->setParameter('category', $category)
             ->orderBy('a.createdAt', 'DESC')
             ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * Prend en paramètres $maxResults qui sera le nb d'article par ...$categories à afficher, ...$categories étant les id des catégories voulant être fetch. La fonction bouclera ensuite sur chaque id et récupèrera les données grâce à findArticlesByRecentlyPublishedAndByCategory()
+     * 
+     * @return array
+     */
+    public function findArticlesRecentlyPublishedByCategories($maxResults, ...$categories): ?array
+    {
+        $articles = [];
+        foreach ($categories as $category) {
+            $articles[] = $this->findArticlesByRecentlyPublishedAndByCategory($maxResults, $category);
+        }
+        return $articles;
     }
     
     // findArticlesByPopularityAndByCategory(value)

@@ -505,6 +505,7 @@ a {
   box-shadow: 0 2px 5px 0px;
   border-radius: 5px 5px 0 0;
   background-color: #ffffff;
+  cursor: pointer;
 }
 .container-content-body .wrapper-body-content .container-body-categories .container-categories-content .wrapper-body-categories-content .container-body-category-content .body-categories-cards .body-categories-cards-container .container-card-image {
   flex-basis: 41%;
@@ -801,7 +802,6 @@ a {
   gap: 0.3rem;
 }
 .wrapper-body-article .container-article-header .article-header-infos #article-category #article-category-span {
-  background-color: var(--clr-politique);
   color: #ffffff;
   padding: 0.5rem 1rem;
   font-size: 32px;

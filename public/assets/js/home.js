@@ -51,6 +51,7 @@
       }
    })
 
+   // S'occupude de la redirection 
    articles.forEach(e => {
       if(e.lastElementChild.classList.contains("articleId") && e.lastElementChild.hasAttribute("data-category")) {
 
