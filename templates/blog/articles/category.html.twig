@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Parole Libre - Accueil{% endblock %}
+
+{% block javascripts %}
+	<script src="{{asset("assets/js/home.js")}}" defer></script>
+{% endblock %}
+
+{% block main %}
+
+<pre>
+   {{ dump(articles) }}
+</pre>
+
+	<section class="container-content-header">
+
+		<div class="container-title-header">
+			<h2>Dernières publications ajoutés</h2>
+			<a href="#" class="btnShowMore">voir plus</a>
+		</div>
+
+		<div class="container-carrousel-header">
+
+			<div class="wrapper-carrousel-chevrons chevron-left">
+				<i class="fa-solid fa-chevron-left"></i>
+			</div>
+
+			<div class="wrapper-carrousel-mid">
+				<div class="container-carrousel-groups">
+					<div class="carrousel-group-1">
+
+						{% for heroArticle in heroArticles %}
+							<article class="container-carrousel-cards">
+
+								<div class="carrousel-article-category">
+									<h4>{{heroArticle.category.name}}</h4>
+									<h5>{{heroArticle.subtitle}}</h5>
+								</div>
+
+								<div class="carrousel-article-image">
+									<img src="https://via.placeholder.com/480x320" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+									<span>Légende de l'image</span>
+								</div>
+
+								<div class="carrousel-article-title">
+									<h3>{{heroArticle.title}}</h3>
+								</div>
+
+								<div class="carrousel-article-content">
+									<p>{{heroArticle.content}}</p>
+								</div>
+
+								<div class="carrousel-article-actions">
+									<div class="article-action author">
+										<span class="greyedOut">Auteur</span> {{heroArticle.user.pseudo}}
+                           </div>
+									<div class="article-action publishedAt">
+										<span class="greyedOut">le</span> {{ heroArticle.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}
+                           </div>
+									<div class="article-action likes">
+										<div>
+											<p>43</p>
+											<i class="fa-regular fa-comment-dots"></i>
+										</div>
+										<div>
+											<p>256</p>
+											<i class="fa-regular fa-thumbs-up"></i>
+										</div>
+									</div>
+								</div>
+								<input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category="{{heroArticle.category.name}}">
+
+							</article>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+			<div class="wrapper-carrousel-chevrons chevron-right">
+				<i class="fa-solid fa-chevron-right"></i>
+			</div>
+
+		</div>
+
+	</section>
+
+	<section class="container-content-body">
+
+		{# Section princpal #}
+		<div class="wrapper-body-content">
+
+
+				<div class="container-body-categories">
+               <div class="container-body-category-title">
+                  <h2>Tous les articles</h2>
+               </div>
+               {% for article in articles %}
+                  <article class="container-body-category-article">
+                     <div class="wrapper-category-image">
+                        <img src="https://via.placeholder.com/5000x300" alt="">
+                     </div>
+                     <div class="wrapper-category-content">
+                        <h3>{{article.title}}</h3>
+                        <p>{{article.content}}</p>
+                        <div class="container-content-footer">
+                           
+                              <div class="article-action author">
+                                 <span class="greyedOut">Auteur</span> {{article.user.pseudo}}
+                              </div>
+                              <div class="article-action publishedAt">
+                                 <span class="greyedOut">le</span> {{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}
+                              </div>
+                              <div class="article-action likes">
+                                 <div>
+                                    <p>43</p>
+                                    <i class="fa-regular fa-comment-dots"></i>
+                                 </div>
+                                 <div>
+                                    <p>256</p>
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                 </div>
+                              </div>
+                           
+                           <input type="hidden" class="articleId" value="{{article.id}}" data-category="{{article.category.name}}">
+                        </div>
+                     </div>
+                  </article>
+               {% endfor %}
+         </div>
+		</div>
+
+		{# Sidebar #}
+		<aside class="wrapper-body-sidebar">
+			{% include "components/_generic-sidebar.html.twig" %}
+		</aside>
+
+	</section>
+
+{% endblock %}
+

@@ -3,74 +3,26 @@
 namespace App\Controller;
 
 use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BlogController extends AbstractController
-{
-
-    //////////////////////////////////////////////////////////////
-    /////////////////////  POLITIQUE  ////////////////////////////
-    //////////////////////////////////////////////////////////////
-
-    #[Route("/politique", name:"app_category_politique")]
-    public function politique(): Response
+{    
+    #[Route("/{categorySlug}/{id}", name:"app_category")]
+    public function categoryPage(ArticleRepository $articleRepository, $id): Response
     {
-        return $this->render('blog/categories/politique.html.twig');
+        $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
+        $articles = $articleRepository->findAllArticlesByCategoryId($id);
+
+        return $this->render('blog/articles/category.html.twig', [
+            "heroArticles" => $heroArticles,
+            "articles" => $articles,
+        ]);
     }
 
-    //////////////////////////////////////////////////////////////
-    //////////////////////  ECONOMIE  ////////////////////////////
-    //////////////////////////////////////////////////////////////
-
-    #[Route("/economie", name:"app_category_economie")]
-    public function economie(): Response
-    {
-        return $this->render('blog/categories/economie.html.twig');
-    }
-
-    //////////////////////////////////////////////////////////////
-    ////////////////////  GEOPOLITIQUE  //////////////////////////
-    //////////////////////////////////////////////////////////////
-
-    #[Route("/geopolitique", name:"app_category_geopolitique")]
-    public function geopolitique(): Response
-    {
-        return $this->render('blog/categories/geopolitique.html.twig');
-    }
-
-    //////////////////////////////////////////////////////////////
-    //////////////////////  SOCIETE  /////////////////////////////
-    //////////////////////////////////////////////////////////////
-
-    #[Route("/societe", name:"app_category_societe")]
-    public function societe(): Response
-    {
-        return $this->render('blog/categories/societe.html.twig');
-    }
-
-    //////////////////////////////////////////////////////////////
-    ///////////////  ARTS & LITTERATURE //////////////////////////
-    //////////////////////////////////////////////////////////////
-
-    #[Route("/arts-litteratures", name:"app_category_artsLitteratures")]
-    public function artsLitteratures(): Response
-    {
-        return $this->render('blog/categories/artsLitteratures.html.twig');
-    }
-
-    //////////////////////////////////////////////////////////////
-    ////////////////////  PAROLE LIBRE  //////////////////////////
-    //////////////////////////////////////////////////////////////
-
-    #[Route("/parole-libre", name:"app_category_paroleLibre")]
-    public function paroleLibre(): Response
-    {
-        return $this->render('blog/categories/paroleLibre.html.twig');
-    }
-
-    #[Route("/{category}/article/{id}", name:"app_category_article")]
+    #[Route("/{categorySlug}/article/{id}", name:"app_category_article")]
     public function showArticle(ArticleRepository $articleRepository, $id): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);

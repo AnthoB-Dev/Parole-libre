@@ -15,6 +15,11 @@ class CategoryType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 "label" => "Nom de la catégorie: ",
+                "required" => true,
+            ])
+            ->add("slug", TextType::class, [
+                "label" => "Définir le slug de la catégorie (ce sera la route à afficher dans l'url ex: /parole-libre.",
+                "required" => true,
             ])
         ;
     }

@@ -58,7 +58,7 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd tous les articles par catégorie, prend en paramètre l'id d'une catégorie (category.id)
+     * Récupère dans la bdd tous les articles par catégorie, triés par date de creation, du plus récent au plus ancien. Prend en paramètre l'id d'une catégorie (category.id)
      * 
      * @return array
      */

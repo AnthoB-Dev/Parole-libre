@@ -8,9 +8,9 @@
 
 {% block main %}
 
-   <section class="container-content-body" style="padding-top: 7rem !important;">
+   <section class="container-content-body" style="padding-top: 7rem !important; max-width: 1300px !important;">
    
-      <div class="wrapper-body-content" style="background-color: #ffffff !important;">
+      <div class="wrapper-body-content" style="background-color: #ffffff !important; flex-basis: 100% !important;">
 
          <div class="wrapper-body-article">
 
@@ -18,7 +18,10 @@
 
                <div class="article-header-infos">
                   <div class="article-header-infos-box" id="article-category">
-                     <span id="article-category-span">{{category}}</span>
+                     <span id="article-category-span">{{article.category.name}}</span>
+                  </div>
+                  <div>
+                     <span>{{article.subtitle}}</span>
                   </div>
                   <div class="article-header-infos-box" id="article-author">
                      <p class="author"><span class="greyedOut">Auteur</span> <span class="spanRed spanSlabbold">{{article.user.pseudo}}</span> <span class="greyedOut">le</span> {{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</p>
@@ -68,10 +71,6 @@
             </div>
          </div>
       </div>
-
-      <aside class="wrapper-body-sidebar">
-         {% include "components/_generic-sidebar.html.twig" %}
-      </aside>
 
    </section>
 
