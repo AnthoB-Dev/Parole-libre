@@ -1,0 +1,29 @@
+<div class="container-header-content">
+
+   <div class="container-header-icons">
+      <div class="container-boxes">
+            <div class="social-box"><a href="#" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a></div>
+            <div class="social-box"><a href="#" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a></div>
+            <div class="social-box"><a href="#" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a></div>
+      </div>
+   </div>
+   <div class="container-header-logo">
+      <a href="{{path("accueil")}}">
+            <img src="{{asset("assets/img/2-logo-no-background-315x106.png")}}" alt="Logo du site d'informations 'Parole Libre'">
+      </a>
+   </div>
+   <div class="container-header-icons">
+      <div class="container-boxes no-shadows">
+            <div class="social-box"><a href="#" class="icon-search"><i class="fa-solid fa-magnifying-glass"></i></a></div>
+            {% if app.user %}
+               <div class="social-box"><a href="#" class="icon-user"><i class="fa-solid fa-user"></i></a></div>
+               <div class="social-box"><a href="{{path("app_logout")}}" class="icon-user"><i class="fa-solid fa-right-from-bracket"></i></a></div>
+               {% if "ROLE_ADMIN" in app.user.roles or "ROLE_SUPERADMIN" in app.user.roles %}
+                  <div class="social-box"><a href="{{path("app_admin_index")}}" class="icon-user"><i class="fa-solid fa-gear"></i></i></a></div>
+               {% endif %}
+            {% else %}
+               <div class="social-box"><a href="{{path("app_login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>
+            {% endif %}
+      </div>
+   </div>
+</div>

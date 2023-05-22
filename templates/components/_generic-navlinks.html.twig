@@ -1,8 +1,0 @@
-<nav class="container-header-nav">
-   <ul class="header-navlinks">
-      <li><a href="{{path("accueil")}}">Accueil</a></li>
-      {% for category in getCategories() %}
-         <li><a href="{{path("app_category", {"categorySlug": category.categorySlug, "id": category.id}) }}">{{category.name}}</a></li>
-      {% endfor %}
-   </ul>
-</nav>

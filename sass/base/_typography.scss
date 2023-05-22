@@ -1,16 +1,21 @@
 // Roboto
 @font-face {
-   font-family: 'roboto-regular';
-   src: url('../fonts/Roboto-webfontkit/roboto-regular-webfont.woff2') format('woff2'),
-        url('../fonts/Roboto-webfontkit/roboto-regular-webfont.woff') format('woff');
+   font-family: 'roboto_regular';
+   src: url('../fonts/Roboto-webfontkit/roboto-regular-webfont.woff2') format('woff2');
    font-weight: normal;
    font-style: normal;
 }
 
 @font-face {
-   font-family: 'roboto-bold';
-   src: url('../fonts/Roboto-webfontkit/roboto-bold-webfont.woff2') format('woff2'),
-        url('../fonts/Roboto-webfontkit/roboto-bold-webfont.woff') format('woff');
+   font-family: 'roboto_medium';
+   src: url('../fonts/Roboto-webfontkit/roboto-medium-webfont.woff2') format('woff2');
+   font-weight: normal;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'roboto_bold';
+   src: url('../fonts/Roboto-webfontkit/roboto-bold-webfont.woff2') format('woff2');
    font-weight: normal;
    font-style: normal;
 }
@@ -18,31 +23,28 @@
 // Roboto Slab
 @font-face {
    font-family: 'roboto_slabregular';
-   src: url('../fonts/Roboto_Slab-webfontkit/robotoslab-regular-webfont.woff2') format('woff2'),
-        url('../fonts/Roboto_Slab-webfontkit/robotoslab-regular-webfont.woff') format('woff');
+   src: url('../fonts/Roboto_Slab-webfontkit/robotoslab-regular-webfont.woff2') format('woff2');
    font-weight: normal;
    font-style: normal;
 }
 
 @font-face {
    font-family: 'roboto_slabmedium';
-   src: url('../fonts/Roboto_Slab-webfontkit/robotoslab-medium-webfont.woff2') format('woff2'),
-        url('../fonts/Roboto_Slab-webfontkit/robotoslab-medium-webfont.woff') format('woff');
+   src: url('../fonts/Roboto_Slab-webfontkit/robotoslab-medium-webfont.woff2') format('woff2');
    font-weight: normal;
    font-style: normal;
 }
 
 @font-face {
    font-family: 'roboto_slabbold';
-   src: url('../fonts/Roboto_Slab-webfontkit/robotoslab-bold-webfont.woff2') format('woff2'),
-        url('../fonts/Roboto_Slab-webfontkit/robotoslab-bold-webfont.woff') format('woff');
+   src: url('../fonts/Roboto_Slab-webfontkit/robotoslab-bold-webfont.woff2') format('woff2');
    font-weight: normal;
    font-style: normal;
 }
 
 
 :root {
-   font-family: "roboto-regular";
+   font-family: "roboto_medium";
    font-size: 16px;
 }
 

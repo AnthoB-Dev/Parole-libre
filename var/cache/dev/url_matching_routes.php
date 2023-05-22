@@ -51,7 +51,10 @@ return [
                 .'|/admin/contenu/articles/modifier\\-article/([^/]++)(*:219)'
                 .'|/([^/]++)/(?'
                     .'|([^/]++)(*:248)'
-                    .'|article/([^/]++)(*:272)'
+                    .'|article/([^/]++)(?'
+                        .'|(*:275)'
+                        .'|/del\\-comment/([^/]++)(*:305)'
+                    .')'
                 .')'
             .')/?$}sDu',
     ],
@@ -65,8 +68,9 @@ return [
         159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
         219 => [[['_route' => 'app_admin_content_article_edit', '_controller' => 'App\\Controller\\AdminController::editArticle'], ['id'], null, null, false, true, null]],
         248 => [[['_route' => 'app_category', '_controller' => 'App\\Controller\\BlogController::categoryPage'], ['categorySlug', 'id'], null, null, false, true, null]],
-        272 => [
-            [['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['categorySlug', 'id'], null, null, false, true, null],
+        275 => [[['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['categorySlug', 'id'], null, null, false, true, null]],
+        305 => [
+            [['_route' => 'app_comment_del', '_controller' => 'App\\Controller\\BlogController::delComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

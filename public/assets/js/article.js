@@ -27,6 +27,7 @@ window.onload = function() {
       articleCategorySpan.style= "background-color: " + clrPolitique + " !important;";
       articleTitle.style= "border-bottom: solid 2px " + clrPolitique + " !important;";
       articleTitle.firstElementChild.style="color: " + clrPolitique + " !important;";
+      carrouselArticleTitle.firstElementChild.style="color: " + clrPolitique + " !important;";
 
    } else if (pathname.startsWith('/parole-libre/public/economie')) {
       articleCategorySpan.style= "background-color: " + clrEconomie + " !important;";

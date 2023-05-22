@@ -12,7 +12,6 @@
 
         <div class="container-title-header">
             <h2>Dernières publications ajoutés</h2>
-            <a href="#" class="btnShowMore">voir plus</a>
         </div>
 
         <div class="container-carrousel-header">
@@ -43,7 +42,8 @@
                                 </div>
 
                                 <div class="carrousel-article-content">
-                                    <p> {{heroArticle.content}} </p>
+                                    <p class="cutoff-text-8"> {{heroArticle.content}} </p>
+                                    <a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id} )}}">Lire la suite</a>
                                 </div>
 
                                 <div class="carrousel-article-actions">
@@ -58,7 +58,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category='{{heroArticle.category.name}}'">
+                                <input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category='{{heroArticle.category.name}}'>
 
                             </article>
                         {% endfor %}
@@ -194,7 +194,8 @@
                                             <h4>{{article.title}}</h4>
                                         </div>
                                         <div class="container-card-content">
-                                            <p>{{article.content}}</p>
+                                            <p class="cutoff-text-6">{{article.content}}</p>
+                                            <a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id} )}}">Lire la suite</a>
                                         </div>
                                         <div class="container-card-actions">
                                             <p>
@@ -204,7 +205,7 @@
                                                 </span>{{article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR')}}
                                             </p>
                                         </div>
-                                        <input type="hidden" class="articleId" value="{{article.id}}" data-category='{{article.category.name}}'">
+                                        <input type="hidden" class="articleId" value="{{article.id}}" data-category='{{article.category.name}}'>
                                     </article>
                                 {% endfor %}
 
@@ -357,7 +358,7 @@
         
         {# Sidebar #}
         <aside class="wrapper-body-sidebar">
-            {% include "components/_generic-sidebar.html.twig" %}
+            {% include "commons/_generic-sidebar.html.twig" %}
         </aside>
     
     </section>

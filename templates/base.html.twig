@@ -28,7 +28,7 @@
 
             {% if app.request.attributes.get('_route')|starts_with('app_admin') %}
 
-                {% include "components/_sidebar-admin.html.twig" %}
+                {% include "commons/_sidebar-admin.html.twig" %}
                 <div class="sidebar-placeholder"></div>
 
             {% elseif app.request.attributes.get('_route') == 'app_login' or app.request.attributes.get('_route') == 'app_register' %}
@@ -37,7 +37,7 @@
 
                 <header id="header-container">
 
-                    {% include "components/_generic-header.html.twig" %}
+                    {% include "commons/_generic-header.html.twig" %}
 
                 </header>
 
@@ -50,7 +50,7 @@
             {% if app.request.attributes.get('_route')|starts_with('app_admin') or app.request.attributes.get('_route') == 'app_login' or app.request.attributes.get('_route') == 'app_register' %}
                 {# Si page login ou register, aucune nav #}
             {% else %}
-                {% include "components/_generic-navlinks.html.twig" %}
+                {% include "commons/_generic-navlinks.html.twig" %}
             {% endif %}
 
 

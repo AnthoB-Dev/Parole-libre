@@ -7,6 +7,7 @@
     --clr-geopolitique: #3581B8;
     --clr-societe: #c0c781;
     --clr-arts: #c47ac0;
+    --clr-paroleLibre: #668D6C;
 
     //- Categories backgrounds
     --clr-unSat-politique: #FC773D;
@@ -62,4 +63,28 @@
 
 html {
     scroll-behavior: smooth;
+}
+
+.cutoff-text-8 {
+    --max-lines : 8;
+    
+    width: 100%;
+
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
+}
+
+.cutoff-text-6 {
+    --max-lines : 6;
+    
+    width: 100%;
+
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
 }
