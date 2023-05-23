@@ -1049,6 +1049,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  font-weight: 300;
 }
 .wrapper-body-comments .container-comments-body .container-comment {
   width: 100%;
@@ -1093,11 +1094,12 @@ a {
   color: var(--clr-logo-green);
   font-size: 1.1em;
 }
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions div i {
+  color: #f58821;
+  cursor: pointer;
+}
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions div a {
   padding: 0.3rem 0.6rem;
-}
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div a:first-child i {
-  color: #f58821;
 }
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions div a i {
   color: var(--clr-logo-red);
@@ -1112,6 +1114,11 @@ a {
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions div button i {
   color: var(--clr-logo-red);
   font-size: 16px;
+}
+.wrapper-body-comments .container-comments-body h5 {
+  font-size: 1.1em;
+  font-family: "roboto_regular";
+  font-style: italic;
 }
 .wrapper-body-comments .container-addComment {
   width: 100%;

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ArticleComment;
 use App\Form\ArticleCommentType;
+use App\Form\ArticleType;
 use App\Repository\ArticleCommentRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
@@ -30,22 +31,23 @@ class BlogController extends AbstractController
     }
 
     #[Route("/{categorySlug}/article/{id}", name:"app_category_article")]
-    public function showArticle(ArticleRepository $articleRepository, $id, Security $security, Request $request, ArticleCommentRepository $articleCommentRepository): Response
+    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);
-        $articleComments = $articleCommentRepository->findAll();
+        $articleComments = $articleCommentRepository->findBy(["article" => $id]);
         $articleCategory = $article->getCategory()->getName();
-
+        
         $comment = new ArticleComment();
-        $commentForm = $this->createForm(ArticleCommentType::class, $comment);
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
-        $comment->setCreatedAt($date);
-        $comment->setUser($security->getUser());
-        $comment->setArticle($article);
+        
+        $commentForm = $this->createForm(ArticleCommentType::class, $comment);
         $commentForm->handleRequest($request);
-
+        
         if($commentForm->isSubmitted() && $commentForm->isValid()) {
-            $categorySlug = $comment->getArticle()->getCategory()->getCategorySlug();
+            $comment->setCreatedAt($date);
+            $comment->setUser($security->getUser());
+            $comment->setArticle($article);
+            dd($comment);
             $articleCommentRepository->save($comment, true);
             $this->addFlash("commentAdded", "Commentaire ajouté");
             return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
@@ -59,13 +61,30 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route("/{categorySlug}/article/{id}/del-comment/{commentId}", name:"app_comment_del")]
-    public function delComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId): Response
+    #[Route("/{categorySlug}/article/{id}/suppr/{commentId}", name:"app_comment_del")]
+    public function delComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId, $categorySlug): Response
+    {
+        $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
+        $comment = $articleCommentRepository->remove($comment, true);
+        $this->addFlash("commentaryDeleted", "Le commentaire a été supprimé.");
+
+        return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
+    }
+
+    #[Route("/{categorySlug}/article/{id}/edit/{commentId}", name:"app_comment_edit")]
+    public function editComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId, Request $request): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $categorySlug = $comment->getArticle()->getCategory()->getCategorySlug();
-        $comment = $articleCommentRepository->remove($comment, true);
-        $this->addFlash("commentaryDeleted", "Le commentaire a été supprimer.");
+        $editForm = $this->createForm(ArticleType::class, $comment);
+        $editForm->handleRequest($request);
+
+        if($editForm->isSubmitted() && $editForm->isValid()) {
+            dd($comment);
+            $articleCommentRepository->save($comment, true);
+        }
+
+        $this->addFlash("commentaryEdited", "Le commentaire a été modifié.");
 
         return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
     }

@@ -53,7 +53,10 @@ return [
                     .'|([^/]++)(*:248)'
                     .'|article/([^/]++)(?'
                         .'|(*:275)'
-                        .'|/del\\-comment/([^/]++)(*:305)'
+                        .'|/(?'
+                            .'|suppr/([^/]++)(*:301)'
+                            .'|edit/([^/]++)(*:322)'
+                        .')'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -69,8 +72,9 @@ return [
         219 => [[['_route' => 'app_admin_content_article_edit', '_controller' => 'App\\Controller\\AdminController::editArticle'], ['id'], null, null, false, true, null]],
         248 => [[['_route' => 'app_category', '_controller' => 'App\\Controller\\BlogController::categoryPage'], ['categorySlug', 'id'], null, null, false, true, null]],
         275 => [[['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['categorySlug', 'id'], null, null, false, true, null]],
-        305 => [
-            [['_route' => 'app_comment_del', '_controller' => 'App\\Controller\\BlogController::delComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null],
+        301 => [[['_route' => 'app_comment_del', '_controller' => 'App\\Controller\\BlogController::delComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
+        322 => [
+            [['_route' => 'app_comment_edit', '_controller' => 'App\\Controller\\BlogController::editComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

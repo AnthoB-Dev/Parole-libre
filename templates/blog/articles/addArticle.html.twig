@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{article.title}}{% endblock %}
+
+{% block javascripts %}
+   <script src="{{asset("assets/js/article.js")}}" defer></script>
+{% endblock %}
+
+{% block main %}
+
+   <section class="container-content-body" style="padding-top: 7rem !important; max-width: 1300px !important;">
+   
+      <div class="wrapper-body-content" style="background-color: #ffffff !important; flex-basis: 100% !important;">
+
+         <div class="wrapper-body-comments">
+            <div class="container-comments-header">
+               <h2>Commentaires</h2>
+            </div>
+            
+
+            <div class="container-addComment">
+               <div class="container-addComment-title">
+                  <h5>Ajouter un commentaire</h5>
+               </div>
+               
+               {{form_start(commentForm, {"attr": {"class": "container-addComment-input"}} ) }}
+                  <div>
+                     {{form_widget(commentForm.content) }}
+                     <button type="submit">Commenter</button>
+                  </div>
+               {{form_end(commentForm)}}
+            </div>
+         </div>
+      </div>
+
+   </section>
+
+{% endblock %}

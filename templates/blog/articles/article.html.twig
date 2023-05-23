@@ -45,86 +45,73 @@
                   <div class="container-article-content">
                      <p>
                         {{article.content}}
-                        {# Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas cupiditate odit quam aperiam, veniam temporibus deserunt fugiat non quas dicta cumque ratione, pariatur eius tempore quibusdam beatae est officiis sapiente!
-                        Rerum incidunt aspernatur tenetur, ipsum expedita laboriosam placeat sit quod exercitationem eius harum, et accusamus atque ad fugit molestias voluptate nostrum dolor! Nihil tempore explicabo inventore ipsum, autem minus hic.
-                        Dicta repellendus voluptatibus facere cupiditate animi aut, officiis unde excepturi. Porro nisi fugit quaerat alias eum iste odio, rem eveniet laboriosam sapiente doloremque amet quam nobis asperiores pariatur nemo delectus.
-                        Aut, doloribus numquam dolorem, ad dolorum corporis deleniti ea in accusantium ex nulla corrupti reprehenderit quasi at sint harum adipisci! Nemo eius consectetur ad mollitia eveniet ipsum atque error odio?
-                        Quia architecto illo odit tempora, consequuntur culpa sit facilis libero distinctio in magnam sequi! Provident, nesciunt optio deleniti accusantium quas, ipsa at quaerat repellat, praesentium magnam laborum vel sunt officia!
-                        Sunt eius nisi veniam quasi explicabo. <br><br>Obcaecati fugit impedit sit? Id ipsa qui sint rem, nobis recusandae veritatis? Tenetur, esse. Voluptatibus delectus numquam aperiam rerum hic sapiente quod incidunt corporis.
-                        Reprehenderit voluptas delectus recusandae voluptate unde corrupti et illum quisquam perspiciatis, beatae dolor! Pariatur nulla cum temporibus numquam tempora, corporis ipsa dicta omnis molestias rem fugit, enim repellendus delectus iste?
-                        Dolor consectetur veniam possimus temporibus sunt provident excepturi, blanditiis repellendus illum doloremque nostrum, repudiandae molestiae ad eligendi quas earum veritatis unde ut. Illum soluta corporis unde voluptatem, optio aspernatur facere.
-                        Repellendus, ratione! <br><br> Voluptatem nulla quaerat repellendus, laborum numquam perferendis doloremque iure atque rerum quas ab explicabo impedit sint eveniet cumque est ad hic. Quae labore incidunt asperiores earum iure pariatur?
-                        Tempore sint nemo blanditiis incidunt veritatis rem eius autem rerum placeat quam mollitia animi praesentium ullam iusto repellendus similique aliquid quas, maiores reprehenderit! Sequi illum qui consequuntur veniam possimus! At.
-                        Aperiam itaque libero laborum error illum rerum voluptate doloremque totam corporis nemo eveniet aut odit cupiditate quisquam, et recusandae aspernatur similique? Suscipit ipsam laborum sit velit a earum ut ab.
-                        In sit vero explicabo quis amet? Maiores, tempore at velit quis necessitatibus molestiae. Blanditiis quaerat, accusamus numquam magni rerum, quo sapiente voluptatibus officia ab atque ducimus, quisquam recusandae aspernatur pariatur.
-                        Corporis animi repellendus recusandae, dolores incidunt dolorum eligendi ipsam nostrum, odio ea voluptatem. Ad cum corporis laudantium, totam, perspiciatis iure dolores sint, eaque optio similique hic enim doloribus? Dicta, inventore.
-                        Ut inventore officiis, error quod quos voluptate reprehenderit iure corporis temporibus aspernatur itaque nihil consequuntur non corrupti dignissimos explicabo eius accusamus, delectus dolorum accusantium? Harum, illum! Possimus nam eligendi cum?
-                        Aspernatur eligendi harum expedita aperiam blanditiis tempore obcaecati recusandae officia omnis incidunt nulla explicabo earum, eum nesciunt minus optio mollitia quia culpa doloremque id? Dolorem quod commodi qui consequuntur sapiente.
-                        Vel maxime odit a voluptatibus blanditiis beatae. Obcaecati quos ad, est alias corrupti minima quibusdam repellat, ipsa quaerat laudantium inventore soluta consequuntur incidunt magni voluptatum quam asperiores! Ullam, id tenetur?
-                        Quod ducimus obcaecati commodi necessitatibus saepe. <br><br>Dolorum architecto reiciendis deleniti harum quam mollitia adipisci nobis distinctio! Error provident in dignissimos molestias quisquam cupiditate similique eum. Repellat incidunt quas eaque id.
-                        Possimus et architecto dolorum incidunt dicta recusandae, quo atque iusto labore similique in mollitia nam, tempora minus suscipit vel iure praesentium facere rerum accusamus velit, a cum. Quod, sunt ea.
-                        Aliquam porro repudiandae reiciendis veritatis tempora amet esse nisi laboriosam in, ab, nobis perferendis dolorum est exercitationem, eius perspiciatis eos odit sequi libero cum neque obcaecati sunt. Itaque, dolor sed?
-                        Aspernatur architecto a, atque dolor dolorem quam fuga velit nihil deserunt, ipsa nulla aperiam itaque repellat nobis natus ipsam repellendus esse quod. Accusamus amet quia quaerat animi libero, odit tempore. #}
                      </p>
                   </div>
                </article>
             </div>
          </div>
 
-         {% if app.flashes.commentaryDeleted is defined %}
-            <div class="alert alert-success">
-               {{ app.flashes.commentaryDeleted }}
-            </div>
-         {% endif %}
-         {% if app.flashes.commentAdded is defined %}
-            <div class="alert alert-success">
-               {{ app.flashes.commentAdded }}
-            </div>
-         {% endif %}
+         <div class="alert alert-success">
+            {% for message in app.flashes('commentaryDeleted') %}
+               {{ message }}
+            {% endfor %}
+         </div>
+         <div class="alert alert-success">
+            {% for message in app.flashes('commentAdded') %}
+               {{ message }}
+            {% endfor %}
+         </div>
 
          <div class="wrapper-body-comments">
             <div class="container-comments-header">
                <h2>Commentaires</h2>
             </div>
-            {% for comment in articleComments %}
-               <div class="container-comments-body">
-                  <div class="container-comment">
-                     <div class="comment-author">
-                        <p>
-                           <span class="spanRed">{{comment.user.pseudo}}</span><span class="greyedOut">le</span>{{ comment.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }} <span class="greyedOut">à</span> {{ comment.createdAt|date('H\hi') }}</span>
-                        </p>
-                     </div>
-                     <div class="comment-content">
-                        <p>{{comment.content}}</p>
-                     </div>
-                     <div class="comment-actions">
-                        <div class="action-likes">
-                           <span>100</span>
-                           <i class="fa-regular fa-thumbs-up"></i>
+            {% if articleComments is not empty %}
+               {% for comment in articleComments %}
+                  <div class="container-comments-body">
+                     <div class="container-comment">
+                        <div class="comment-author">
+                           <p>
+                              <span class="spanRed">{{comment.user.pseudo}}</span><span class="greyedOut">le</span>{{ comment.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }} <span class="greyedOut">à</span> {{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i') }} </span>
+                           </p>
                         </div>
-                        <div>
-                           {% if comment.user == app.user %}
-                              <a href="{{path("app_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.id, "commentId": comment.id} )}}">
-                                 <i class="fa-solid fa-eraser"></i>
-                              </a>
-                           {% endif %}
+                        <div class="comment-content">
+                           <p>{{comment.content}}</p>
+                        </div>
+                        <div class="comment-actions">
+                           <div class="action-likes">
+                              <span>100</span>
+                              <i class="fa-regular fa-thumbs-up"></i>
+                           </div>
+                           <div>
+                              {% if comment.user == app.user %}
+                                 {# <a href="{{path("app_comment_edit", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}"> #}
+                                    <i class="fa-solid fa-eraser editIcon"></i>
+                                 {# </a> #}
+                              {% endif %}
 
-                           {% if is_granted("ROLE_ADMIN") %}
-                              <a href="{{path("app_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.id, "commentId": comment.id} )}}">
-                                 <i class="fa-solid fa-trash-can"></i>
-                              </a>
-                           {% endif %}
+                              {% if is_granted("ROLE_ADMIN") %}
+                                 <a href="{{path("app_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                 </a>
+                              {% endif %}
 
-                           {% if comment.user != app.user %}
-                              <button>
-                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                              </button>
-                           {% endif %}
+                              {% if comment.user != app.user %}
+                                 <button>
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                 </button>
+                              {% endif %}
+                           </div>
                         </div>
                      </div>
                   </div>
+               {% endfor %}
+            {% else %}
+               <div class="container-comments-body">
+                  <h5>Aucun commentaires n'a encore été rédigé pour cet article. Réagissez en premier!</h5>
                </div>
-            {% endfor %}
+            {% endif %}
+
             <div class="container-addComment">
                <div class="container-addComment-title">
                   <h5>Ajouter un commentaire</h5>
