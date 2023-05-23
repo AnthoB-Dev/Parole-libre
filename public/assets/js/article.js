@@ -61,7 +61,7 @@
 
    // const form = document.querySelector(".container-addComment-input");
    // const url = window.location.pathname;
-
+   
    // form.addEventListener("submit", async(e) => {
    //    e.preventDefault();
       
@@ -96,19 +96,17 @@
          if(commentContent) {
             const form = document.createElement("form");
             form.style="width: 100%;height: 100%;display: flex;flex-direction: column;align-items: flex-end;gap: 0.5rem;";
-            form.attributes.name="edit-comment";
+            form.name="edit-comment";
 
             const input = document.createElement("textarea");
             input.style="width: 100%; min-height: 100px; box-shadow: inset 0 0 13px -5px; padding: 1rem; border: none; border-radius: 5px; resize: none; font-size: 1.1em;";
-            const inputText = commentContent.textContent;
-            input.append(inputText);
+            input.textContent = commentContent.textContent.trim();
 
             const button = document.createElement("button");
             button.type="submit";
             button.innerText="Modifier";
             form.append(input);
             form.append(button);
-
 
             commentContent.replaceChild(form, commentContent.querySelector("p"))
          }

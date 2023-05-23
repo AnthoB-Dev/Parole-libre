@@ -1090,9 +1090,16 @@ a {
   justify-content: space-between;
   gap: 1rem;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-likes i {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-likes a {
+  padding: 0.3rem;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-likes a i {
   color: var(--clr-logo-green);
-  font-size: 1.1em;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-likes span {
+  font-family: "roboto_regular";
+  font-size: 0.9em;
+  color: #4d4d4d;
 }
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions div i {
   color: #f58821;

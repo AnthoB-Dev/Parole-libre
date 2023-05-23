@@ -58,6 +58,7 @@ return [
                             .'|edit/([^/]++)(*:322)'
                         .')'
                     .')'
+                    .'|([^/]++)/like\\-comment/([^/]++)(*:363)'
                 .')'
             .')/?$}sDu',
     ],
@@ -73,8 +74,9 @@ return [
         248 => [[['_route' => 'app_category', '_controller' => 'App\\Controller\\BlogController::categoryPage'], ['categorySlug', 'id'], null, null, false, true, null]],
         275 => [[['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['categorySlug', 'id'], null, null, false, true, null]],
         301 => [[['_route' => 'app_comment_del', '_controller' => 'App\\Controller\\BlogController::delComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
-        322 => [
-            [['_route' => 'app_comment_edit', '_controller' => 'App\\Controller\\BlogController::editComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null],
+        322 => [[['_route' => 'app_comment_edit', '_controller' => 'App\\Controller\\BlogController::editComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
+        363 => [
+            [['_route' => 'app_comment_like_add', '_controller' => 'App\\Controller\\BlogController::toggleCommentLike'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

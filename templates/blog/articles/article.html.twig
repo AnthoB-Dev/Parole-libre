@@ -68,6 +68,7 @@
             </div>
             {% if articleComments is not empty %}
                {% for comment in articleComments %}
+
                   <div class="container-comments-body">
                      <div class="container-comment">
                         <div class="comment-author">
@@ -80,8 +81,22 @@
                         </div>
                         <div class="comment-actions">
                            <div class="action-likes">
-                              <span>100</span>
-                              <i class="fa-regular fa-thumbs-up"></i>
+                              <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
+                              {% if status is defined %}
+                                 {% if status is same as "unliked" %}
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                 {% else %}
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                 {% endif %}
+                              {% else %}
+                                 <i class="fa-regular fa-thumbs-up"></i>
+                              {% endif %}
+                              </a>
+                              <span>
+                                 {% if comment.getCommentLikesCount() != 0 %}
+                                    {{comment.getCommentLikesCount()}}
+                                 {% endif %}
+                              </span>
                            </div>
                            <div>
                               {% if comment.user == app.user %}

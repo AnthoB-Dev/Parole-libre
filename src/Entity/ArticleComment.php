@@ -169,4 +169,15 @@ class ArticleComment
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getCommentLikesCount(): int
+    {
+        /** @var Collection<int, CommentLike> $commentLikes */
+        $commentLikes = $this->getCommentLikes();
+
+        return $commentLikes->count();
+    }
 }

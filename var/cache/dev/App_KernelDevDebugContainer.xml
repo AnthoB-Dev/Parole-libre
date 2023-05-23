@@ -394,6 +394,9 @@
     <service id="App\Form\CategoryType" class="App\Form\CategoryType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
+    <service id="App\Form\CommentLikeType" class="App\Form\CommentLikeType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
     <service id="App\Form\RegistrationFormType" class="App\Form\RegistrationFormType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
@@ -1194,6 +1197,7 @@
         <argument>App\Form\ArticleCommentType</argument>
         <argument>App\Form\ArticleType</argument>
         <argument>App\Form\CategoryType</argument>
+        <argument>App\Form\CommentLikeType</argument>
         <argument>App\Form\RegistrationFormType</argument>
         <argument>App\Form\ReportReasonType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
@@ -3180,7 +3184,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
-      <argument type="service" id=".service_locator.fCiLwZk"/>
+      <argument type="service" id=".service_locator.VB9yyfc"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -6080,6 +6084,8 @@
     <service id=".abstract.instanceof.App\Form\ArticleType" class="App\Form\ArticleType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\CategoryType" class="App\Form\CategoryType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\CategoryType" class="App\Form\CategoryType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\CommentLikeType" class="App\Form\CommentLikeType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\CommentLikeType" class="App\Form\CommentLikeType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\RegistrationFormType" class="App\Form\RegistrationFormType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\RegistrationFormType" class="App\Form\RegistrationFormType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\ReportReasonType" class="App\Form\ReportReasonType" autowire="true" abstract="true"/>
@@ -6462,11 +6468,12 @@
         <argument key="reportReasonRepository" type="service_closure" id="App\Repository\ReportReasonRepository"/>
       </argument>
     </service>
-    <service id=".service_locator.qH12MF8" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.k6mD1Th" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="articleCommentRepository" type="service_closure" id="App\Repository\ArticleCommentRepository"/>
         <argument key="articleRepository" type="service_closure" id="App\Repository\ArticleRepository"/>
+        <argument key="commentLikeRepository" type="service_closure" id="App\Repository\CommentLikeRepository"/>
         <argument key="security" type="service_closure" id="security.helper"/>
       </argument>
     </service>
@@ -6474,6 +6481,14 @@
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="articleCommentRepository" type="service_closure" id="App\Repository\ArticleCommentRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.bCk8bLZ" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="articleCommentRepository" type="service_closure" id="App\Repository\ArticleCommentRepository"/>
+        <argument key="commentLikeRepository" type="service_closure" id="App\Repository\CommentLikeRepository"/>
+        <argument key="security" type="service_closure" id="security.helper"/>
       </argument>
     </service>
     <service id=".service_locator.iQAD6w2" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -6491,7 +6506,7 @@
         <argument key="authenticationUtils" type="service_closure" id="security.authentication_utils"/>
       </argument>
     </service>
-    <service id=".service_locator._RW8rI2" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.WgpYoHw" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AdminController::addArticle" type="service_closure" id=".service_locator.JjJp5aL"/>
@@ -6504,7 +6519,8 @@
         <argument key="App\Controller\BlogController::categoryPage" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\BlogController::delComment" type="service_closure" id=".service_locator.NSXjMWT"/>
         <argument key="App\Controller\BlogController::editComment" type="service_closure" id=".service_locator.NSXjMWT"/>
-        <argument key="App\Controller\BlogController::showArticle" type="service_closure" id=".service_locator.qH12MF8"/>
+        <argument key="App\Controller\BlogController::showArticle" type="service_closure" id=".service_locator.k6mD1Th"/>
+        <argument key="App\Controller\BlogController::toggleCommentLike" type="service_closure" id=".service_locator.bCk8bLZ"/>
         <argument key="App\Controller\IndexController::index" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\RegistrationController::register" type="service_closure" id=".service_locator.iQAD6w2"/>
         <argument key="App\Controller\SecurityController::login" type="service_closure" id=".service_locator.zFcJjKU"/>
@@ -6522,7 +6538,8 @@
         <argument key="App\Controller\BlogController:categoryPage" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\BlogController:delComment" type="service_closure" id=".service_locator.NSXjMWT"/>
         <argument key="App\Controller\BlogController:editComment" type="service_closure" id=".service_locator.NSXjMWT"/>
-        <argument key="App\Controller\BlogController:showArticle" type="service_closure" id=".service_locator.qH12MF8"/>
+        <argument key="App\Controller\BlogController:showArticle" type="service_closure" id=".service_locator.k6mD1Th"/>
+        <argument key="App\Controller\BlogController:toggleCommentLike" type="service_closure" id=".service_locator.bCk8bLZ"/>
         <argument key="App\Controller\IndexController:index" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\RegistrationController:register" type="service_closure" id=".service_locator.iQAD6w2"/>
         <argument key="App\Controller\SecurityController:login" type="service_closure" id=".service_locator.zFcJjKU"/>
@@ -6694,12 +6711,13 @@
       <argument type="service" id="debug.argument_resolver.not_tagged_controller.inner"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.fCiLwZk" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.VB9yyfc" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Form\ArticleCommentType" type="service_closure" id="App\Form\ArticleCommentType"/>
         <argument key="App\Form\ArticleType" type="service_closure" id="App\Form\ArticleType"/>
         <argument key="App\Form\CategoryType" type="service_closure" id="App\Form\CategoryType"/>
+        <argument key="App\Form\CommentLikeType" type="service_closure" id="App\Form\CommentLikeType"/>
         <argument key="App\Form\RegistrationFormType" type="service_closure" id="App\Form\RegistrationFormType"/>
         <argument key="App\Form\ReportReasonType" type="service_closure" id="App\Form\ReportReasonType"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service_closure" id="form.type.entity"/>
@@ -7359,12 +7377,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator._RW8rI2"/>
+      <argument type="service" id=".service_locator.WgpYoHw"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator._RW8rI2"/>
+      <argument type="service" id=".service_locator.WgpYoHw"/>
     </service>
     <service id="debug.traced.messenger.bus.default.inner" class="Symfony\Component\Messenger\MessageBus">
       <argument type="iterator">
@@ -8275,7 +8293,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator._RW8rI2"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.WgpYoHw"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
@@ -8294,11 +8312,12 @@
     <service id="Psr\Log\LoggerInterface $deprecationLogger" alias="monolog.logger.deprecation"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id=".service_locator.0GV1BZZ" alias=".service_locator.gSv9zYw"/>
-    <service id=".service_locator.CV.1p6N" alias=".service_locator.qH12MF8"/>
+    <service id=".service_locator.yeyTn5l" alias=".service_locator.k6mD1Th"/>
+    <service id=".service_locator.zH1zFMu" alias=".service_locator.bCk8bLZ"/>
     <service id=".service_locator.x__eXbe" alias=".service_locator.iQAD6w2"/>
-    <service id=".service_locator.kgyXrOt" alias=".service_locator._RW8rI2"/>
+    <service id=".service_locator.OX8BXCO" alias=".service_locator.WgpYoHw"/>
     <service id=".service_locator.wKF4yn1" alias=".service_locator.19_mNxd"/>
-    <service id=".service_locator.5MQD6yi" alias=".service_locator.fCiLwZk"/>
+    <service id=".service_locator.ENpWkD3" alias=".service_locator.VB9yyfc"/>
     <service id=".service_locator.XW18Svm" alias=".service_locator.TcKhdzh"/>
     <service id=".service_locator.O24_MAy" alias=".service_locator.yY.p4P7"/>
     <service id=".service_locator._eRAkJb" alias=".service_locator.jIxfAsi"/>
@@ -8351,8 +8370,9 @@
     <service id=".service_locator.jsP1p89" alias=".service_locator.JjJp5aL"/>
     <service id=".service_locator.7u3DfCJ" alias=".service_locator.RdVbGrJ"/>
     <service id=".service_locator.AU1rrhj" alias=".service_locator._aoRC.5"/>
-    <service id=".service_locator.eoBggCS" alias=".service_locator.qH12MF8"/>
+    <service id=".service_locator.kjHBfAH" alias=".service_locator.k6mD1Th"/>
     <service id=".service_locator.scLS6X." alias=".service_locator.NSXjMWT"/>
+    <service id=".service_locator.pjqusY4" alias=".service_locator.bCk8bLZ"/>
     <service id=".service_locator.yhWEeZ1" alias=".service_locator.iQAD6w2"/>
     <service id=".service_locator.URfgn8g" alias=".service_locator.zFcJjKU"/>
     <service id=".service_locator.eAaUVIw" alias=".service_locator.jIxfAsi"/>

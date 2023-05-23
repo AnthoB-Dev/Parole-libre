@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\ArticleComment;
+use App\Entity\CommentLike;
 use App\Form\ArticleCommentType;
 use App\Form\ArticleType;
 use App\Repository\ArticleCommentRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\CommentLikeRepository;
 use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +33,7 @@ class BlogController extends AbstractController
     }
 
     #[Route("/{categorySlug}/article/{id}", name:"app_category_article")]
-    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug): Response
+    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug, CommentLikeRepository $commentLikeRepository): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);
         $articleComments = $articleCommentRepository->findBy(["article" => $id]);
@@ -47,12 +49,11 @@ class BlogController extends AbstractController
             $comment->setCreatedAt($date);
             $comment->setUser($security->getUser());
             $comment->setArticle($article);
-            dd($comment);
             $articleCommentRepository->save($comment, true);
             $this->addFlash("commentAdded", "Commentaire ajouté");
             return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
         }
-
+        
         return $this->render("blog/articles/article.html.twig", [
             "article" => $article,
             "category" => $articleCategory,
@@ -87,5 +88,47 @@ class BlogController extends AbstractController
         $this->addFlash("commentaryEdited", "Le commentaire a été modifié.");
 
         return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
+    }
+
+    #[Route("/{categorySlug}/{id}/like-comment/{commentId}", name:"app_comment_like_add")]
+    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository)
+    {
+        
+        $currentUser = $security->getUser();     
+        $comment_id = $articleCommentRepository->findOneBy(["id" => $commentId]);
+        $commentLike = $commentLikeRepository->findOneBy([
+            'user' => $currentUser,
+            'article_comment' => $comment_id,
+        ]);
+
+        $status = "unliked";
+
+        if($commentLike) {
+            $userLiker = $commentLike->getUser();
+        }
+
+        if(!$commentLike) {
+            $like = new CommentLike();  
+            $like->setUser($security->getUser());
+            $like->setArticleComment($comment_id);
+            $commentLikeRepository->save($like, true);
+            $status = "liked";
+    
+        } else if($commentLike && $userLiker == $currentUser) {
+            $commentLikeRepository->remove($commentLike, true);
+            $status = "unliked";
+            
+        } else {
+            $like = new CommentLike(); 
+            $like->setUser($currentUser);
+            $like->setArticleComment($comment_id);
+            $commentLikeRepository->save($like, true);
+            $status = "liked";
+        }
+
+        return $this->redirectToRoute("app_category_article", [
+            "categorySlug" => $categorySlug, "id" => $id,
+            "status" => $status,
+        ]);
     }
 }
