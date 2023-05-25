@@ -127,8 +127,8 @@ class BlogController extends AbstractController
         }
 
         return $this->redirectToRoute("app_category_article", [
-            "categorySlug" => $categorySlug, "id" => $id,
-            "status" => $status,
+            "categorySlug" => $categorySlug, 
+            "id" => $id,
         ]);
     }
 }

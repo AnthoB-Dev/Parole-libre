@@ -93,7 +93,7 @@
       // Suppression toutes les classes de page précédentes
       container.classList.remove('accueil', 'politique', 'economie', 'geopolitique', 'societe', 'arts', 'paroleLibre');
 
-      if (pathname === '/parole-libre/public/accueil') {
+      if(pathname === '/parole-libre/public/accueil') {
          
          container.classList.add('accueil');
 
