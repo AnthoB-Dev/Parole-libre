@@ -91,6 +91,7 @@
 				</div>
 				<div class="container-body-category-articles">
 
+<<<<<<< Updated upstream
 {% for article in articles %}
 
 	<article class="container-body-category-article">
@@ -134,6 +135,51 @@
 		</a>
 	</article>
 {% endfor %}
+=======
+				{% for article in articles %}
+
+					<article class="container-body-category-article">
+
+						<a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id} )}}">
+
+							<div class="wrapper-category-image">
+								<img src="https://via.placeholder.com/500x300" alt="">
+							</div>
+
+							<div class="wrapper-category-content">
+
+								<h3>{{article.title}}</h3>
+
+								<p class="cutoff-text-8">{{article.content}}</p>
+								
+								<div class="container-content-footer">
+									
+									<div class="article-action author">
+										<span class="greyedOut">Auteur</span> <span class="spanRed">{{article.user.pseudo}}</span>
+									</div>
+
+									<div class="article-action publishedAt">
+										<span class="greyedOut">le</span> <span>{{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</span>
+									</div>
+									
+									<div class="article-action likes">
+										<div>
+											<p>43</p>
+											<i class="fa-regular fa-comment-dots"></i>
+										</div>
+										<div>
+											<p>256</p>
+											<i class="fa-regular fa-thumbs-up"></i>
+										</div>
+									</div>
+									
+									<input type="hidden" class="articleId" value="{{article.id}}" data-category="{{article.category.name}}">
+								</div>
+							</div>
+						</a>
+					</article>
+				{% endfor %}
+>>>>>>> Stashed changes
 				</div>
 			</div>
 		</div>

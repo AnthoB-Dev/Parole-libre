@@ -93,7 +93,8 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre l'id d'une catégorie (category.id)
+     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. 
+     * Prend en paramètre l'id d'une catégorie (category.id)
      * 
      * @return array
      */
@@ -112,7 +113,8 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Prend en paramètres $maxResults qui sera le nb d'article par ...$categories à afficher, ...$categories étant les id des catégories voulant être fetch. La fonction bouclera ensuite sur chaque id et récupèrera les données grâce à findArticlesByRecentlyPublishedAndByCategory()
+     * Prend en paramètres $maxResults qui sera le nb d'article par ...$categories à afficher, ...$categories étant les id des catégories voulant être fetch. 
+     * La fonction bouclera ensuite sur chaque id et récupèrera les données grâce à findArticlesByRecentlyPublishedAndByCategory()
      * 
      * @return array
      */

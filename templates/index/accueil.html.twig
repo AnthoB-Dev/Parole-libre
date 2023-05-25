@@ -165,8 +165,8 @@
                 <div class="container-body-categories">
 
                     <div class="container-categories-title">
-                        <h2>{{articles[i][0].category.name}}</h2>
-                        <a href="/{{articles[i][0].category.name}}" class="btnShowMore">voir plus</a>
+                        <h2>{{categoryArticles[0].category.name}}</h2>
+                        <a href="{{path("app_category", {"categorySlug": categoryArticles[0].category.categorySlug, "id": categoryArticles[0].category.id} )}}" class="btnShowMore">voir plus</a>
                     </div>
 
                     <div class="container-categories-content">

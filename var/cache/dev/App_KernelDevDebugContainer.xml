@@ -439,6 +439,7 @@
       <argument type="service" id="router.default"/>
     </service>
     <service id="App\Security\CustomUserChecker" class="App\Security\CustomUserChecker" autowire="true" autoconfigure="true"/>
+    <service id="App\Services\LikedHelper" class="App\Services\LikedHelper" autowire="true" autoconfigure="true"/>
     <service id="App\Twig\AppExtension" class="App\Twig\AppExtension" autowire="true" autoconfigure="true">
       <tag name="twig.extension"/>
       <argument type="service" id="App\Repository\CategoryRepository"/>

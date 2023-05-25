@@ -81,6 +81,7 @@
                         </div>
                         <div class="comment-actions">
                            <div class="action-likes">
+<<<<<<< Updated upstream
                               {% if app.user %}
                                  <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
                                     <i class="fa-regular fa-thumbs-up"></i>
@@ -90,6 +91,11 @@
                                     <i class="fa-regular fa-thumbs-up" style="display: inline; color: var(--clr-logo-green); cursor: auto;"></i>
                                  </div>
                               {% endif %}
+=======
+                              <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
+                                 <i class="fa-regular fa-thumbs-up"></i>
+                              </a>
+>>>>>>> Stashed changes
                               <span>
                                  {% if comment.getCommentLikesCount() != 0 %}
                                     {{comment.getCommentLikesCount()}}
@@ -97,6 +103,7 @@
                               </span>
                            </div>
                            <div>
+<<<<<<< Updated upstream
                               {% if app.user %}
                                  {% if comment.user == app.user %}
                                     <i class="fa-solid fa-eraser editIcon"></i>
@@ -107,6 +114,10 @@
                                        <i class="fa-solid fa-triangle-exclamation"></i>
                                     </button>
                                  {% endif %}
+=======
+                              {% if comment.user == app.user %}
+                                 <i class="fa-solid fa-eraser editIcon"></i>
+>>>>>>> Stashed changes
                               {% endif %}
 
                               {% if is_granted("ROLE_ADMIN") %}
