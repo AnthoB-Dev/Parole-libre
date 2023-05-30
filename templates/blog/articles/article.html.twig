@@ -85,6 +85,7 @@
                                  <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
                                     <i class="fa-regular fa-thumbs-up"></i>
                                  </a>
+                                 </a>
                               {% else %}
                                  <div style="display: inline;">
                                     <i class="fa-regular fa-thumbs-up" style="display: inline; color: var(--clr-logo-green); cursor: auto;"></i>
@@ -120,6 +121,12 @@
                   </div>
                {% endfor %}
             {% else %}
+                  <div class="container-comments-body">
+                     <h5>Aucun commentaires n'a encore été rédigé pour cet article. Réagissez le premier 
+                        {% if not app.user %} en vous <a href="{{path("app_login")}}">connectant!</a>
+                        {% else %}!{% endif %}
+                     </h5>
+                  </div>
                   <div class="container-comments-body">
                      <h5>Aucun commentaires n'a encore été rédigé pour cet article. Réagissez le premier 
                         {% if not app.user %} en vous <a href="{{path("app_login")}}">connectant!</a>
