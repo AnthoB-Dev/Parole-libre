@@ -1,3 +1,9 @@
+// From "utils"
+@import "./utils/classes";
+@import "./utils/functions";
+@import "./utils/mixins";
+@import "./utils/variables";
+
 // From "base"
 @import "./base/base";
 @import "./base/global";
@@ -22,8 +28,3 @@
 @import "./pages/article";
 @import "./pages/category";
 
-// From "utils"
-@import "./utils/classes";
-@import "./utils/functions";
-@import "./utils/mixins";
-@import "./utils/variables";

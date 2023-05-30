@@ -141,3 +141,13 @@
    backdrop-filter: blur(9px);
    border: 1px solid rgba(255, 255, 255, 0.25);
 }
+
+@media only screen and (max-width: 1024px) {
+
+   .container-header-nav {
+
+      .header-navlinks {
+         flex-wrap: wrap;
+      }
+   }
+}

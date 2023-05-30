@@ -1,1 +1,8 @@
-
+@mixin cutoff($lines) {
+   width: 100%;
+   display: -webkit-box;
+   overflow: hidden;
+   -webkit-box-orient: vertical;
+   -moz-box-orient: vertical;
+   -webkit-line-clamp: $lines;
+}

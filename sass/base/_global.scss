@@ -88,3 +88,15 @@ html {
     -moz-box-orient: vertical;
     -webkit-line-clamp: var(--max-lines);
 }
+
+.cutoff-text-3 {
+    --max-lines : 6;
+    
+    width: 100%;
+
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
+}
