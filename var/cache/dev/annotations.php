@@ -92,6 +92,10 @@ return [[
 '[C]App%5CController%5CBlogController%23showArticle' => 1,
 'App%5CController%5CBlogController%23delComment' => 0,
 '[C]App%5CController%5CBlogController%23delComment' => 1,
+'App%5CController%5CBlogController%23editComment' => 0,
+'[C]App%5CController%5CBlogController%23editComment' => 1,
+'App%5CController%5CBlogController%23toggleCommentLike' => 0,
+'[C]App%5CController%5CBlogController%23toggleCommentLike' => 1,
 'App%5CController%5CIndexController' => 0,
 '[C]App%5CController%5CIndexController' => 1,
 'App%5CController%5CIndexController%23index' => 0,
@@ -224,6 +228,8 @@ return [[
 '[C]App%5CEntity%5CArticleComment%23addReport' => 1,
 'App%5CEntity%5CArticleComment%23removeReport' => 0,
 '[C]App%5CEntity%5CArticleComment%23removeReport' => 1,
+'App%5CEntity%5CArticleComment%23getCommentLikesCount' => 0,
+'[C]App%5CEntity%5CArticleComment%23getCommentLikesCount' => 1,
 'App%5CEntity%5CArticleComment%24id' => 0,
 '[C]App%5CEntity%5CArticleComment%24id' => 1,
 'App%5CEntity%5CArticleComment%24user' => 0,
@@ -1020,6 +1026,6 @@ return [[
 ], [
 
 0 => [],
-1 => 1684788938,
+1 => 1685432446,
 
 ]];
