@@ -23,6 +23,44 @@
          {% else %}
             <div class="social-box"><a href="{{path("app_login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>
          {% endif %}
+         <div class="social-box burger" id="burger">
+            <div class="top-bar"></div>
+            <div class="middle-bar"></div>
+            <div class="bottom-bar"></div>
+         </div>
       </div>
    </div>
+</div>
+
+<div class="" id="burger-nav">
+   <div class="btnClose"><i class="fa-solid fa-xmark"></i></div>
+   <h5>Menus</h5>
+   <a href="{{path("accueil")}}" class="burger-navlink"><i class="fa-solid fa-house"></i>Accueil</a>
+   {% if app.user %}
+      <a href="#" class="burger-navlink"><i class="fa-solid fa-user"></i>Profil</a>
+   {% if "ROLE_ADMIN" in app.user.roles or "ROLE_SUPERADMIN" in app.user.roles %}
+      <a href="{{path("app_admin_index")}}" class="burger-navlink"><i class="fa-solid fa-gear"></i>Panel admin</a>
+   {% endif %}
+      <a href="{{path("app_logout")}}" class="burger-navlink"><i class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
+   {% else %}
+      <a href="{{path("app_login")}}" class="burger-navlink"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i>Connexion</a>
+   {% endif %}
+   <div class="container-burger-links">
+      <h5>Navigation</h5>
+      <nav>
+         <ul>
+            {% for category in getCategories() %}
+               <li class="burger-navlink"><a href="{{path("app_category", {"categorySlug": category.categorySlug, "id": category.id}) }}">{{category.name}}</a></li>
+            {% endfor %}
+         </ul>
+      </nav>
+   </div>
+   {# <div class="container-boxes">
+      <h5 id="nopad">Réseaux sociaux</h5>
+      <div>
+         <div class="social-box"><a href="#" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a></div>
+         <div class="social-box"><a href="#" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a></div>
+         <div class="social-box"><a href="#" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a></div>
+      </div>
+   </div> #}
 </div>
