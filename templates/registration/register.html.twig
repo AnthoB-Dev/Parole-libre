@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <div class="d-flex f-col m-auto">
+    <div class="d-flex f-col m-auto p-3">
         
         <h1 class="h3 mb-3 fw-normal text-center">S'inscrire</h1>
 
@@ -29,10 +29,14 @@
         {{ form_end(registrationForm) }}
             
         <div class="m-3">
-            <a href="{{path("app_login")}}" class="text-primary text-decoration-none d-flex align-items-baseline">Vous avez un compte ? <span class="btn btn-primary px-4 ms-2">Connectez-vous !</span></a>
+            <a href="{{path("app_login")}}" class="text-primary text-decoration-none d-flex align-items-baseline">
+                Vous avez un compte ? <span class="btn btn-primary px-4 ms-2">Connectez-vous !</span>
+            </a>
         </div>
         <div class="m-3">
-            <a href="{{path("accueil")}}" class="text-dark text-decoration-none"><i class="fa-solid fa-rotate-left danger"></i> Retour</a>
+            <a href="{{path("accueil")}}" class="text-dark text-decoration-none">
+                <i class="fa-solid fa-rotate-left danger"></i> Retour
+            </a>
         </div>
     </div> 
 

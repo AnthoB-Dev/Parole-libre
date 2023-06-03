@@ -11,10 +11,11 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
 class RegistrationFormType extends AbstractType
 {
@@ -24,10 +25,33 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 "label" => "Email",
                 "required" => true,
+                "constraints" => [
+                    new NotBlank([
+                        "message" => "Veuillez remplir ce champs."
+                    ]),
+                    new Email([
+                        "message" => "Saisissez une adresse email valide.",
+                    ]),
+                ]
             ])
             ->add('pseudo', TextType::class, [
                 "label" => "Pseudo",
                 "required" => true,
+                "constraints" => [
+                    new NotBlank([
+                        "message" => "Veuillez remplir ce champs.",
+                    ]),
+                    new Regex([
+                        "pattern" => "^[a-z0-9_-]{4,15}$/",
+                        "message" => "Format invalide! Votre pseudo peut contenir des lettres, chiffres et être séparé par des tirrets '-' .",
+                    ]),
+                    new Length([
+                        "min" => 4,
+                        "minMessage" => "Votre pseudo doit contenir au moins {{ limit }} caractères.",
+                        "max" => 15,
+                        "maxMessage" => "Merci de ne pas dépasser {{ limit }} caractères.",
+                    ])
+                ]
             ])
             ->add('plainPassword', RepeatedType::class, [
                 "type" => PasswordType::class,
@@ -42,7 +66,7 @@ class RegistrationFormType extends AbstractType
                 ], 
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Saisissez un mot de passe.',
+                        'message' => 'Veuillez remplir ce champs.',
                     ]),
                     new Length([
                         'min' => 8,
@@ -51,7 +75,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Regex([
                         "pattern" => "/^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/",
-                        "message" => "Minimum 8 caractères, au moins une lettre, un chiffre et un caractère spécial.",
+                        "message" => "Format invalide! Votre mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial.",
                     ])
                 ],
             ])
