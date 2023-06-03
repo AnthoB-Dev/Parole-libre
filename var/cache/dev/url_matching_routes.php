@@ -27,8 +27,8 @@ return [
         '/admin/structure/signalements' => [[['_route' => 'app_admin_structure_reportReasons', '_controller' => 'App\\Controller\\AdminController::reportReasons'], null, null, null, false, false, null]],
         '/admin/structure/signalements/add' => [[['_route' => 'app_admin_structure_reportReasons_add', '_controller' => 'App\\Controller\\AdminController::addReportReasons'], null, null, null, false, false, null]],
         '/accueil' => [[['_route' => 'accueil', '_controller' => 'App\\Controller\\IndexController::index'], null, null, null, false, false, null]],
-        '/register' => [[['_route' => 'app_register', '_controller' => 'App\\Controller\\RegistrationController::register'], null, null, null, false, false, null]],
-        '/login' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
+        '/inscription' => [[['_route' => 'app_register', '_controller' => 'App\\Controller\\RegistrationController::register'], null, null, null, false, false, null]],
+        '/connexion' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
         '/logout' => [[['_route' => 'app_logout', '_controller' => 'App\\Controller\\SecurityController::logout'], null, null, null, false, false, null]],
     ],
     [ // $regexpList

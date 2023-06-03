@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Se connecter{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
 <form method="post" class="d-flex f-col m-auto">
@@ -25,29 +25,22 @@
             <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
             <label for="inputPassword">Mot de passe</label>
         </div>
-
-        {# <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Rester connecter
-            </label>
-        </div> #}
     </div>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
 
-
     <button class="btn btn-lg btn-success mb-3" type="submit">
         Connexion
     </button>
 
     <div class="m-3">
-        <a href="{{path("app_register")}}" class="text-primary">Pas de compte ? Inscivez-vous !</a>
+        <a href="{{path("app_register")}}" class="text-primary text-decoration-none d-flex align-items-baseline">Pas de compte ? <span class="btn btn-primary px-4 ms-2">Inscivez-vous !</span></a>
     </div>
 
     <div class="m-3">
-        <a href="{{path("accueil")}}" class="text-dark">Retour</a>
+        <a href="{{path("accueil")}}" class="text-dark text-decoration-none"><i class="fa-solid fa-rotate-left danger"></i> Retour</a>
     </div>
 </form>
 {% endblock %}

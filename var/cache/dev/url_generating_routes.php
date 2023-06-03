@@ -35,7 +35,7 @@ return [
     'app_comment_edit' => [['categorySlug', 'id', 'commentId'], ['_controller' => 'App\\Controller\\BlogController::editComment'], [], [['variable', '/', '[^/]++', 'commentId', true], ['text', '/edit'], ['variable', '/', '[^/]++', 'id', true], ['text', '/article'], ['variable', '/', '[^/]++', 'categorySlug', true]], [], [], []],
     'app_comment_like_add' => [['categorySlug', 'id', 'commentId'], ['_controller' => 'App\\Controller\\BlogController::toggleCommentLike'], [], [['variable', '/', '[^/]++', 'commentId', true], ['text', '/like-comment'], ['variable', '/', '[^/]++', 'id', true], ['variable', '/', '[^/]++', 'categorySlug', true]], [], [], []],
     'accueil' => [[], ['_controller' => 'App\\Controller\\IndexController::index'], [], [['text', '/accueil']], [], [], []],
-    'app_register' => [[], ['_controller' => 'App\\Controller\\RegistrationController::register'], [], [['text', '/register']], [], [], []],
-    'app_login' => [[], ['_controller' => 'App\\Controller\\SecurityController::login'], [], [['text', '/login']], [], [], []],
+    'app_register' => [[], ['_controller' => 'App\\Controller\\RegistrationController::register'], [], [['text', '/inscription']], [], [], []],
+    'app_login' => [[], ['_controller' => 'App\\Controller\\SecurityController::login'], [], [['text', '/connexion']], [], [], []],
     'app_logout' => [[], ['_controller' => 'App\\Controller\\SecurityController::logout'], [], [['text', '/logout']], [], [], []],
 ];

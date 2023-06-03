@@ -1,46 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
 
-    {# {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.pseudo) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.isWriter) }}
-
-        <button type="submit" class="btn">S'inscrire</button>
-    {{ form_end(registrationForm) }} #}
-
     <div class="d-flex f-col m-auto">
         
-        <div class="form-signin">
-            {{ form_start(registrationForm) }}
-            <div class="form-signin">
-                <h1 class="h3 mb-3 fw-normal text-center">S'inscrire</h1>
+        <h1 class="h3 mb-3 fw-normal text-center">S'inscrire</h1>
 
-                <div class="form-floating mb-1 d-flex f-col">
-                    {{ form_row(registrationForm.email) }}
-                </div>
-                <div class="form-floating mb-1">
-                    {{ form_row(registrationForm.pseudo) }}
-                </div>
-                <div class="form-floating mb-1">
-                    {{ form_row(registrationForm.plainPassword) }}
-                </div>
-                <div class="checkbox mb-3">
-                    {{ form_row(registrationForm.isWriter) }}
-                </div>
+        {{ form_start(registrationForm, {"attr": {"class": "form-signin d-flex f-col"}} ) }}
+
+            <div class="form-floating mb-2 d-flex f-col">
+                {{ form_row(registrationForm.email, {"attr": {"class": "form-control"} }) }}
             </div>
+            <div class="form-floating mb-2">
+                {{ form_row(registrationForm.pseudo, {"attr": {"class": "form-control"}}) }}
+            </div>
+            <div class="form-floating mb-2" id="passwords">
+                {{ form_row(registrationForm.plainPassword.first, {"attr": {"class": "form-control"} }) }}
+                {{ form_row(registrationForm.plainPassword.second, {"attr": {"class": "form-control"} }) }}
+            </div>
+            <div class="checkbox mb-3">
+                {{ form_row(registrationForm.isWriter, {"attr": {"class": "d-flex"}}) }}
+            </div>
+
             <button type="submit" class="btn btn-lg btn-success mb-3">S'inscrire</button>
-            {{ form_end(registrationForm) }}
-            <div class="m-3">
-                <a href="{{path("app_login")}}" class="text-primary">Vous avez un compte ? Connectez-vous !</a>
-            </div>
-            <div class="m-3">
-                <a href="{{path("accueil")}}" class="text-dark">Retour</a>
-            </div>
+            
+        {{ form_end(registrationForm) }}
+            
+        <div class="m-3">
+            <a href="{{path("app_login")}}" class="text-primary text-decoration-none d-flex align-items-baseline">Vous avez un compte ? <span class="btn btn-primary px-4 ms-2">Connectez-vous !</span></a>
+        </div>
+        <div class="m-3">
+            <a href="{{path("accueil")}}" class="text-dark text-decoration-none"><i class="fa-solid fa-rotate-left danger"></i> Retour</a>
         </div>
     </div> 
+
 {% endblock %}
