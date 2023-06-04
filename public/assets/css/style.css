@@ -1680,24 +1680,31 @@ a {
   font-size: 0.9em;
   color: #4d4d4d;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div i {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons {
+  display: flex;
+  align-items: center;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons > i {
+  padding: 0.3rem 0.6rem;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons .editIcon {
   color: #f58821;
   cursor: pointer;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div a {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons a {
   padding: 0.3rem 0.6rem;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div a i {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons a i {
   color: var(--clr-logo-red);
   font-size: 16px;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div div {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons div {
   padding: 0.3rem 0.6rem;
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div div i {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons div i {
   color: var(--clr-logo-red);
   font-size: 16px;
 }

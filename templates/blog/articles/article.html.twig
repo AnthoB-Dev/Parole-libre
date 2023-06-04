@@ -11,26 +11,38 @@
    <section class="container-content-body" style="padding-top: 7rem !important; max-width: 1300px !important;">
    
       <div class="wrapper-body-content" style="background-color: #ffffff !important; flex-basis: 100% !important;">
-
          <div class="wrapper-body-article">
-
             <div class="container-article-header">
 
                <div class="article-header-infos">
+
                   <div class="article-header-infos-box" id="article-category">
-                     <span id="article-category-span">{{article.category.name}}</span>
+                     <span id="article-category-span">
+                        {{article.category.name}}
+                     </span>
                   </div>
                   <div>
-                     <span>{{article.subtitle}}</span>
+                     <h4>
+                        {{article.subtitle}}
+                     </h4>
                   </div>
                   <div class="article-header-infos-box" id="article-author">
-                     <p class="author"><span class="greyedOut">Auteur</span> <span class="spanRed spanSlabbold">{{article.user.pseudo}}</span> <span class="greyedOut">le</span> {{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</p>
+                     <p class="author">
+                        <span class="greyedOut">Auteur</span> 
+                        <span class="spanRed spanSlabbold">{{article.user.pseudo}}</span> 
+                        <span class="greyedOut">le</span> 
+                        {{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}
+                     </p>
                   </div>
+
                </div>
 
                <div class="article-header-title">
-                  <h1>{{article.title}}</h1>
+                  <h1>
+                     {{article.title}}
+                  </h1>
                </div>
+
             </div>
 
             <div class="container-article-body">
@@ -38,7 +50,7 @@
                <article class="wrapper-article">
 
                   <div class="container-article-image">
-                     <img src="https://via.placeholder.com/750x500" alt="">
+                     <img src="https://via.placeholder.com/750x500" alt="Image présentant l'article '{{article.title}}', article de la catégorie '{{article.category.name}}'">
                      <span>Légende de l'image</span>
                   </div>
 
@@ -47,7 +59,9 @@
                         {{article.content}}
                      </p>
                   </div>
+
                </article>
+
             </div>
          </div>
 
@@ -68,7 +82,6 @@
             </div>
             {% if articleComments %}
                {% for comment in articleComments %}
-
                   <div class="container-comments-body">
                      <div class="container-comment">
                         <div class="comment-author">
@@ -86,7 +99,6 @@
                         <div class="comment-content">
                            <p>{{comment.content}}</p>
                            {% if app.user and app.user == comment.user %}
-                              {# Formulaire de modification #}
                               {{ form_start(updateForms[comment.id], {"attr": {"class": "hidden"}}) }}
                                  {{ form_row(updateForms[comment.id].content) }}
                                  <button type="submit">Modifier</button>
@@ -124,8 +136,8 @@
                                  {% endif %}
                               {% endif %}
 
-                              {% if is_granted("ROLE_ADMIN") %}
-                                 <a href="{{path("app_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
+                              {% if app.user and is_granted("ROLE_ADMIN") %}
+                                 <a href="{{path("app_article_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
                                     <i class="fa-solid fa-trash-can"></i>
                                  </a>
                               {% endif %}

@@ -4,7 +4,6 @@
    const articleCategorySpan = document.querySelector("#article-category-span");
    const articleTitle = document.querySelector(".article-header-title");
    const editIcons = document.querySelectorAll(".editIcon");
-   const cancelIcons = document.querySelectorAll(".cancelIcon");
 
    const clrPolitique = "#FF4E00";
    const clrEconomie = "#FFB100";
@@ -31,7 +30,7 @@
          articleCategorySpan.style= "background-color: " + clrPolitique + " !important;";
          articleTitle.style= "border-bottom: solid 2px " + clrPolitique + " !important;";
          articleTitle.firstElementChild.style="color: " + clrPolitique + " !important;";
-         carrouselArticleTitle.firstElementChild.style="color: " + clrPolitique + " !important;";
+         // carrouselArticleTitle.firstElementChild.style="color: " + clrPolitique + " !important;";
 
       } else if (pathname.startsWith('/parole-libre/public/economie')) {
          articleCategorySpan.style= "background-color: " + clrEconomie + " !important;";
@@ -60,38 +59,10 @@
       }   
    }
 
-   // const form = document.querySelector(".container-addComment-input");
-   // const url = window.location.pathname;
-   
-   // form.addEventListener("submit", async(e) => {
-   //    e.preventDefault();
-      
-   //    const form = e.target;
-   //    const data = new FormData(form);
-   //    const url = window.location.pathname;
-
-   //    try {
-   //       const response = await fetch(url, { 
-   //          method: "POST",
-   //          body: data,
-   //       });
-
-   //       if (response.ok) {
-   //          console.log("commentaire sauvegardé.");
-   //       } else {
-   //          console.error("Erreur lors de la sauvegarde du commentaire.");
-   //       }
-
-   //       window.location.href= `${url}`;
-         
-   //    } catch (error) {
-   //       console.error("Erreur lors de la requête:", error);
-   //    }
-   // })
-
    const toggleCommentEditForm = (editIcon) => {
 
       const parent = editIcon.parentElement?.parentElement?.parentElement;
+      
       if(parent) {
 
          const commentContent = parent.querySelector(".comment-content");
@@ -105,7 +76,6 @@
          if(commentContent.firstElementChild) {
             
             if (!paragraph.classList.contains("hidden")) {
-               
                form.classList.toggle("hidden");
                paragraph.classList.toggle("hidden");
                iconPencil.classList.toggle("hidden");
@@ -123,10 +93,7 @@
    };
 
    editIcons.forEach(editIcon => {
-      console.log(editIcon);
       editIcon.addEventListener("click", () => {
-         console.log("test1");
-
          toggleCommentEditForm(editIcon);
       });
    });

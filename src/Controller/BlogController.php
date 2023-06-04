@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Security;
 
 class BlogController extends AbstractController
 {    
+    // Articles - Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
     #[Route("/{categorySlug}/{id}", name:"app_category")]
     public function categoryPage(ArticleRepository $articleRepository, $id): Response
     {
@@ -31,20 +32,23 @@ class BlogController extends AbstractController
         ]);
     }
 
+    // Article - Read : Page de lecture d'un article (blog/articles/article.html.twig)
+    // Commentaires - Create : Ajout d'un commentaire sur le dit article
+    // Commentaires - Read : Récupères les commentaires lié à l'article
+    // Commentaires - Update : Prépare un form de modification pour chaque commentaire présent, puis appel la fonction updateComment pour gérer la modification 
     #[Route("/{categorySlug}/article/{id}", name:"app_category_article")]
     public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);
         $articleComments = $articleCommentRepository->findBy(["article" => $id]);
         $articleCategory = $article->getCategory()->getName();
+        $updateForms = [];
         
         $comment = new ArticleComment();
-
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
         
         $commentForm = $this->createForm(ArticleCommentType::class, $comment);
         $commentForm->handleRequest($request);
-        $updateForms = [];
 
         if($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setCreatedAt($date);
@@ -55,10 +59,10 @@ class BlogController extends AbstractController
             return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
         }
         
-        foreach ($articleComments as $articleComment) {
+        foreach($articleComments as $articleComment) {
 
             $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
-                'action' => $this->generateUrl('app_category_article_update_comment', [
+                'action' => $this->generateUrl('app_article_comment_update', [
                     "categorySlug" => $categorySlug,
                     'id' => $articleComment->getArticle()->getId(), 
                     "commentId" => $articleComment->getId()
@@ -68,8 +72,7 @@ class BlogController extends AbstractController
             $updateForm->handleRequest($request);
             $updateForms[$articleComment->getId()] = $updateForm->createView();
     
-            if ($updateForm->isSubmitted() && $updateForm->isValid()) {
-                // Enregistrez les modifications du commentaire
+            if($updateForm->isSubmitted() && $updateForm->isValid()) {
                 $articleCommentRepository->save($articleComment, true);
                 $this->addFlash('commentUpdated', 'Commentaire mis à jour');
                 return $this->redirectToRoute('app_category_article', ['categorySlug' => $categorySlug, 'id' => $id]);
@@ -85,34 +88,33 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route("/{categorySlug}/article/{id}/comment/{commentId}/update", name:"app_category_article_update_comment")]
+    // Commentaires - Update : Modification d'un commentaire posté
+    #[Route("/{categorySlug}/article/{id}/comment/{commentId}/update", name:"app_article_comment_update")]
     public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository ,$commentId, Security $security, $categorySlug, $id): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
 
-        // Vérification de l'utilisateur connecté et de l'utilisateur qui a créer le commentaire
         if($security->getUser() == $comment->getUser()) {
 
             $updateForm = $this->createForm(ArticleCommentType::class, $comment);
             $updateForm->handleRequest($request);
     
-            if ($updateForm->isSubmitted() && $updateForm->isValid()) {
+            if($updateForm->isSubmitted() && $updateForm->isValid()) {
                 $comment->setUpdatedAt($date);
                 $articleCommentRepository->save($comment, true);
                 $this->addFlash('commentUpdated', 'Commentaire mis à jour');
                 return $this->redirectToRoute('app_category_article', ['categorySlug' => $categorySlug, 'id' => $id]);
             }
     
-            // Retournez la même vue avec le formulaire d'édition du commentaire
             return $this->render('blog/articles/article.html.twig', [
                 'updateForm' => $updateForm->createView(),
             ]);
         }
-
     }
 
-    #[Route("/{categorySlug}/article/{id}/suppr/{commentId}", name:"app_comment_del")]
+    // Commentaires - Delete : Suppression d'un commentaire
+    #[Route("/{categorySlug}/article/{id}/comment/{commentId}/delete", name:"app_article_comment_del")]
     public function delComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId, $categorySlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
@@ -122,24 +124,7 @@ class BlogController extends AbstractController
         return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
     }
 
-    #[Route("/{categorySlug}/article/{id}/edit/{commentId}", name:"app_comment_edit")]
-    public function editComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId, Request $request): Response
-    {
-        $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
-        $categorySlug = $comment->getArticle()->getCategory()->getCategorySlug();
-        $editForm = $this->createForm(ArticleType::class, $comment);
-        $editForm->handleRequest($request);
-
-        if($editForm->isSubmitted() && $editForm->isValid()) {
-            dd($comment);
-            $articleCommentRepository->save($comment, true);
-        }
-
-        $this->addFlash("commentaryEdited", "Le commentaire a été modifié.");
-
-        return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
-    }
-
+    // Commentaires - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un commentaire
     #[Route("/{categorySlug}/{id}/like-comment/{commentId}", name:"app_comment_like_add")]
     public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository)
     {

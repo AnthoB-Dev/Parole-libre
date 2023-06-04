@@ -22,29 +22,26 @@
         {% endblock %}
     </head>
 
-    <body id="{% if app.request.attributes.get('_route')|starts_with('app_admin') %}body-admin{% endif %}">
+    <body id="{% if app.request.attributes.get('_route')|starts_with('app_admin') %}body-admin{% else %}body{% endif %}">
+
         <div class="filter hidden"></div>
 
-        {% block header %}
+        {% if app.request.attributes.get('_route')|starts_with('app_admin') %}
 
-            {% if app.request.attributes.get('_route')|starts_with('app_admin') %}
+            {% include "commons/_sidebar-admin.html.twig" %}
+            <div class="sidebar-placeholder"></div>
 
-                {% include "commons/_sidebar-admin.html.twig" %}
-                <div class="sidebar-placeholder"></div>
+        {% elseif app.request.attributes.get('_route') == 'app_login' or app.request.attributes.get('_route') == 'app_register' %}
+            {# Si page login ou register, aucun header #}
+        {% else %}
 
-            {% elseif app.request.attributes.get('_route') == 'app_login' or app.request.attributes.get('_route') == 'app_register' %}
-                {# Si page login ou register, aucun header #}
-            {% else %}
+            <header id="header-container">
 
-                <header id="header-container">
+                {% include "commons/_generic-header.html.twig" %}
 
-                    {% include "commons/_generic-header.html.twig" %}
+            </header>
 
-                </header>
-
-            {% endif %}
-
-        {% endblock %}
+        {% endif %}
 
         <main class="{% if app.request.attributes.get('_route')|starts_with('app_admin') %}body-container-admin{% else %}body-container{% endif %}"{% if app.request.attributes.get('_route') == 'app_login' or app.request.attributes.get('_route') == 'app_register' %} style="height: 100vh;" {% endif %}>
 
@@ -53,7 +50,6 @@
             {% else %}
                 {% include "commons/_generic-navlinks.html.twig" %}
             {% endif %}
-
 
             {% block body %}
 
@@ -67,12 +63,10 @@
 
         </main>
 
-        {% block footer %}
 
-            <footer id="footer-container">
+        <footer id="footer-container">
+        
+        </footer>
             
-            </footer>
-            
-        {% endblock %}
     </body>
 </html>

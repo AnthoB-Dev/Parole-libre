@@ -1,9 +1,15 @@
 <div class="container-header-content">
    <div class="container-header-icons">
       <div class="container-boxes">
-         <div class="social-box"><a href="#" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a></div>
-         <div class="social-box"><a href="#" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a></div>
-         <div class="social-box"><a href="#" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a></div>
+         <div class="social-box">
+            <a href="#" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a>
+         </div>
+         <div class="social-box">
+            <a href="#" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a>
+         </div>
+         <div class="social-box">
+            <a href="#" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a>
+         </div>
       </div>
    </div>
    <div class="container-header-logo">
@@ -35,15 +41,22 @@
 <div id="burger-nav">
    <div class="btnClose"><i class="fa-solid fa-xmark"></i></div>
    <h5>Menus</h5>
+
    <a href="{{path("accueil")}}" class="burger-navlink"><i class="fa-solid fa-house"></i>Accueil</a>
+
    {% if app.user %}
       <a href="#" class="burger-navlink"><i class="fa-solid fa-user"></i>Profil</a>
-   {% if "ROLE_ADMIN" in app.user.roles or "ROLE_SUPERADMIN" in app.user.roles %}
-      <a href="{{path("app_admin_index")}}" class="burger-navlink"><i class="fa-solid fa-gear"></i>Panel admin</a>
-   {% endif %}
+
+      {% if is_granted("ROLE_ADMIN") %}
+         <a href="{{path("app_admin_index")}}" class="burger-navlink"><i class="fa-solid fa-gear"></i>Panel admin</a>
+      {% endif %}
+
       <a href="{{path("app_logout")}}" class="burger-navlink"><i class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
+
    {% else %}
+
       <a href="{{path("app_login")}}" class="burger-navlink"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i>Connexion</a>
+
    {% endif %}
    <div class="container-burger-links">
       <h5>Navigation</h5>
