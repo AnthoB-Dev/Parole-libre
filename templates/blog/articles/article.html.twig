@@ -51,15 +51,15 @@
             </div>
          </div>
 
-         <div class="alert alert-success">
+         <div class="alert alert-success" style="margin: 1rem 0; padding: 0; color: var(--clr-logo-red)">
             {% for message in app.flashes('commentaryDeleted') %}
-               {{ message }}
-            {% endfor %}
+               <p style="color: var(--clr-logo-red); margin: 1rem 0;">{{ message|trim }}</p>
+            {% endfor %}
          </div>
          <div class="alert alert-success">
             {% for message in app.flashes('commentAdded') %}
-               {{ message }}
-            {% endfor %}
+               <p style="color: var(--clr-logo-green); margin: 1rem 0;">{{ message|trim }}</p>
+            {% endfor %}
          </div>
 
          <div class="wrapper-body-comments">
@@ -73,11 +73,25 @@
                      <div class="container-comment">
                         <div class="comment-author">
                            <p>
-                              <span class="spanRed">{{comment.user.pseudo}}</span><span class="greyedOut">le</span>{{ comment.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }} <span class="greyedOut">à</span> {{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i') }} </span>
+                              <span class="spanRed">{{comment.user.pseudo}}</span>
+                              <span class="greyedOut">le</span>
+                              {{ comment.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }} 
+                              <span class="greyedOut">à</span> {{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i') }}</span>
+
+                              {% if comment.updatedAt %}
+                                 <span class="greyedOut" style="margin-left: .5rem;">édité le {{comment.updatedAt|format_datetime(pattern='d MMMM', locale='fr_FR')}} à {{ comment.updatedAt|date('H') }}h{{ comment.updatedAt|date('i') }}</span>
+                              {% endif %}
                            </p>
                         </div>
                         <div class="comment-content">
                            <p>{{comment.content}}</p>
+                           {% if app.user and app.user == comment.user %}
+                              {# Formulaire de modification #}
+                              {{ form_start(updateForms[comment.id], {"attr": {"class": "hidden"}}) }}
+                                 {{ form_row(updateForms[comment.id].content) }}
+                                 <button type="submit">Modifier</button>
+                              {{ form_end(updateForms[comment.id]) }}
+                           {% endif %}
                         </div>
                         <div class="comment-actions">
                            <div class="action-likes">
@@ -96,16 +110,17 @@
                                  {% endif %}
                               </span>
                            </div>
-                           <div>
-                              {% if app.user %}
+                           <div class="action-icons">
+                              {% if app.user and is_granted("ROLE_USER") %}
                                  {% if comment.user == app.user %}
-                                    <i class="fa-solid fa-eraser editIcon"></i>
+                                    <i class="fas fa-pencil-alt editIcon"></i>
+                                    <i class="fas fa-undo cancelIcon hidden"></i>
                                  {% endif %}
 
                                  {% if comment.user != app.user %}
-                                    <button>
+                                    <div>
                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                    </button>
+                                    </div>
                                  {% endif %}
                               {% endif %}
 

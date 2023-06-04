@@ -4,6 +4,7 @@
    const articleCategorySpan = document.querySelector("#article-category-span");
    const articleTitle = document.querySelector(".article-header-title");
    const editIcons = document.querySelectorAll(".editIcon");
+   const cancelIcons = document.querySelectorAll(".cancelIcon");
 
    const clrPolitique = "#FF4E00";
    const clrEconomie = "#FFB100";
@@ -88,28 +89,45 @@
    //    }
    // })
 
-   editIcons.forEach(editIcon => {
-      editIcon.addEventListener("click", () => {
-         const parent = editIcon.parentElement.parentElement.parentElement;
+   const toggleCommentEditForm = (editIcon) => {
+
+      const parent = editIcon.parentElement?.parentElement?.parentElement;
+      if(parent) {
+
          const commentContent = parent.querySelector(".comment-content");
-   
-         if(commentContent) {
-            const form = document.createElement("form");
-            form.style="width: 100%;height: 100%;display: flex;flex-direction: column;align-items: flex-end;gap: 0.5rem;";
-            form.name="edit-comment";
+         const commentActions = parent.querySelector(".comment-actions");
+         const icons = commentActions.querySelector(".action-icons");
+         const iconPencil = icons.querySelector(".editIcon");
+         const iconUndo = icons.querySelector(".cancelIcon");
+         const form = commentContent.querySelector("form");
+         const paragraph = commentContent.querySelector("p");
 
-            const input = document.createElement("textarea");
-            input.style="width: 100%; min-height: 100px; box-shadow: inset 0 0 13px -5px; padding: 1rem; border: none; border-radius: 5px; resize: none; font-size: 1.1em;";
-            input.textContent = commentContent.textContent.trim();
-
-            const button = document.createElement("button");
-            button.type="submit";
-            button.innerText="Modifier";
-            form.append(input);
-            form.append(button);
-
-            commentContent.replaceChild(form, commentContent.querySelector("p"))
+         if(commentContent.firstElementChild) {
+            
+            if (!paragraph.classList.contains("hidden")) {
+               
+               form.classList.toggle("hidden");
+               paragraph.classList.toggle("hidden");
+               iconPencil.classList.toggle("hidden");
+               iconUndo.classList.toggle("hidden");
+               iconUndo.addEventListener("click", () => toggleCommentEditForm(editIcon));
+            } else {
+               form.classList.toggle("hidden");
+               paragraph.classList.toggle("hidden");
+               iconPencil.classList.toggle("hidden");
+               iconUndo.classList.toggle("hidden");
+               iconUndo.addEventListener("click", () => toggleCommentEditForm(editIcon));
+            }
          }
+      }
+   };
+
+   editIcons.forEach(editIcon => {
+      console.log(editIcon);
+      editIcon.addEventListener("click", () => {
+         console.log("test1");
+
+         toggleCommentEditForm(editIcon);
       });
    });
    

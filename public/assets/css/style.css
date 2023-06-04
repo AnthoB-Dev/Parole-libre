@@ -1631,6 +1631,36 @@ a {
 .wrapper-body-comments .container-comments-body .container-comment .comment-content p {
   font-family: "roboto_regular";
 }
+.wrapper-body-comments .container-comments-body .container-comment .comment-content form {
+  display: flex;
+  flex-direction: column;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-content form div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-content form div label {
+  display: none;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-content form div textarea {
+  width: 100%;
+  min-height: 100px;
+  box-shadow: inset 0 0 10px -5px;
+  padding: 1rem;
+  border: none;
+  border-radius: 5px;
+  resize: none;
+  font-size: 1.1em;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-content form button {
+  align-self: flex-end;
+  margin: 10px 0;
+  padding: 5px 10px;
+}
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions {
   flex-basis: 10%;
   width: 100%;
@@ -1661,13 +1691,13 @@ a {
   color: var(--clr-logo-red);
   font-size: 16px;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div button {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions div div {
   padding: 0.3rem 0.6rem;
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
-.wrapper-body-comments .container-comments-body .container-comment .comment-actions div button i {
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions div div i {
   color: var(--clr-logo-red);
   font-size: 16px;
 }
@@ -1707,7 +1737,7 @@ a {
 .wrapper-body-comments .container-addComment .container-addComment-input div textarea {
   width: 100%;
   min-height: 150px;
-  box-shadow: inset 0 0 13px -5px;
+  box-shadow: inset 0 0 10px -5px;
   padding: 1rem;
   border: none;
   border-radius: 5px;

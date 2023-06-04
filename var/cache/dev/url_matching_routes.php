@@ -54,11 +54,12 @@ return [
                     .'|article/([^/]++)(?'
                         .'|(*:275)'
                         .'|/(?'
-                            .'|suppr/([^/]++)(*:301)'
-                            .'|edit/([^/]++)(*:322)'
+                            .'|comment/([^/]++)/update(*:310)'
+                            .'|suppr/([^/]++)(*:332)'
+                            .'|edit/([^/]++)(*:353)'
                         .')'
                     .')'
-                    .'|([^/]++)/like\\-comment/([^/]++)(*:363)'
+                    .'|([^/]++)/like\\-comment/([^/]++)(*:394)'
                 .')'
             .')/?$}sDu',
     ],
@@ -73,9 +74,10 @@ return [
         219 => [[['_route' => 'app_admin_content_article_edit', '_controller' => 'App\\Controller\\AdminController::editArticle'], ['id'], null, null, false, true, null]],
         248 => [[['_route' => 'app_category', '_controller' => 'App\\Controller\\BlogController::categoryPage'], ['categorySlug', 'id'], null, null, false, true, null]],
         275 => [[['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['categorySlug', 'id'], null, null, false, true, null]],
-        301 => [[['_route' => 'app_comment_del', '_controller' => 'App\\Controller\\BlogController::delComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
-        322 => [[['_route' => 'app_comment_edit', '_controller' => 'App\\Controller\\BlogController::editComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
-        363 => [
+        310 => [[['_route' => 'app_category_article_update_comment', '_controller' => 'App\\Controller\\BlogController::updateComment'], ['categorySlug', 'id', 'commentId'], null, null, false, false, null]],
+        332 => [[['_route' => 'app_comment_del', '_controller' => 'App\\Controller\\BlogController::delComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
+        353 => [[['_route' => 'app_comment_edit', '_controller' => 'App\\Controller\\BlogController::editComment'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
+        394 => [
             [['_route' => 'app_comment_like_add', '_controller' => 'App\\Controller\\BlogController::toggleCommentLike'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

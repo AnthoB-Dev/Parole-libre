@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{article.title}}{% endblock %}
+
+{% block javascripts %}
+   <script src="{{asset("assets/js/article.js")}}" defer></script>
+{% endblock %}
+
+{% block main %}
+
+   <section class="container-content-body" style="padding-top: 7rem !important; max-width: 1300px !important;">
+   
+      <div class="wrapper-body-content" style="background-color: #ffffff !important; flex-basis: 100% !important;">
+
+         <div class="wrapper-body-article">
+
+            <div class="container-article-header">
+
+               <div class="article-header-infos">
+                  <div class="article-header-infos-box" id="article-category">
+                     <span id="article-category-span">{{article.category.name}}</span>
+                  </div>
+                  <div>
+                     <span>{{article.subtitle}}</span>
+                  </div>
+                  <div class="article-header-infos-box" id="article-author">
+                     <p class="author"><span class="greyedOut">Auteur</span> <span class="spanRed spanSlabbold">{{article.user.pseudo}}</span> <span class="greyedOut">le</span> {{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</p>
+                  </div>
+               </div>
+
+               <div class="article-header-title">
+                  <h1>{{article.title}}</h1>
+               </div>
+            </div>
+
+            <div class="container-article-body">
+
+               <article class="wrapper-article">
+
+                  <div class="container-article-image">
+                     <img src="https://via.placeholder.com/750x500" alt="">
+                     <span>Légende de l'image</span>
+                  </div>
+
+                  <div class="container-article-content">
+                     <p>
+                        {{article.content}}
+                     </p>
+                  </div>
+               </article>
+            </div>
+         </div>
+
+         <div class="alert alert-success">
+            {% for message in app.flashes('commentaryDeleted') %}
+               {{ message }}
+            {% endfor %}
+         </div>
+         <div class="alert alert-success">
+            {% for message in app.flashes('commentAdded') %}
+               {{ message }}
+            {% endfor %}
+         </div>
+
+         <div class="wrapper-body-comments">
+            <div class="container-comments-header">
+               <h2>Commentaires</h2>
+            </div>
+            {% if articleComments %}
+               {% for comment in articleComments %}
+
+                  <div class="container-comments-body">
+                     <div class="container-comment">
+                        <div class="comment-author">
+                           <p>
+                              <span class="spanRed">{{comment.user.pseudo}}</span><span class="greyedOut">le</span>{{ comment.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }} <span class="greyedOut">à</span> {{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i') }} </span>
+                           </p>
+                        </div>
+                        <div class="comment-content">
+                           <p>{{comment.content}}</p>
+                        </div>
+                        <div class="comment-actions">
+                           <div class="action-likes">
+                              {% if app.user %}
+                                 <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                 </a>
+                              {% else %}
+                                 <div style="display: inline;">
+                                    <i class="fa-regular fa-thumbs-up" style="display: inline; color: var(--clr-logo-green); cursor: auto;"></i>
+                                 </div>
+                              {% endif %}
+                              <span>
+                                 {% if comment.getCommentLikesCount() != 0 %}
+                                    {{comment.getCommentLikesCount()}}
+                                 {% endif %}
+                              </span>
+                           </div>
+                           <div>
+                              {% if app.user %}
+                                 {% if comment.user == app.user %}
+                                    <i class="fa-solid fa-eraser editIcon"></i>
+                                 {% endif %}
+
+                                 {% if comment.user != app.user %}
+                                    <button>
+                                       <i class="fa-solid fa-triangle-exclamation"></i>
+                                    </button>
+                                 {% endif %}
+                              {% endif %}
+
+                              {% if is_granted("ROLE_ADMIN") %}
+                                 <a href="{{path("app_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                 </a>
+                              {% endif %}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               {% endfor %}
+            {% else %}
+                  <div class="container-comments-body">
+                     <h5>Aucun commentaires n'a encore été rédigé pour cet article. Réagissez le premier 
+                        {% if not app.user %} en vous <a href="{{path("app_login")}}">connectant!</a>
+                        {% else %}!{% endif %}
+                     </h5>
+                  </div>
+            {% endif %}
+            {% if app.user %}
+               <div class="container-addComment">
+                  <div class="container-addComment-title">
+                     <h5>Ajouter un commentaire</h5>
+                  </div>
+                  
+                  {{form_start(commentForm, {"attr": {"class": "container-addComment-input"}} ) }}
+                     <div>
+                        {{form_widget(commentForm.content) }}
+                        <button type="submit">Commenter</button>
+                     </div>
+                  {{form_end(commentForm)}}
+               </div>
+            {% else %}
+               <div class="container-addComment">
+                  <div class="container-addComment-title">
+                     <h5>Réagissez à cet article en vous <a href="{{path("app_login")}}">connectant!</a></h5>
+                  </div>
+               </div>
+            {% endif %}
+         </div>
+      </div>
+   </section>
+{% endblock %}
