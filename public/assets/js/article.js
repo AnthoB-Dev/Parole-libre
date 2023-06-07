@@ -12,6 +12,12 @@
    const clrArtsLitteratures = "#C47AC0";
    const clrParoleLibre = "#33673B";
 
+   const categoryContainer = document.querySelector("#article-category-span");
+   const title = document.querySelector(".article-header-title");
+   const titleColor = title.querySelector("label");
+
+   const categorySelect = document.querySelector("#article_category");
+
    // Sur scoll vers le bas, ajoute la classe "sticky à la nav" après 240px parcouru
    window.onscroll = () => {
       if (window.scrollY >= 240) { 
@@ -92,10 +98,69 @@
       }
    };
 
-   editIcons.forEach(editIcon => {
-      editIcon.addEventListener("click", () => {
-         toggleCommentEditForm(editIcon);
+   const changeColorsInNewArticle = (v) => {
+      
+      if(v == 1) {
+         categoryContainer.style = "background-color: " + clrPolitique + "!important;";
+         title.style = "border-bottom: 2px solid " + clrPolitique + "!important;"
+         titleColor.style = "color: " + clrPolitique + "!important;";
+      } else if (v == 2) {
+         categoryContainer.style = "background-color: " + clrArtsLitteratures + "!important;";
+         title.style = "border-bottom: 2px solid " + clrArtsLitteratures + "!important;"
+         titleColor.style = "color: " + clrArtsLitteratures + "!important;";
+      } else if (v == 5) {
+         categoryContainer.style = "background-color: " + clrEconomie + "!important;";
+         title.style = "border-bottom: 2px solid " + clrEconomie + "!important;"
+         titleColor.style = "color: " + clrEconomie + "!important;";
+      } else if (v == 6) {
+         categoryContainer.style = "background-color: " + clrSociete + "!important;";
+         title.style = "border-bottom: 2px solid " + clrSociete + "!important;"
+         titleColor.style = "color: " + clrSociete + "!important;";
+      } else if (v == 7) {
+         categoryContainer.style = "background-color: " + clrGeopolitique + "!important;";
+         title.style = "border-bottom: 2px solid " + clrGeopolitique + "!important;"
+         titleColor.style = "color: " + clrGeopolitique + "!important;";
+      } else if (v == 8) {
+         categoryContainer.style = "background-color: " + clrParoleLibre + "!important;";
+         title.style = "border-bottom: 2px solid " + clrParoleLibre + "!important;"
+         titleColor.style = "color: " + clrParoleLibre + "!important;";
+      }
+   }
+
+   if(editIcons) {
+
+      editIcons.forEach(editIcon => {
+         editIcon.addEventListener("click", () => {
+            toggleCommentEditForm(editIcon);
+         });
       });
-   });
+   }
+
+   if(document.getElementById('fileInputLabel')) {
+      
+      // document.getElementById('fileInputLabel').addEventListener('click', function (event) {
+      //    event.preventDefault();
+      //    document.getElementById('article_image').click();
+      // });
+      
+      document.getElementById('article_image').addEventListener('change', function (event) {
+         let reader = new FileReader();
+         reader.onload = function(e) {
+            document.getElementById('image').src = e.target.result;
+         };
+         reader.readAsDataURL(event.target.files[0]);
+      });
+
+      window.onload = function(){
+         let v = categorySelect.value;
+         changeColorsInNewArticle(v);
+      };
+
+      categorySelect.addEventListener("change", () => {
+         let v = categorySelect.value;
+         changeColorsInNewArticle(v);
+      });
+   }
+
    
 })();

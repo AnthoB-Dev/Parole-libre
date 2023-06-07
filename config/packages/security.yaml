@@ -37,10 +37,12 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/writer, roles: ROLE_WRITER }
 
     role_hierarchy:
         ROLE_USER: ROLE_USER
-        ROLE_ADMIN: ROLE_USER   
+        ROLE_WRITER: ROLE_USER
+        ROLE_ADMIN: ROLE_WRITER
         ROLE_SUPERADMIN: ROLE_ADMIN
 
 when@test:

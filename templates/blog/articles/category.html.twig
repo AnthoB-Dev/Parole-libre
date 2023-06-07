@@ -33,7 +33,7 @@
 								</div>
 
 								<div class="carrousel-article-image">
-									<img src="https://via.placeholder.com/480x320" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+									<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
 									<span>Légende de l'image</span>
 								</div>
 
@@ -80,6 +80,18 @@
 
 	</section>
 
+	{% if category == "parole-libre" %}
+      <div class="container-content-prebody">
+			<p>Vous aussi vous souhaitez publier un article ?</p>
+			{% if app.user.isWriter %}
+				<p>Alors n'attendez plus et faite valoir votre liberté d'expression! Rendez-vous <a href="{{path("app_article_new")}}">ici</a> pour commencer.</p>
+			{% else %}
+				<p>Vous en avez la possibilité si vous ne vous êtes pas défini en tant qu'auteur lors de l'inscription d'aller modifier cela dans votre</p>
+				<p><a href=""><i class="fa-solid fa-user"></i> profile</a>.</p>
+			{% endif %}
+		</div>
+   {% endif %}
+
 	<section class="container-content-body">
 
 		{# Section princpal #}
@@ -98,7 +110,7 @@
 						<a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id} )}}">
 
 							<div class="wrapper-category-image">
-								<img src="https://via.placeholder.com/500x300" alt="">
+								<img src="{{asset("upload_directory/" ~ article.image)}}" alt="Image correspondant à l'article '{{article.title}}'">
 							</div>
 
 							<div class="wrapper-category-content">

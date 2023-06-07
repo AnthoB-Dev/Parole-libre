@@ -14,8 +14,8 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
@@ -121,6 +121,10 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
             'Monolog\\' => 8,
             'Masterminds\\' => 12,
         ),
+        'F' => 
+        array (
+            'FOS\\CKEditorBundle\\' => 19,
+        ),
         'E' => 
         array (
             'Egulias\\EmailValidator\\' => 23,
@@ -143,6 +147,10 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
             'Doctrine\\Bundle\\MigrationsBundle\\' => 33,
             'Doctrine\\Bundle\\DoctrineBundle\\' => 31,
             'DeepCopy\\' => 9,
+        ),
+        'C' => 
+        array (
+            'Cocur\\Slugify\\' => 14,
         ),
         'A' => 
         array (
@@ -478,6 +486,10 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
+        'FOS\\CKEditorBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src',
+        ),
         'Egulias\\EmailValidator\\' => 
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
@@ -547,6 +559,10 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'Cocur\\Slugify\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cocur/slugify/src',
+        ),
         'App\\Tests\\' => 
         array (
             0 => __DIR__ . '/../..' . '/tests',
@@ -572,10 +588,13 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         'App\\Entity\\Report' => __DIR__ . '/../..' . '/src/Entity/Report.php',
         'App\\Entity\\ReportReason' => __DIR__ . '/../..' . '/src/Entity/ReportReason.php',
         'App\\Entity\\User' => __DIR__ . '/../..' . '/src/Entity/User.php',
+        'App\\Form\\ArticleCommentType' => __DIR__ . '/../..' . '/src/Form/ArticleCommentType.php',
         'App\\Form\\ArticleType' => __DIR__ . '/../..' . '/src/Form/ArticleType.php',
         'App\\Form\\CategoryType' => __DIR__ . '/../..' . '/src/Form/CategoryType.php',
+        'App\\Form\\CommentLikeType' => __DIR__ . '/../..' . '/src/Form/CommentLikeType.php',
         'App\\Form\\RegistrationFormType' => __DIR__ . '/../..' . '/src/Form/RegistrationFormType.php',
         'App\\Form\\ReportReasonType' => __DIR__ . '/../..' . '/src/Form/ReportReasonType.php',
+        'App\\Form\\UpdateCommentType' => __DIR__ . '/../..' . '/src/Form/UpdateCommentType.php',
         'App\\Kernel' => __DIR__ . '/../..' . '/src/Kernel.php',
         'App\\Repository\\ArticleCommentRepository' => __DIR__ . '/../..' . '/src/Repository/ArticleCommentRepository.php',
         'App\\Repository\\ArticleLikeRepository' => __DIR__ . '/../..' . '/src/Repository/ArticleLikeRepository.php',
@@ -586,7 +605,28 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         'App\\Repository\\ReportRepository' => __DIR__ . '/../..' . '/src/Repository/ReportRepository.php',
         'App\\Repository\\UserRepository' => __DIR__ . '/../..' . '/src/Repository/UserRepository.php',
         'App\\Security\\AppCustomAuthenticator' => __DIR__ . '/../..' . '/src/Security/AppCustomAuthenticator.php',
+        'App\\Security\\CustomUserChecker' => __DIR__ . '/../..' . '/src/Security/CustomUserChecker.php',
+        'App\\Services\\LikedHelper' => __DIR__ . '/../..' . '/src/Services/LikedHelper.php',
         'App\\Twig\\AppExtension' => __DIR__ . '/../..' . '/src/Twig/AppExtension.php',
+        'Cocur\\Slugify\\Bridge\\Laravel\\SlugifyFacade' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Laravel/SlugifyFacade.php',
+        'Cocur\\Slugify\\Bridge\\Laravel\\SlugifyServiceProvider' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Laravel/SlugifyServiceProvider.php',
+        'Cocur\\Slugify\\Bridge\\Latte\\SlugifyHelper' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Latte/SlugifyHelper.php',
+        'Cocur\\Slugify\\Bridge\\League\\SlugifyServiceProvider' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/League/SlugifyServiceProvider.php',
+        'Cocur\\Slugify\\Bridge\\Nette\\SlugifyExtension' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Nette/SlugifyExtension.php',
+        'Cocur\\Slugify\\Bridge\\Plum\\SlugifyConverter' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Plum/SlugifyConverter.php',
+        'Cocur\\Slugify\\Bridge\\Symfony\\CocurSlugifyBundle' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Symfony/CocurSlugifyBundle.php',
+        'Cocur\\Slugify\\Bridge\\Symfony\\CocurSlugifyExtension' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Symfony/CocurSlugifyExtension.php',
+        'Cocur\\Slugify\\Bridge\\Symfony\\Configuration' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Symfony/Configuration.php',
+        'Cocur\\Slugify\\Bridge\\Twig\\SlugifyExtension' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/Twig/SlugifyExtension.php',
+        'Cocur\\Slugify\\Bridge\\ZF2\\Module' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/ZF2/Module.php',
+        'Cocur\\Slugify\\Bridge\\ZF2\\SlugifyService' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/ZF2/SlugifyService.php',
+        'Cocur\\Slugify\\Bridge\\ZF2\\SlugifyViewHelper' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/ZF2/SlugifyViewHelper.php',
+        'Cocur\\Slugify\\Bridge\\ZF2\\SlugifyViewHelperFactory' => __DIR__ . '/..' . '/cocur/slugify/src/Bridge/ZF2/SlugifyViewHelperFactory.php',
+        'Cocur\\Slugify\\RuleProvider\\DefaultRuleProvider' => __DIR__ . '/..' . '/cocur/slugify/src/RuleProvider/DefaultRuleProvider.php',
+        'Cocur\\Slugify\\RuleProvider\\FileRuleProvider' => __DIR__ . '/..' . '/cocur/slugify/src/RuleProvider/FileRuleProvider.php',
+        'Cocur\\Slugify\\RuleProvider\\RuleProviderInterface' => __DIR__ . '/..' . '/cocur/slugify/src/RuleProvider/RuleProviderInterface.php',
+        'Cocur\\Slugify\\Slugify' => __DIR__ . '/..' . '/cocur/slugify/src/Slugify.php',
+        'Cocur\\Slugify\\SlugifyInterface' => __DIR__ . '/..' . '/cocur/slugify/src/SlugifyInterface.php',
         'Collator' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Collator.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
@@ -1869,6 +1909,21 @@ class ComposerStaticInit4f422e39700ae0690c67210fcafa2545
         'Egulias\\EmailValidator\\Warning\\QuotedString' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/QuotedString.php',
         'Egulias\\EmailValidator\\Warning\\TLD' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/TLD.php',
         'Egulias\\EmailValidator\\Warning\\Warning' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/Warning.php',
+        'FOS\\CKEditorBundle\\Builder\\JsonBuilder' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Builder/JsonBuilder.php',
+        'FOS\\CKEditorBundle\\Command\\CKEditorInstallerCommand' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Command/CKEditorInstallerCommand.php',
+        'FOS\\CKEditorBundle\\Config\\CKEditorConfiguration' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Config/CKEditorConfiguration.php',
+        'FOS\\CKEditorBundle\\Config\\CKEditorConfigurationInterface' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Config/CKEditorConfigurationInterface.php',
+        'FOS\\CKEditorBundle\\DependencyInjection\\Configuration' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/DependencyInjection/Configuration.php',
+        'FOS\\CKEditorBundle\\DependencyInjection\\FOSCKEditorExtension' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/DependencyInjection/FOSCKEditorExtension.php',
+        'FOS\\CKEditorBundle\\Exception\\BadProxyUrlException' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Exception/BadProxyUrlException.php',
+        'FOS\\CKEditorBundle\\Exception\\ConfigException' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Exception/ConfigException.php',
+        'FOS\\CKEditorBundle\\Exception\\FOSCKEditorException' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Exception/FOSCKEditorException.php',
+        'FOS\\CKEditorBundle\\FOSCKEditorBundle' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/FOSCKEditorBundle.php',
+        'FOS\\CKEditorBundle\\Form\\Type\\CKEditorType' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Form/Type/CKEditorType.php',
+        'FOS\\CKEditorBundle\\Installer\\CKEditorInstaller' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Installer/CKEditorInstaller.php',
+        'FOS\\CKEditorBundle\\Renderer\\CKEditorRenderer' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Renderer/CKEditorRenderer.php',
+        'FOS\\CKEditorBundle\\Renderer\\CKEditorRendererInterface' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Renderer/CKEditorRendererInterface.php',
+        'FOS\\CKEditorBundle\\Twig\\CKEditorExtension' => __DIR__ . '/..' . '/friendsofsymfony/ckeditor-bundle/src/Twig/CKEditorExtension.php',
         'IntlDateFormatter' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/IntlDateFormatter.php',
         'Locale' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Locale.php',
         'Masterminds\\HTML5' => __DIR__ . '/..' . '/masterminds/html5/src/HTML5.php',

@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class ArticleType extends AbstractType
 {
@@ -25,7 +26,7 @@ class ArticleType extends AbstractType
                 "class" => Category::class,
                 "choice_label" => "name",
                 "label" => "Catégorie",
-                "placeholder" => "-------",
+                "placeholder" => "Choisir",
                 "required" => true,
             ])
             ->add('title', TextType::class, [
@@ -42,7 +43,7 @@ class ArticleType extends AbstractType
                         "message" => "Ce champs ne peut être laisser vide."
                     ]),
                     new Regex([
-                        "pattern" => "/^([A-Z])(?=.*?[a-zA-Z]{9,60})$/",
+                        "pattern" => "/^[A-Z][a-zA-Z ]{8,59}$/",
                         "message" => "Format invalide! Le titre doit commencer par une majuscule et ne peut contenir que des lettres.",
                     ])
                 ],
@@ -69,7 +70,7 @@ class ArticleType extends AbstractType
             ->add('image', FileType::class, [
                 "data_class" => null,
                 "label" => "Image de présentation:",
-                "required" => true,
+                "required" => false,
                 "constraints" => [
                     new Image([
                         "mimeTypes" => [
@@ -80,15 +81,28 @@ class ArticleType extends AbstractType
                         "mimeTypesMessage" => "Seuls les formats .PNG, .JPEG et .WEBP sont acceptés.",
                         "maxSize" => "20480k",
                         "maxSizeMessage" => "La taille du fichier ne peut pas dépasser 20mo.",
-                        "extensions" => ["jpg", "jpeg", "png", "webp"],
-                        "extensionsMessage" => "Seules les extensions .jpg, .jpeg, .png et .webp sont autorisées."
                     ])
                 ],
+            ])
+            ->add("imageCaption", TextType::class, [
+                "label" => "Légende de l'image",
+                "required" => true,
+                "constraints" => [
+                    new NotBlank([
+                        "message" => "Ce champs ne peut être laisser vide."
+                    ]),
+                    new Length([
+                        "min" => 20,
+                        "minMessage" => "La légende doit comprendre au moins {{ limit }} caractères.",
+                        "max" => 100,
+                        "maxMessage" => "La légende doit comprendre maximum {{ limit }} caractères.",
+                    ]),
+                ]
             ])
             ->add('content', TextareaType::class, [
                 "label" => "Contenu:",
                 "required" => true,
-                "constaints" => [
+                "constraints" => [
                     new Length([
                         "min" => 1000,
                         "minMessage" => "Le contenu doit comprendre au moins {{ limit }} caractères. (Environ 200 mots)",

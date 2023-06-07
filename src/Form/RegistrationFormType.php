@@ -31,9 +31,9 @@ class RegistrationFormType extends AbstractType
                     new Email([
                         "message" => "Saisissez une adresse email valide.",
                     ]),
-                    new Regex([
-                        "pattern" => "/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/"
-                    ])
+                    // new Regex([
+                    //     "pattern" => "/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/"
+                    // ])
                 ]
             ])
             ->add('pseudo', TextType::class, [
@@ -43,10 +43,10 @@ class RegistrationFormType extends AbstractType
                     new NotBlank([
                         "message" => "Veuillez remplir ce champs.",
                     ]),
-                    new Regex([
-                        "pattern" => "^[a-z0-9_-]{4,20}$/",
-                        "message" => "Format invalide! Votre pseudo peut contenir des lettres, chiffres et être séparé par des tirets '-' .",
-                    ]),
+                    // new Regex([
+                    //     "pattern" => "^[a-z0-9_-]{4,20}$/",
+                    //     "message" => "Format invalide! Votre pseudo peut contenir des lettres, chiffres et être séparé par des tirets '-' .",
+                    // ]),
                     new Length([
                         "min" => 4,
                         "minMessage" => "Votre pseudo doit contenir au moins {{ limit }} caractères.",

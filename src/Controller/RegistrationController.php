@@ -34,7 +34,12 @@ class RegistrationController extends AbstractController
                 )
             );
             $user->setSignInDate($date);
-            $user->setRoles(["ROLE_USER"]);
+            
+            if($form->get('isWriter')->getData() == true) {
+                $user->setRoles(["ROLE_WRITER"]);
+            } else {
+                $user->setRoles(["ROLE_USER"]);
+            }
             $user->setIsBanned(false);
 
             $entityManager->persist($user);

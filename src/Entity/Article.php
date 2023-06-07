@@ -52,6 +52,12 @@ class Article
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Report::class, orphanRemoval: true)]
     private Collection $reports;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imageCaption = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $titleSlug = null;
+
     public function __construct()
     {
         $this->articleComments = new ArrayCollection();
@@ -246,6 +252,30 @@ class Article
                 $report->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImageCaption(): ?string
+    {
+        return $this->imageCaption;
+    }
+
+    public function setImageCaption(string $imageCaption): self
+    {
+        $this->imageCaption = $imageCaption;
+
+        return $this;
+    }
+
+    public function getTitleSlug(): ?string
+    {
+        return $this->titleSlug;
+    }
+
+    public function setTitleSlug(string $titleSlug): self
+    {
+        $this->titleSlug = $titleSlug;
 
         return $this;
     }

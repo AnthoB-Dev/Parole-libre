@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Entity\ArticleComment;
+use App\Entity\ArticleLike;
 use App\Entity\CommentLike;
 use App\Form\ArticleCommentType;
 use App\Form\ArticleType;
 use App\Repository\ArticleCommentRepository;
+use App\Repository\ArticleLikeRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentLikeRepository;
 use DateTimeImmutable;
@@ -16,19 +19,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Cocur\Slugify\Slugify;
 
 class BlogController extends AbstractController
 {    
     // Articles - Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
-    #[Route("/{categorySlug}/{id}", name:"app_category")]
+    #[Route("articles/{categorySlug}/{id}", name:"app_category")]
     public function categoryPage(ArticleRepository $articleRepository, $id): Response
     {
         $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
         $articles = $articleRepository->findAllArticlesByCategoryId($id);
+        $category = $articles[0]->getCategory()->getCategorySlug();
 
         return $this->render('blog/articles/category.html.twig', [
             "heroArticles" => $heroArticles,
             "articles" => $articles,
+            "category" => $category,
         ]);
     }
 
@@ -88,9 +94,130 @@ class BlogController extends AbstractController
         ]);
     }
 
+    // Article - Create :
+    #[Route("/writer/parole-libre/ajouter", name: "app_article_new")]
+    public function newParoleLibre(Security $security, Request $request, ArticleRepository $articleRepository): Response
+    {
+        $article = new Article();
+        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
+        $user = $security->getUser();
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $article->setUser($user);
+            $article->setCreatedAt($date);
+            $slugify = new Slugify();
+            $slug = $slugify->slugify($article->getTitle());
+            $article->setTitleSlug($slug);
+
+            // Défini l'image
+            $file = $form->get("image")->getData();
+            if($file) {
+                $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $fileExtension = $file->guessExtension();
+                $newFileName = $originalFileName . "_" . uniqid() . "." . $fileExtension;
+                $file -> move($this->getParameter("upload_directory"), $newFileName);
+                $article -> setImage($newFileName);
+            } else {
+                $article->setImage("default.png");
+            }
+
+            $articleRepository->save($article, true);
+
+            return $this->redirectToRoute("app_category", ["categorySlug" => "parole-libre", "id" => 8]);
+        }
+
+        return $this->render("blog/articles/newArticle.html.twig", [
+            "form" => $form->createView(),
+        ]);
+    }
+
+    // Article - Update :
+    #[Route("/writer/parole-libre/article/{id}/modifier", name: "app_article_edit")]
+    public function editParoleLibre(ArticleRepository $articleRepository, Request $request, $id, Security $security): Response
+    {
+        $article = $articleRepository->findOneBy(["id" => $id]);
+        $slugify = new Slugify();
+        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
+        
+        if($security->getUser() == $article->getUser() ); {
+            $articleTitle = $article->getTitle();
+            $articleImage = $article->getImage();
+            $slug = $slugify->slugify($articleTitle);
+            $form = $this->createForm(ArticleType::class, $article);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()) {
+                $file = $form->get("image")->getData();
+                if($file) {
+                    $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $fileExtension = $file->guessExtension();
+                    $newFileName = $originalFileName . "_" . uniqid() . "." . $fileExtension;
+                    $file->move($this->getParameter("upload_directory"), $newFileName);
+                    $article->setImage($newFileName);
+                }
+                
+                $article->setTitleSlug($slug);
+                $article->setUpdatedAt($date);
+
+                $articleRepository->save($article, true);
+                return $this->redirectToRoute("app_category_article", [
+                    "categorySlug" => $article->getCategory()->getCategorySlug(),
+                    "id" => $id,
+                ]);
+            }
+
+            return $this->render("blog/articles/editArticle.html.twig", [
+                "form" => $form->createView(),
+                "articleTitle" => $articleTitle,
+                "articleImage" => $articleImage,
+            ]);
+        }
+    }
+
+    // Article commentaires - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un article
+    #[Route("/{categorySlug}/article/{id}/like-article/{articleId}", name:"app_article_like_add")]
+    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, $id, $categorySlug, $articleId, ArticleLikeRepository $articleLikeRepository)
+    {
+        
+        $currentUser = $security->getUser();     
+        $article = $articleRepository->findOneBy(["id" => $articleId]);
+        $articleLike = $articleLikeRepository->findOneBy([
+            'user' => $currentUser,
+            'article' => $articleId,
+        ]);
+        
+        if($articleLike) {
+            $userLiker = $articleLike->getUser();
+        }
+        
+        if(!$articleLike) {
+            $like = new ArticleLike();  
+            $like->setUser($security->getUser());
+            $like->setArticle($article);
+            $articleLikeRepository->save($like, true);
+    
+        } else if($articleLike && $userLiker == $currentUser) {
+            $articleLikeRepository->remove($articleLike, true);
+            
+        } else {
+            $like = new ArticleLike(); 
+            $like->setUser($currentUser);
+            $like->setArticle($article);
+            $articleLikeRepository->save($like, true);
+        }
+
+        return $this->redirectToRoute("app_category_article", [
+            "categorySlug" => $categorySlug, 
+            "id" => $id,
+        ]);
+    }
+
     // Commentaires - Update : Modification d'un commentaire posté
     #[Route("/{categorySlug}/article/{id}/comment/{commentId}/update", name:"app_article_comment_update")]
-    public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository ,$commentId, Security $security, $categorySlug, $id): Response
+    public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository, $commentId, Security $security, $categorySlug, $id): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
@@ -125,7 +252,7 @@ class BlogController extends AbstractController
     }
 
     // Commentaires - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un commentaire
-    #[Route("/{categorySlug}/{id}/like-comment/{commentId}", name:"app_comment_like_add")]
+    #[Route("/{categorySlug}/article/{id}/like-comment/{commentId}", name:"app_comment_like_add")]
     public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository)
     {
         
@@ -166,4 +293,6 @@ class BlogController extends AbstractController
             "id" => $id,
         ]);
     }
+
+    
 }

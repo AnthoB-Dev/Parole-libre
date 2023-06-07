@@ -11,7 +11,7 @@
    <section class="container-content-body" style="padding-top: 7rem !important; max-width: 1300px !important;">
    
       <div class="wrapper-body-content" style="background-color: #ffffff !important; flex-basis: 100% !important;">
-         <div class="wrapper-body-article">
+         <article class="wrapper-body-article">
             <div class="container-article-header">
 
                <div class="article-header-infos">
@@ -34,6 +34,11 @@
                         {{ article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}
                      </p>
                   </div>
+                  {% if app.user == article.user and is_granted("ROLE_WRITER") or is_granted("ROLE_ADMIN") %}
+                     <div id="editButton">
+                        <a href="{{path("app_article_edit", {"id": article.id})}}"><i class="fas fa-pencil-alt"></i> Modifier l'article</a>
+                     </div>
+                  {% endif %}
 
                </div>
 
@@ -47,11 +52,16 @@
 
             <div class="container-article-body">
 
-               <article class="wrapper-article">
+               <div class="wrapper-article">
 
                   <div class="container-article-image">
-                     <img src="https://via.placeholder.com/750x500" alt="Image présentant l'article '{{article.title}}', article de la catégorie '{{article.category.name}}'">
-                     <span>Légende de l'image</span>
+                     <img src="{{asset("upload_directory/" ~ article.image)}}" alt="Image présentant l'article '{{article.title}}', article de la catégorie '{{article.category.name}}'">
+                     <span>{{article.imageCaption}}</span>
+                     {% if article.titleSlug %}
+                        <h3>{{article.titleSlug}}</h3>
+                     {% else %}
+                        <h1>SLUG VIDE</h1>
+                     {% endif %}
                   </div>
 
                   <div class="container-article-content">
@@ -60,21 +70,27 @@
                      </p>
                   </div>
 
-               </article>
+                  <div id="btnLike">
+                     <a href="{{path("app_article_like_add", {"categorySlug": article.category.categorySlug, "id": article.category.id, "articleId": article.id})}}"><i class="fa-solid fa-thumbs-up"></i> J'aime cet article</a>
+                  </div>
+
+               </div>
 
             </div>
-         </div>
+         </article>
 
-         <div class="alert alert-success" style="margin: 1rem 0; padding: 0; color: var(--clr-logo-red)">
-            {% for message in app.flashes('commentaryDeleted') %}
-               <p style="color: var(--clr-logo-red); margin: 1rem 0;">{{ message|trim }}</p>
-            {% endfor %}
-         </div>
-         <div class="alert alert-success">
-            {% for message in app.flashes('commentAdded') %}
-               <p style="color: var(--clr-logo-green); margin: 1rem 0;">{{ message|trim }}</p>
-            {% endfor %}
-         </div>
+         {% if app.flashes %}
+            <div class="alert alert-success" style="margin: 1rem 0; padding: 0; color: var(--clr-logo-red)">
+               {% for message in app.flashes('commentaryDeleted') %}
+                  <p style="color: var(--clr-logo-red); margin: 1rem 0;">{{ message|trim }}</p>
+               {% endfor %}
+            </div>
+            <div class="alert alert-success">
+               {% for message in app.flashes('commentAdded') %}
+                  <p style="color: var(--clr-logo-green); margin: 1rem 0;">{{ message|trim }}</p>
+               {% endfor %}
+            </div>
+         {% endif %}
 
          <div class="wrapper-body-comments">
             <div class="container-comments-header">

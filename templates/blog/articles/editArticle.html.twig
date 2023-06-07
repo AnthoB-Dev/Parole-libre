@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{articleTitle}}{% endblock %}
+
+{% block javascripts %}
+   <script src="{{asset("assets/js/article.js")}}" defer></script>
+{% endblock %}
+
+{% block main %}
+
+   {{form_start(form, {"attr": {"id": "form-new-article"}}) }}
+      <section class="container-content-body container-article-style">
+      
+         <div class="wrapper-body-content article-style">
+            <article class="wrapper-body-article">
+               <div class="container-article-header">
+
+                  <div class="article-header-infos">
+                     <div class="article-header-infos-box" id="article-category">
+                        <span id="article-category-span">
+                           {{form_row(form.category)}}
+                        </span>
+                     </div>
+
+                     {{form_row(form.subtitle)}}
+
+                     <div class="article-header-infos-box" id="article-author">
+                     </div>
+
+                  </div>
+
+                  <h1 class="article-header-title">
+                     {{form_row(form.title)}}
+                  </h1>
+
+               </div>
+
+               <div class="container-article-body">
+
+                  <div class="wrapper-article">
+
+                     <div class="container-article-image">
+                        <div class="file-input-container">
+                           <label for="registration_form_userImage" id="fileInputLabel" class="file-input-label">
+                              {{ form_widget(form.image, {"attr": {"required": false}}) }}
+                           </label>
+                        </div>
+                        <img class="image-swap" id="image" src="{{asset("upload_directory/" ~ articleImage)}}" alt="">
+                        {{form_row(form.imageCaption)}}
+                     </div>
+
+                     <div class="container-article-content">
+                        {{form_row(form.content)}}
+                     </div>
+
+                     <button type="submit">Modifier l'article</button>
+                  </article>
+
+               </div>
+            </div>
+         </div>
+      </section>
+   {{form_end(form)}}
+{% endblock %}
