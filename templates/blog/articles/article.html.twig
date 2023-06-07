@@ -57,11 +57,6 @@
                   <div class="container-article-image">
                      <img src="{{asset("upload_directory/" ~ article.image)}}" alt="Image présentant l'article '{{article.title}}', article de la catégorie '{{article.category.name}}'">
                      <span>{{article.imageCaption}}</span>
-                     {% if article.titleSlug %}
-                        <h3>{{article.titleSlug}}</h3>
-                     {% else %}
-                        <h1>SLUG VIDE</h1>
-                     {% endif %}
                   </div>
 
                   <div class="container-article-content">

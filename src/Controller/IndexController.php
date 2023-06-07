@@ -13,13 +13,13 @@ class IndexController extends AbstractController
     public function index(ArticleRepository $articleRepository): Response
     {        
         $recentHeroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategories(3, 1, 2, 5, 6, 7);
-
         $articles = $articleRepository->findArticlesRecentlyPublishedByCategories(2, 1, 2, 5, 6, 7);
+        $popularArticles = $articleRepository->findByPopularityOfCategory(6, 1, 2, 5, 6, 7);
 
         return $this->render("index/accueil.html.twig", [
             "recentHeroArticles" => $recentHeroArticles,
-            
             "articles" => $articles,
+            "popularArticles" => $popularArticles,
         ]);
     }
 

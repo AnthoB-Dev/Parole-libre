@@ -279,4 +279,30 @@ class Article
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getArticleLikesCount(): int
+    {
+        /** 
+         * @var Collection <int, Article> $articleLikes 
+         */
+        $articleLikes = $this->getArticleLikes();
+
+        return $articleLikes->count();
+    }
+
+    /**
+     * @return int
+     */
+    public function getArticleCommentsCount(): int
+    {
+        /** 
+         * @var Collection <int, Article> $articleComments 
+         */
+        $articleComments = $this->getArticleComments();
+
+        return $articleComments->count();
+    }
 }

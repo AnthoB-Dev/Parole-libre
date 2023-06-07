@@ -34,7 +34,7 @@
 
 								<div class="carrousel-article-image">
 									<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
-									<span>Légende de l'image</span>
+									<span>{{heroArticle.imageCaption}}</span>
 								</div>
 
 								<div class="carrousel-article-title">
@@ -43,7 +43,7 @@
 
 								<div class="carrousel-article-content">
 									<p class="cutoff-text-8">{{heroArticle.content}}</p>
-									<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id} )}}">Lire la suite</a>
+									<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
 								</div>
 
 								<div class="carrousel-article-actions">
@@ -55,11 +55,19 @@
                            </div>
 									<div class="article-action likes">
 										<div>
-											<p>43</p>
+											{% if heroArticle.getArticleCommentsCount() != 0 %}
+                                    <p>{{heroArticle.getArticleCommentsCount()}}</p>
+                                 {% else %}
+                                    <p>0</p>
+                                 {% endif %}
 											<i class="fa-regular fa-comment-dots"></i>
 										</div>
 										<div>
-											<p>256</p>
+											{% if heroArticle.getArticleLikesCount() != 0 %}
+                                    <p>{{heroArticle.getArticleLikesCount()}}</p>
+                                 {% else %}
+                                    <p>0</p>
+                                 {% endif %}
 											<i class="fa-regular fa-thumbs-up"></i>
 										</div>
 									</div>
@@ -107,7 +115,7 @@
 
 					<article class="container-body-category-article">
 
-						<a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id} )}}">
+						<a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
 
 							<div class="wrapper-category-image">
 								<img src="{{asset("upload_directory/" ~ article.image)}}" alt="Image correspondant à l'article '{{article.title}}'">
@@ -131,11 +139,19 @@
 									
 									<div class="article-action likes">
 										<div>
-											<p>43</p>
+											{% if article.getArticleCommentsCount() != 0 %}
+                                    <p>{{article.getArticleCommentsCount()}}</p>
+                                 {% else %}
+                                    <p>0</p>
+                                 {% endif %}
 											<i class="fa-regular fa-comment-dots"></i>
 										</div>
 										<div>
-											<p>256</p>
+											{% if article.getArticleLikesCount() != 0 %}
+                                    <p>{{article.getArticleLikesCount()}}</p>
+                                 {% else %}
+                                    <p>0</p>
+                                 {% endif %}
 											<i class="fa-regular fa-thumbs-up"></i>
 										</div>
 									</div>

@@ -131,7 +131,6 @@ class ArticleComment
     public function removeCommentLike(CommentLike $commentLike): self
     {
         if ($this->commentLikes->removeElement($commentLike)) {
-            // set the owning side to null (unless already changed)
             if ($commentLike->getArticleComment() === $this) {
                 $commentLike->setArticleComment(null);
             }
@@ -140,9 +139,6 @@ class ArticleComment
         return $this;
     }
 
-    /**
-     * @return Collection<int, Report>
-     */
     public function getReports(): Collection
     {
         return $this->reports;
@@ -161,7 +157,7 @@ class ArticleComment
     public function removeReport(Report $report): self
     {
         if ($this->reports->removeElement($report)) {
-            // set the owning side to null (unless already changed)
+            
             if ($report->getArticleComment() === $this) {
                 $report->setArticleComment(null);
             }
@@ -170,9 +166,6 @@ class ArticleComment
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCommentLikesCount(): int
     {
         /** @var Collection<int, CommentLike> $commentLikes */

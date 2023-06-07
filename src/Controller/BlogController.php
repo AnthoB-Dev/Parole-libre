@@ -42,7 +42,7 @@ class BlogController extends AbstractController
     // Commentaires - Create : Ajout d'un commentaire sur le dit article
     // Commentaires - Read : Récupères les commentaires lié à l'article
     // Commentaires - Update : Prépare un form de modification pour chaque commentaire présent, puis appel la fonction updateComment pour gérer la modification 
-    #[Route("/{categorySlug}/article/{id}", name:"app_category_article")]
+    #[Route("/{categorySlug}/article/{id}/{titleSlug}", name:"app_category_article")]
     public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);
@@ -212,6 +212,7 @@ class BlogController extends AbstractController
         return $this->redirectToRoute("app_category_article", [
             "categorySlug" => $categorySlug, 
             "id" => $id,
+            "titleSlug" => $article->getTitleSlug(),
         ]);
     }
 
@@ -263,8 +264,6 @@ class BlogController extends AbstractController
             'article_comment' => $comment_id,
         ]);
 
-        $status = "unliked";
-
         if($commentLike) {
             $userLiker = $commentLike->getUser();
         }
@@ -274,18 +273,15 @@ class BlogController extends AbstractController
             $like->setUser($security->getUser());
             $like->setArticleComment($comment_id);
             $commentLikeRepository->save($like, true);
-            $status = "liked";
     
         } else if($commentLike && $userLiker == $currentUser) {
             $commentLikeRepository->remove($commentLike, true);
-            $status = "unliked";
             
         } else {
             $like = new CommentLike(); 
             $like->setUser($currentUser);
             $like->setArticleComment($comment_id);
             $commentLikeRepository->save($like, true);
-            $status = "liked";
         }
 
         return $this->redirectToRoute("app_category_article", [
@@ -294,5 +290,29 @@ class BlogController extends AbstractController
         ]);
     }
 
-    
+    // #[Route("/updateAll", name:"udpateAllArticles")] 
+    // public function updateAll(ArticleRepository $articleRepository)
+    // {
+    //     $articles = $articleRepository->findAll();
+    //     foreach ($articles as $article) {
+    //         $imageCaption = $article->getImageCaption();
+    //         $title = $article->getTitle();
+    //         $titleSlug = $article->getTitleSlug();
+            
+    //         if(!$imageCaption) {
+    //             $article->setImageCaption("Légende d'image par défaut");
+    //         }
+    //         if(!$titleSlug) {
+    //             $slugify = new Slugify();
+    //             $slug = $slugify->slugify($title);
+    //             $article->setTitleSlug($slug);
+    //         }
+    //         if($image == "default.webp") {
+    //             $article->setImage("default.jpg");
+    //         }
+    //         $articleRepository->save($article, true);
+
+    //         return $this->redirectToRoute("accueil");
+    //     }
+    // }
 }

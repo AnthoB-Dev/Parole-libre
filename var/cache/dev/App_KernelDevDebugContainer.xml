@@ -6620,7 +6620,7 @@
         <argument key="authenticationUtils" type="service_closure" id="security.authentication_utils"/>
       </argument>
     </service>
-    <service id=".service_locator.W5SYAd3" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.PL5gnrt" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AdminController::addArticle" type="service_closure" id=".service_locator.JjJp5aL"/>
@@ -6637,7 +6637,6 @@
         <argument key="App\Controller\BlogController::showArticle" type="service_closure" id=".service_locator.qH12MF8"/>
         <argument key="App\Controller\BlogController::toggleArticleLike" type="service_closure" id=".service_locator.F7IJIQk"/>
         <argument key="App\Controller\BlogController::toggleCommentLike" type="service_closure" id=".service_locator.bCk8bLZ"/>
-        <argument key="App\Controller\BlogController::updateAll" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\BlogController::updateComment" type="service_closure" id=".service_locator.Lec_9bD"/>
         <argument key="App\Controller\IndexController::index" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\RegistrationController::register" type="service_closure" id=".service_locator.iQAD6w2"/>
@@ -6660,7 +6659,6 @@
         <argument key="App\Controller\BlogController:showArticle" type="service_closure" id=".service_locator.qH12MF8"/>
         <argument key="App\Controller\BlogController:toggleArticleLike" type="service_closure" id=".service_locator.F7IJIQk"/>
         <argument key="App\Controller\BlogController:toggleCommentLike" type="service_closure" id=".service_locator.bCk8bLZ"/>
-        <argument key="App\Controller\BlogController:updateAll" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\BlogController:updateComment" type="service_closure" id=".service_locator.Lec_9bD"/>
         <argument key="App\Controller\IndexController:index" type="service_closure" id=".service_locator.i9Y0h6B"/>
         <argument key="App\Controller\RegistrationController:register" type="service_closure" id=".service_locator.iQAD6w2"/>
@@ -7501,12 +7499,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.W5SYAd3"/>
+      <argument type="service" id=".service_locator.PL5gnrt"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.W5SYAd3"/>
+      <argument type="service" id=".service_locator.PL5gnrt"/>
     </service>
     <service id="debug.traced.messenger.bus.default.inner" class="Symfony\Component\Messenger\MessageBus">
       <argument type="iterator">
@@ -8419,7 +8417,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.W5SYAd3"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.PL5gnrt"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
@@ -8443,7 +8441,7 @@
     <service id=".service_locator.wLYr5b8" alias=".service_locator.F7IJIQk"/>
     <service id=".service_locator.zH1zFMu" alias=".service_locator.bCk8bLZ"/>
     <service id=".service_locator.x__eXbe" alias=".service_locator.iQAD6w2"/>
-    <service id=".service_locator.Bzummh_" alias=".service_locator.W5SYAd3"/>
+    <service id=".service_locator.oygJVbO" alias=".service_locator.PL5gnrt"/>
     <service id=".service_locator.wKF4yn1" alias=".service_locator.19_mNxd"/>
     <service id=".service_locator.CXCsldj" alias=".service_locator.yKeYA5d"/>
     <service id=".service_locator.XW18Svm" alias=".service_locator.TcKhdzh"/>

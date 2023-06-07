@@ -27,7 +27,6 @@ return [
         '/admin/structure/signalements' => [[['_route' => 'app_admin_structure_reportReasons', '_controller' => 'App\\Controller\\AdminController::reportReasons'], null, null, null, false, false, null]],
         '/admin/structure/signalements/add' => [[['_route' => 'app_admin_structure_reportReasons_add', '_controller' => 'App\\Controller\\AdminController::addReportReasons'], null, null, null, false, false, null]],
         '/writer/parole-libre/ajouter' => [[['_route' => 'app_article_new', '_controller' => 'App\\Controller\\BlogController::newParoleLibre'], null, null, null, false, false, null]],
-        '/updateAll' => [[['_route' => 'udpateAllArticles', '_controller' => 'App\\Controller\\BlogController::updateAll'], null, null, null, false, false, null]],
         '/accueil' => [[['_route' => 'accueil', '_controller' => 'App\\Controller\\IndexController::index'], null, null, null, false, false, null]],
         '/inscription' => [[['_route' => 'app_register', '_controller' => 'App\\Controller\\RegistrationController::register'], null, null, null, false, false, null]],
         '/connexion' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
@@ -54,16 +53,16 @@ return [
                     .'|dmin/contenu/articles/modifier\\-article/([^/]++)(*:222)'
                     .'|rticles/([^/]++)/([^/]++)(*:255)'
                 .')'
-                .'|/([^/]++)/article/([^/]++)(*:290)'
-                .'|/writer/parole\\-libre/article/([^/]++)/modifier(*:345)'
+                .'|/([^/]++)/article/([^/]++)/([^/]++)(*:299)'
+                .'|/writer/parole\\-libre/article/([^/]++)/modifier(*:354)'
                 .'|/([^/]++)/article/([^/]++)/(?'
                     .'|like\\-(?'
-                        .'|article/([^/]++)(*:408)'
-                        .'|comment/([^/]++)(*:432)'
+                        .'|article/([^/]++)(*:417)'
+                        .'|comment/([^/]++)(*:441)'
                     .')'
                     .'|comment/([^/]++)/(?'
-                        .'|update(*:467)'
-                        .'|delete(*:481)'
+                        .'|update(*:476)'
+                        .'|delete(*:490)'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -78,12 +77,12 @@ return [
         159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
         222 => [[['_route' => 'app_admin_content_article_edit', '_controller' => 'App\\Controller\\AdminController::editArticle'], ['id'], null, null, false, true, null]],
         255 => [[['_route' => 'app_category', '_controller' => 'App\\Controller\\BlogController::categoryPage'], ['categorySlug', 'id'], null, null, false, true, null]],
-        290 => [[['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['categorySlug', 'id'], null, null, false, true, null]],
-        345 => [[['_route' => 'app_article_edit', '_controller' => 'App\\Controller\\BlogController::editParoleLibre'], ['id'], null, null, false, false, null]],
-        408 => [[['_route' => 'app_article_like_add', '_controller' => 'App\\Controller\\BlogController::toggleArticleLike'], ['categorySlug', 'id', 'articleId'], null, null, false, true, null]],
-        432 => [[['_route' => 'app_comment_like_add', '_controller' => 'App\\Controller\\BlogController::toggleCommentLike'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
-        467 => [[['_route' => 'app_article_comment_update', '_controller' => 'App\\Controller\\BlogController::updateComment'], ['categorySlug', 'id', 'commentId'], null, null, false, false, null]],
-        481 => [
+        299 => [[['_route' => 'app_category_article', '_controller' => 'App\\Controller\\BlogController::showArticle'], ['categorySlug', 'id', 'titleSlug'], null, null, false, true, null]],
+        354 => [[['_route' => 'app_article_edit', '_controller' => 'App\\Controller\\BlogController::editParoleLibre'], ['id'], null, null, false, false, null]],
+        417 => [[['_route' => 'app_article_like_add', '_controller' => 'App\\Controller\\BlogController::toggleArticleLike'], ['categorySlug', 'id', 'articleId'], null, null, false, true, null]],
+        441 => [[['_route' => 'app_comment_like_add', '_controller' => 'App\\Controller\\BlogController::toggleCommentLike'], ['categorySlug', 'id', 'commentId'], null, null, false, true, null]],
+        476 => [[['_route' => 'app_article_comment_update', '_controller' => 'App\\Controller\\BlogController::updateComment'], ['categorySlug', 'id', 'commentId'], null, null, false, false, null]],
+        490 => [
             [['_route' => 'app_article_comment_del', '_controller' => 'App\\Controller\\BlogController::delComment'], ['categorySlug', 'id', 'commentId'], null, null, false, false, null],
             [null, null, null, null, false, false, 0],
         ],

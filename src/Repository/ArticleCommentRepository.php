@@ -39,16 +39,6 @@ class ArticleCommentRepository extends ServiceEntityRepository
         }
     }
 
-    public function countCommentLikes($commentId): int
-    {
-        return $this->createQueryBuilder('cl')
-            ->select('COUNT(cl)')
-            ->andWhere('cl.articleComment = :commentId')
-            ->setParameter('commentId', $commentId)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
 //    /**
 //     * @return ArticleComment[] Returns an array of ArticleComment objects
 //     */

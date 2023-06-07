@@ -126,6 +126,31 @@ class ArticleRepository extends ServiceEntityRepository
         }
         return $articles;
     }
+
+    public function findByPopularityOfCategory($maxResults, ...$categoryId)
+    {
+        return $this->createQueryBuilder("a")
+            ->leftJoin("a.category", "c")
+            ->leftJoin("a.likes", "l")
+            ->andWhere("c.id = :category")
+            ->setParameter("category", $categoryId)
+            ->groupBy("a.id")
+            ->orderBy("COUNT(l.id)", "DESC")
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function countCommentLikes($commentId): int
+    {
+        return $this->createQueryBuilder('cl')
+            ->select('COUNT(cl)')
+            ->andWhere('cl.articleComment = :commentId')
+            ->setParameter('commentId', $commentId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     
     // findArticlesByPopularityAndByCategory(value)
     // findSuperAuthors()
