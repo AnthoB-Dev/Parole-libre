@@ -11,7 +11,7 @@
    <section class="container-content-body" style="padding-top: 7rem !important; max-width: 1300px !important;">
    
       <div class="wrapper-body-content" style="background-color: #ffffff !important; flex-basis: 100% !important;">
-         <article class="wrapper-body-article">
+         <article class="wrapper-body-article" id="{{article.id}}">
             <div class="container-article-header">
 
                <div class="article-header-infos">
@@ -55,7 +55,7 @@
                <div class="wrapper-article">
 
                   <div class="container-article-image">
-                     <img src="{{asset("upload_directory/" ~ article.image)}}" alt="Image présentant l'article '{{article.title}}', article de la catégorie '{{article.category.name}}'">
+                     <img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
                      <span>{{article.imageCaption}}</span>
                   </div>
 
@@ -93,7 +93,7 @@
             </div>
             {% if articleComments %}
                {% for comment in articleComments %}
-                  <div class="container-comments-body">
+                  <div class="container-comments-body" id="{{comment.id}}">
                      <div class="container-comment">
                         <div class="comment-author">
                            <p>

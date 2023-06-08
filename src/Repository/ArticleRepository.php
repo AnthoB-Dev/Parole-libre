@@ -94,7 +94,7 @@ class ArticleRepository extends ServiceEntityRepository
 
     /**
      * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. 
-     * Prend en paramètre l'id d'une catégorie (category.id)
+     * Prend en second paramètre l'id d'une catégorie (category.id)
      * 
      * @return array
      */
@@ -127,11 +127,17 @@ class ArticleRepository extends ServiceEntityRepository
         return $articles;
     }
 
-    public function findByPopularityOfCategory($maxResults, ...$categoryId)
+    /**
+     * Récupère dans la bdd $maxResults articles triés par le nombre de likes qu'ils possèdent. 
+     * Prend en second paramètre l'id d'une catégorie (category.id)
+     * 
+     * @return array
+     */
+    public function findByPopularityOfCategory($maxResults, $categoryId)
     {
         return $this->createQueryBuilder("a")
             ->leftJoin("a.category", "c")
-            ->leftJoin("a.likes", "l")
+            ->leftJoin("a.articleLikes", "l")
             ->andWhere("c.id = :category")
             ->setParameter("category", $categoryId)
             ->groupBy("a.id")
@@ -142,16 +148,50 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-    public function countCommentLikes($commentId): int
+    /**
+     * Prend en paramètres $maxResults qui sera le nb d'article par ...$categories à afficher, ...$categories étant les id des catégories voulant être fetch. 
+     * La fonction bouclera ensuite sur chaque id et récupèrera les données grâce à findByPopularityOfCategory()
+     * 
+     * @return array
+     */
+    public function findByPopularityOfCategories($maxResults, ...$categories): ?array
     {
-        return $this->createQueryBuilder('cl')
-            ->select('COUNT(cl)')
-            ->andWhere('cl.articleComment = :commentId')
-            ->setParameter('commentId', $commentId)
-            ->getQuery()
-            ->getSingleScalarResult();
+        $articles = [];
+        foreach ($categories as $category) {
+            $articles[] = $this->findByPopularityOfCategory($maxResults, $category);
+        }
+        return $articles;
     }
+
+    public function findArticlesByRecentComments($maxResults): ?array
+    {
+        return $this->createQueryBuilder('a')
+            ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
+            ->leftJoin("a.articleComments", "ac")
+            ->leftJoin("ac.user", "u")
+            ->leftJoin("a.category", "c")
+            ->orderBy('ac.createdAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult();
+        ;
+    }
+    public function findArticlesByCategoryAndRecentComments($maxResults, $categoryId): ?array
+    {
+        return $this->createQueryBuilder('a')
+            ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
+            ->join("a.articleComments", "ac")
+            ->join("ac.user", "u")
+            ->join("a.category", "c")
+            ->where("c.id = :category")
+            ->setParameter("category", $categoryId)
+            ->orderBy('ac.createdAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult();
+        ;
+    }
+
     
-    // findArticlesByPopularityAndByCategory(value)
     // findSuperAuthors()
 }

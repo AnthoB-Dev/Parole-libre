@@ -27,7 +27,7 @@
 						{% for heroArticle in heroArticles %}
 							<article class="container-carrousel-cards">
 
-								<div class="carrousel-article-category">
+								<div class="carrousel-article-category bg-{{heroArticle.category.categorySlug}}">
 									<h4>{{heroArticle.category.name}}</h4>
 									<h5>{{heroArticle.subtitle}}</h5>
 								</div>
@@ -118,7 +118,7 @@
 						<a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
 
 							<div class="wrapper-category-image">
-								<img src="{{asset("upload_directory/" ~ article.image)}}" alt="Image correspondant à l'article '{{article.title}}'">
+								<img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
 							</div>
 
 							<div class="wrapper-category-content">

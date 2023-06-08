@@ -9,54 +9,34 @@
 
 		<div class="container-parole-cards">
 
-			{# Articles #}
-			<article class="parole-card">
+			{# Dernieres Parole Libre #}
+			{% for parole in lastParoles %}
+		
+				<article class="parole-card">
 
-				<div class="container-body-sidebar-cards">
-					<div class="body-sidebar-cards-author">
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">Par</span>
-							<p>Pseudo1234</p>
+					<div class="container-body-sidebar-cards">
+						<div class="body-sidebar-cards-author">
+							<div class="body-sidebar-cards-author-spans">
+								<span class="greyedOut">Par</span>
+								<p>{{parole.user.pseudo}}</p>
+							</div>
+							<div class="body-sidebar-cards-author-spans">
+								<span class="greyedOut">le</span>
+								<p>{{parole.createdAt|format_datetime(pattern='dd/MM/yy', locale='fr_FR')}}</p>
+							</div>
 						</div>
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">le</span>
-							<p>jj/mm/yyyy</p>
+						<div class="body-sidebar-cards-content">
+							<div class="body-sidebar-cards-content-title">
+								<h5>{{parole.subTitle}}</h5>
+							</div>
+							<div class="body-sidebar-cards-content-content">
+								<p>{{parole.title}}</p>
+							</div>
 						</div>
 					</div>
-					<div class="body-sidebar-cards-content">
-						<div class="body-sidebar-cards-content-title">
-							<h5>Politique</h5>
-						</div>
-						<div class="body-sidebar-cards-content-content">
-							<p>Titre : Le Débat sur la Régulation des Médias Sociaux</p>
-						</div>
-					</div>
-				</div>
-			</article>
+				</article>
 
-			<article class="parole-card">
-
-				<div class="container-body-sidebar-cards">
-					<div class="body-sidebar-cards-author">
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">Par</span>
-							<p>Pseudo1234</p>
-						</div>
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">le</span>
-							<p>jj/mm/yyyy</p>
-						</div>
-					</div>
-					<div class="body-sidebar-cards-content">
-						<div class="body-sidebar-cards-content-title">
-							<h5>Titre de l'article, ceci est un exemple de titre</h5>
-						</div>
-						<div class="body-sidebar-cards-content-content">
-							<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet expedita distinctio sed. Cupiditate ullam autem nemo vitae eum atque nesciunt ut expedita facilis sequi minus, optio itaque obcaecati porro fugit?</p>
-						</div>
-					</div>
-				</div>
-			</article>
+			{% endfor %}
 		</div>
 	</div>
 	
@@ -73,53 +53,36 @@
 		<div class="container-parole-cards">
 
 			{# Articles #}
-			<article class="parole-card">
+			{% for comment in lastComments %}
+				
+				<article class="parole-card">
+					<a href="{{ path("app_category_article", {"categorySlug": comment.categorySlug, "id": comment.id, "titleSlug": comment.titleSlug}) }}#{{comment.cId}}">
+						<div class="container-body-sidebar-cards">
+							<div class="body-sidebar-cards-author">
+								<div class="body-sidebar-cards-author-spans">
+									<span class="greyedOut">Par</span>
+									<p>{{comment.pseudo}}</p>
+								</div>
+								<div class="body-sidebar-cards-author-spans">
+									<span class="greyedOut">le</span>
+									<p>{{comment.createdAt|format_datetime(pattern='dd/MM/yy', locale='fr_FR') }}</p>
+									<span class="greyedOut">à</span>
+									<p>{{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i')}}</p>
+								</div>
+							</div>
+							<div class="body-sidebar-cards-content">
+								<div class="body-sidebar-cards-content-title txt-{{comment.categorySlug}}">
+									<h5>{{comment.title}}</h5>
+								</div>
+								<div class="body-sidebar-cards-content-content">
+									<p>{{comment.content}}</p>
+								</div>
+							</div>
+						</div>
+					</a>
+				</article>
+			{% endfor %}
 
-				<div class="container-body-sidebar-cards">
-					<div class="body-sidebar-cards-author">
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">Par</span>
-							<p>Pseudo1234</p>
-						</div>
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">le</span>
-							<p>jj/mm/yyyy</p>
-						</div>
-					</div>
-					<div class="body-sidebar-cards-content">
-						<div class="body-sidebar-cards-content-title">
-							<h5>Titre de l'article, ceci est un exemple de titre</h5>
-						</div>
-						<div class="body-sidebar-cards-content-content">
-							<p>Commentaire : Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet expedita distinctio sed. Cupiditate ullam autem nemo vitae eum atque nesciunt ut expedita facilis sequi minus, optio itaque obcaecati porro fugit?</p>
-						</div>
-					</div>
-				</div>
-			</article>
-
-			<article class="parole-card">
-
-				<div class="container-body-sidebar-cards">
-					<div class="body-sidebar-cards-author">
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">Par</span>
-							<p>Pseudo1234</p>
-						</div>
-						<div class="body-sidebar-cards-author-spans">
-							<span class="greyedOut">le</span>
-							<p>jj/mm/yyyy</p>
-						</div>
-					</div>
-					<div class="body-sidebar-cards-content">
-						<div class="body-sidebar-cards-content-title">
-							<h5>Titre de l'article, ceci est un exemple de titre</h5>
-						</div>
-						<div class="body-sidebar-cards-content-content">
-							<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet expedita distinctio sed. Cupiditate ullam autem nemo vitae eum atque nesciunt ut expedita facilis sequi minus, optio itaque obcaecati porro fugit?</p>
-						</div>
-					</div>
-				</div>
-			</article>
 		</div>
 	</div>
 

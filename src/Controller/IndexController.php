@@ -14,12 +14,16 @@ class IndexController extends AbstractController
     {        
         $recentHeroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategories(3, 1, 2, 5, 6, 7);
         $articles = $articleRepository->findArticlesRecentlyPublishedByCategories(2, 1, 2, 5, 6, 7);
-        $popularArticles = $articleRepository->findByPopularityOfCategory(6, 1, 2, 5, 6, 7);
+        $popularArticles = $articleRepository->findByPopularityOfCategories(6, 1, 2, 5, 6, 7);
+        $lastParoles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(10, 8);
+        $lastComments = $articleRepository->findArticlesByRecentComments(10);
 
         return $this->render("index/accueil.html.twig", [
             "recentHeroArticles" => $recentHeroArticles,
             "articles" => $articles,
             "popularArticles" => $popularArticles,
+            "lastParoles" => $lastParoles,
+            "lastComments" => $lastComments,
         ]);
     }
 

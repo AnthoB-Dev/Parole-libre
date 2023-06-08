@@ -1,32 +1,11 @@
-.f-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.align-center {
-    align-items: center;
-}
-
-.f-col {
-    display: flex;
-    flex-direction: column;
-}
-
-.f-between {
-    display: flex;
-    justify-content: space-between;
-}
-
-.f-around {
-    display: flex;
-    justify-content: space-around;
-}
-
 .hidden {
     display: none !important;
 }
 
 .cursorPointer {
     cursor: pointer;
+}
+
+.txt-align-center {
+    text-align: center;
 }

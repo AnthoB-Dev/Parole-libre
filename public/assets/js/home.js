@@ -13,14 +13,9 @@
    const categoryParoleLibre = "parole libre";
    const clrParoleLibre = "#33673B";
 
-   const coloringCategory = document.querySelectorAll(".carrousel-article-category");
    const coloringSections = document.querySelectorAll(".container-body-category-content");
    const nav = document.querySelector('.container-header-nav');
    const articles = document.querySelectorAll("article");
-   const h3Titles = document.querySelectorAll("h3");
-   const h5Titles = document.querySelectorAll("h5");
-   const sidebarTitle = document.querySelector(".container-parole-title")
-   const sidebarH5 = document.querySelectorAll(".body-sidebar-cards-content-title")
    
    const politique = categoryPolitique.toUpperCase();
    const economie = categoryEconomie.toUpperCase();
@@ -30,25 +25,7 @@
    const paroleLibre = categoryParoleLibre.toUpperCase();
 
 
-   // Change la couleur dynamiquement du fond de chaque catégorie
-   coloringCategory.forEach(e => {
-
-      if(e.firstElementChild.textContent.toUpperCase() === politique) {
-         e.style="background-color: " + clrPolitique + ";";
-      } else if(e.firstElementChild.textContent.toUpperCase() === economie) {
-         e.style="background-color: " + clrEconomie + ";";
-      } else if(e.firstElementChild.textContent.toUpperCase() === geopolitique) {
-         e.style="background-color: " + clrGeopolitique + ";";
-      } else if(e.firstElementChild.textContent.toUpperCase() === societe) {
-         e.style="background-color: " + clrSociete + ";";
-      } else if(e.firstElementChild.textContent.toUpperCase() === artsLitteratures) {
-         e.style="background-color: " + clrArtsLitteratures + ";";
-      } else if(e.firstElementChild.textContent.toUpperCase() === paroleLibre) {
-         e.style="background-color: " + clrParoleLibre + ";";
-      }
-   })
-
-   // Sur chargement de la page et selon le chemin de la page, changement de la couleur de la bande de fond de l'élément du haut de la page et de tous titres possible. 
+   // Sur chargement de la page et selon le chemin de la page, changement de la couleur de la bande de fond des sections. 
    window.onload = function() {
       // Obtention du chemin de la page actuelle
       const pathname = window.location.pathname;
@@ -98,93 +75,27 @@
                      }
                   })        
                            
-               } else {
-                  
-                  h3Titles.forEach(e => {
-                     if(categoryToLower == "politique") {
-                        e.style="color :" + clrPolitique + ";";
-                     } else if(categoryToLower == "géopolitique") {
-                        e.style="color :" + clrGeopolitique + ";";
-                     } else if(categoryToLower == "arts & littératures") {
-                        e.style="color :" + clrArtsLitteratures + ";";
-                     } else if(categoryToLower == "économie") {
-                        e.style="color :" + clrEconomie + ";";
-                     } else if(categoryToLower == "société") {
-                        e.style="color :" + clrSociete + ";";
-                     } else if(categoryToLower == "parole-libre") {
-                        e.style="color :" + clrParoleLibre + ";";
-                     }
-                  })
                }
             })
          })
 
-      } else if (pathname.startsWith('/parole-libre/public/politique')) {
+      } else if (pathname.startsWith('/parole-libre/public/articles/politique')) {
          container.classList.add('politique');
-         sidebarTitle.style="background-color: " + clrPolitique + "!important;" + "color: #ffffff !important;";
-         sidebarH5.style="color: #ffffff !important;";
-
-         h3Titles.forEach(e => {
-            e.style="color: " + clrPolitique + ";";
-         })
-         h5Titles.forEach(e => {
-            e.parentElement.style="background-color: " + clrPolitique + ";";
-         })
          
-      } else if (pathname.startsWith('/parole-libre/public/economie')) {
+      } else if (pathname.startsWith('/parole-libre/public/articles/economie')) {
          container.classList.add('economie');
-         sidebarTitle.style="background-color: " + clrEconomie + "!important;";
 
-         h3Titles.forEach(e => {
-            e.style="color: " + clrEconomie + ";";
-         })
-         h5Titles.forEach(e => {
-            e.parentElement.style="background-color: " + clrEconomie + ";";
-         })
-
-      } else if (pathname.startsWith('/parole-libre/public/geopolitique')) {
+      } else if (pathname.startsWith('/parole-libre/public/articles/geopolitique')) {
          container.classList.add('geopolitique');
-         sidebarTitle.style="background-color: " + clrGeopolitique + "!important;";
 
-         h3Titles.forEach(e => {
-            e.style="color: " + clrGeopolitique + ";";
-         })
-         h5Titles.forEach(e => {
-            e.parentElement.style="background-color: " + clrGeopolitique + ";";
-         })
-
-      } else if (pathname.startsWith('/parole-libre/public/societe')) {
+      } else if (pathname.startsWith('/parole-libre/public/articles/societe')) {
          container.classList.add('societe');
-         sidebarTitle.style="background-color: " + clrSociete + "!important;";
 
-         h3Titles.forEach(e => {
-            e.style="color: " + clrSociete + ";";
-         })
-         h5Titles.forEach(e => {
-            e.parentElement.style="background-color: " + clrSociete + ";";
-         })
-
-      } else if (pathname.startsWith('/parole-libre/public/arts-litteratures')) {
+      } else if (pathname.startsWith('/parole-libre/public/articles/arts-litteratures')) {
          container.classList.add('artsLitteratures');
-         sidebarTitle.style="background-color: " + clrArtsLitteratures + "!important;";
 
-         h3Titles.forEach(e => {
-            e.style="color: " + clrArtsLitteratures + ";";
-         })
-         h5Titles.forEach(e => {
-            e.parentElement.style="background-color: " + clrArtsLitteratures + ";";
-         })
-
-      } else if (pathname.startsWith('/parole-libre/public/parole-libre')) {
+      } else if (pathname.startsWith('/parole-libre/public/articles/parole-libre')) {
          container.classList.add('paroleLibre');
-         sidebarTitle.style="background-color: " + clrParoleLibre + "!important;";
-
-         h3Titles.forEach(e => {
-            e.style="color: " + clrParoleLibre + ";";
-         })
-         h5Titles.forEach(e => {
-            e.parentElement.style="background-color: " + clrParoleLibre + ";";
-         })
       }   
    }
 

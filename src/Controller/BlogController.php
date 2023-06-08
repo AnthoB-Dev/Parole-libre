@@ -30,11 +30,13 @@ class BlogController extends AbstractController
         $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
         $articles = $articleRepository->findAllArticlesByCategoryId($id);
         $category = $articles[0]->getCategory()->getCategorySlug();
+        $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
 
         return $this->render('blog/articles/category.html.twig', [
             "heroArticles" => $heroArticles,
             "articles" => $articles,
             "category" => $category,
+            "lastCategoryComments" => $lastCategoryComments,
         ]);
     }
 
@@ -43,10 +45,10 @@ class BlogController extends AbstractController
     // Commentaires - Read : Récupères les commentaires lié à l'article
     // Commentaires - Update : Prépare un form de modification pour chaque commentaire présent, puis appel la fonction updateComment pour gérer la modification 
     #[Route("/{categorySlug}/article/{id}/{titleSlug}", name:"app_category_article")]
-    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug): Response
+    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug, $titleSlug): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);
-        $articleComments = $articleCommentRepository->findBy(["article" => $id]);
+        $articleComments = $articleCommentRepository->findBy(["article" => $id], ["createdAt" => "DESC"]);
         $articleCategory = $article->getCategory()->getName();
         $updateForms = [];
         
@@ -62,7 +64,7 @@ class BlogController extends AbstractController
             $comment->setArticle($article);
             $articleCommentRepository->save($comment, true);
             $this->addFlash("commentAdded", "Commentaire ajouté");
-            return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
+            return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id, "titleSlug" => $titleSlug]);
         }
         
         foreach($articleComments as $articleComment) {
@@ -290,7 +292,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-    // #[Route("/updateAll", name:"udpateAllArticles")] 
+    // #[Route("/updateAll")] 
     // public function updateAll(ArticleRepository $articleRepository)
     // {
     //     $articles = $articleRepository->findAll();
@@ -298,6 +300,7 @@ class BlogController extends AbstractController
     //         $imageCaption = $article->getImageCaption();
     //         $title = $article->getTitle();
     //         $titleSlug = $article->getTitleSlug();
+    //         $image = $article->getImage();
             
     //         if(!$imageCaption) {
     //             $article->setImageCaption("Légende d'image par défaut");
@@ -310,9 +313,15 @@ class BlogController extends AbstractController
     //         if($image == "default.webp") {
     //             $article->setImage("default.jpg");
     //         }
+    //         if($title) {
+    //             $tl = strtolower($title);
+    //             $ucf = ucfirst($tl);
+    //             $article->setTitle($ucf);
+    //         }
+            
     //         $articleRepository->save($article, true);
-
-    //         return $this->redirectToRoute("accueil");
+            
     //     }
+    //     return $this->redirectToRoute("accueil");
     // }
 }
