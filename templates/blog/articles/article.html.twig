@@ -65,9 +65,21 @@
                      </p>
                   </div>
 
-                  <div id="btnLike">
-                     <a href="{{path("app_article_like_add", {"categorySlug": article.category.categorySlug, "id": article.category.id, "articleId": article.id})}}"><i class="fa-solid fa-thumbs-up"></i> J'aime cet article</a>
-                  </div>
+                  {% if app.user %}
+                     {% if isArticleLiked(article.id) %}
+                        <div id="btnLike">
+                           <a href="{{path("app_article_like_add", {"categorySlug": article.category.categorySlug, "id": article.category.id, "titleSlug": article.titleSlug, "articleId": article.id})}}"><i class="fa-solid fa-thumbs-up"></i></a>
+                        </div>
+                     {% else %}
+                        <div id="btnLike">
+                           <a href="{{path("app_article_like_add", {"categorySlug": article.category.categorySlug, "id": article.category.id, "titleSlug": article.titleSlug, "articleId": article.id})}}"><i class="fa-regular fa-thumbs-up"></i></a>
+                        </div>
+                     {% endif %}
+                  {% else %}
+                     <div id="btnLike">
+                        <p>Si vous avez aimer cet article, <a href="{{path("app_login")}}">connectez-vous</a> et laissez un j'aime</p>
+                     </div>
+                  {% endif %}
 
                </div>
 
@@ -87,7 +99,7 @@
             </div>
          {% endif %}
 
-         <div class="wrapper-body-comments">
+         <div class="wrapper-body-comments" id="commentaries">
             <div class="container-comments-header">
                <h2>Commentaires</h2>
             </div>
@@ -119,9 +131,15 @@
                         <div class="comment-actions">
                            <div class="action-likes">
                               {% if app.user %}
-                                 <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
-                                    <i class="fa-regular fa-thumbs-up"></i>
-                                 </a>
+                                 {% if isCommentLiked(comment.id) %}
+                                    <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id} )}}#{{comment.id}}">
+                                       <i class="fa-solid fa-thumbs-up"></i>
+                                    </a>
+                                 {% else %}
+                                    <a href="{{path("app_comment_like_add", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id} )}}#{{comment.id}}">
+                                       <i class="fa-regular fa-thumbs-up"></i>
+                                    </a>
+                                 {% endif %}
                               {% else %}
                                  <div style="display: inline;">
                                     <i class="fa-regular fa-thumbs-up" style="display: inline; color: var(--clr-logo-green); cursor: auto;"></i>
@@ -148,7 +166,7 @@
                               {% endif %}
 
                               {% if app.user and is_granted("ROLE_ADMIN") %}
-                                 <a href="{{path("app_article_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "commentId": comment.id} )}}">
+                                 <a href="{{path("app_article_comment_del", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id} )}}">
                                     <i class="fa-solid fa-trash-can"></i>
                                  </a>
                               {% endif %}
@@ -171,12 +189,13 @@
                      <h5>Ajouter un commentaire</h5>
                   </div>
                   
-                  {{form_start(commentForm, {"attr": {"class": "container-addComment-input"}} ) }}
+                  {{ form_start(commentForm, {'attr': {'class': 'container-addComment-input'}} ) }}
                      <div>
-                        {{form_widget(commentForm.content) }}
+                        {{ form_widget(commentForm.content) }}
                         <button type="submit">Commenter</button>
                      </div>
-                  {{form_end(commentForm)}}
+                  {{ form_end(commentForm) }}
+
                </div>
             {% else %}
                <div class="container-addComment">

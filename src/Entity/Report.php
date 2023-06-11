@@ -18,14 +18,14 @@ class Report
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?article $article = null;
+    private ?Article $article = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
-    private ?articleComment $article_comment = null;
+    private ?ArticleComment $article_comment = null;
 
     #[ORM\ManyToMany(targetEntity: reportReason::class, inversedBy: 'reports')]
     private Collection $report_reason;

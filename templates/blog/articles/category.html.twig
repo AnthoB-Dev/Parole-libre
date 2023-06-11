@@ -33,8 +33,10 @@
 								</div>
 
 								<div class="carrousel-article-image">
-									<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
-									<span>{{heroArticle.imageCaption}}</span>
+									<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">
+										<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+										<span>{{heroArticle.imageCaption}}</span>
+									</a>
 								</div>
 
 								<div class="carrousel-article-title">
@@ -112,8 +114,9 @@
 				<div class="container-body-category-articles">
 
 				{% for article in articles %}
-
+			
 					<article class="container-body-category-article">
+						<div class="pastille bg-{{article.category.categorySlug}}"></div>
 
 						<a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
 
@@ -123,7 +126,7 @@
 
 							<div class="wrapper-category-content">
 
-								<h3>{{article.title}}</h3>
+								<h3><span class="bg-{{article.category.categorySlug}}"></span>{{article.title}}</h3>
 
 								<p class="cutoff-text-8">{{article.content}}</p>
 								

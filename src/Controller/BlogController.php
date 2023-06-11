@@ -25,13 +25,20 @@ class BlogController extends AbstractController
 {    
     // Articles - Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
     #[Route("articles/{categorySlug}/{id}", name:"app_category")]
-    public function categoryPage(ArticleRepository $articleRepository, $id): Response
+    public function categoryPage(ArticleRepository $articleRepository, $id, $categorySlug): Response
     {
-        $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
-        $articles = $articleRepository->findAllArticlesByCategoryId($id);
-        $category = $articles[0]->getCategory()->getCategorySlug();
-        $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
-
+        if($categorySlug != "parole-libre" && $id != 8) {
+            $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
+            $articles = $articleRepository->findAllArticlesByCategoryId($id);
+            $category = $articles[0]->getCategory()->getCategorySlug();
+            $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
+        } else {
+            $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByParoleLibre(3);
+            $articles = $articleRepository->findAllArticlesOfParoleLibre();
+            $category = "Parole Libre";
+            $lastCategoryComments = $articleRepository->findParolesLibresAndRecentComments(10);
+        }
+        
         return $this->render('blog/articles/category.html.twig', [
             "heroArticles" => $heroArticles,
             "articles" => $articles,
@@ -64,7 +71,11 @@ class BlogController extends AbstractController
             $comment->setArticle($article);
             $articleCommentRepository->save($comment, true);
             $this->addFlash("commentAdded", "Commentaire ajouté");
-            return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id, "titleSlug" => $titleSlug]);
+            return $this->redirectToRoute("app_category_article", [
+                "categorySlug" => $categorySlug, 
+                "id" => $id, 
+                "titleSlug" => $titleSlug
+            ]);
         }
         
         foreach($articleComments as $articleComment) {
@@ -72,8 +83,9 @@ class BlogController extends AbstractController
             $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
                 'action' => $this->generateUrl('app_article_comment_update', [
                     "categorySlug" => $categorySlug,
-                    'id' => $articleComment->getArticle()->getId(), 
-                    "commentId" => $articleComment->getId()
+                    "id" => $articleComment->getArticle()->getId(),
+                    "titleSlug" => $titleSlug, 
+                    "commentId" => $articleComment->getId(),
                 ]),
                 'method' => 'POST',
             ]);
@@ -83,7 +95,11 @@ class BlogController extends AbstractController
             if($updateForm->isSubmitted() && $updateForm->isValid()) {
                 $articleCommentRepository->save($articleComment, true);
                 $this->addFlash('commentUpdated', 'Commentaire mis à jour');
-                return $this->redirectToRoute('app_category_article', ['categorySlug' => $categorySlug, 'id' => $id]);
+                return $this->redirectToRoute('app_category_article', [
+                    "categorySlug" => $categorySlug, 
+                    "id" => $id,
+                    "titleSlug" => $article->getCategory()->getCategorySlug(),
+                ]);
             }
         }
         
@@ -179,9 +195,9 @@ class BlogController extends AbstractController
         }
     }
 
-    // Article commentaires - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un article
-    #[Route("/{categorySlug}/article/{id}/like-article/{articleId}", name:"app_article_like_add")]
-    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, $id, $categorySlug, $articleId, ArticleLikeRepository $articleLikeRepository)
+    // Article (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un article
+    #[Route("/{categorySlug}/article/{id}/{titleSlug}/like-article/{articleId}", name:"app_article_like_add")]
+    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, $categorySlug, $articleId, ArticleLikeRepository $articleLikeRepository)
     {
         
         $currentUser = $security->getUser();     
@@ -195,15 +211,9 @@ class BlogController extends AbstractController
             $userLiker = $articleLike->getUser();
         }
         
-        if(!$articleLike) {
-            $like = new ArticleLike();  
-            $like->setUser($security->getUser());
-            $like->setArticle($article);
-            $articleLikeRepository->save($like, true);
-    
-        } else if($articleLike && $userLiker == $currentUser) {
+        if($articleLike && $userLiker == $currentUser) {
             $articleLikeRepository->remove($articleLike, true);
-            
+    
         } else {
             $like = new ArticleLike(); 
             $like->setUser($currentUser);
@@ -213,14 +223,14 @@ class BlogController extends AbstractController
 
         return $this->redirectToRoute("app_category_article", [
             "categorySlug" => $categorySlug, 
-            "id" => $id,
+            "id" => $articleId,
             "titleSlug" => $article->getTitleSlug(),
         ]);
     }
 
     // Commentaires - Update : Modification d'un commentaire posté
-    #[Route("/{categorySlug}/article/{id}/comment/{commentId}/update", name:"app_article_comment_update")]
-    public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository, $commentId, Security $security, $categorySlug, $id): Response
+    #[Route("/{categorySlug}/article/{id}/{titleSlug}/comment/{commentId}/update", name:"app_article_comment_update")]
+    public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository, $commentId, Security $security, $categorySlug, $id, $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
@@ -234,7 +244,11 @@ class BlogController extends AbstractController
                 $comment->setUpdatedAt($date);
                 $articleCommentRepository->save($comment, true);
                 $this->addFlash('commentUpdated', 'Commentaire mis à jour');
-                return $this->redirectToRoute('app_category_article', ['categorySlug' => $categorySlug, 'id' => $id]);
+                return $this->redirectToRoute('app_category_article', [
+                    'categorySlug' => $categorySlug, 
+                    'id' => $id,
+                    "titleSlug" => $titleSlug,
+                ]);
             }
     
             return $this->render('blog/articles/article.html.twig', [
@@ -244,19 +258,23 @@ class BlogController extends AbstractController
     }
 
     // Commentaires - Delete : Suppression d'un commentaire
-    #[Route("/{categorySlug}/article/{id}/comment/{commentId}/delete", name:"app_article_comment_del")]
-    public function delComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId, $categorySlug): Response
+    #[Route("/{categorySlug}/article/{id}/{titleSlug}/comment/{commentId}/delete", name:"app_article_comment_del")]
+    public function delComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId, $categorySlug, $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $comment = $articleCommentRepository->remove($comment, true);
         $this->addFlash("commentaryDeleted", "Le commentaire a été supprimé.");
 
-        return $this->redirectToRoute("app_category_article", ["categorySlug" => $categorySlug, "id" => $id]);
+        return $this->redirectToRoute("app_category_article", [
+            "categorySlug" => $categorySlug, 
+            "id" => $id,
+            "titleSlug" => $titleSlug,
+        ]);
     }
 
-    // Commentaires - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un commentaire
-    #[Route("/{categorySlug}/article/{id}/like-comment/{commentId}", name:"app_comment_like_add")]
-    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository)
+    // Commentaires (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un commentaire
+    #[Route("/{categorySlug}/article/{id}/{titleSlug}/like-comment/{commentId}", name:"app_comment_like_add")]
+    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository, $titleSlug)
     {
         
         $currentUser = $security->getUser();     
@@ -289,6 +307,7 @@ class BlogController extends AbstractController
         return $this->redirectToRoute("app_category_article", [
             "categorySlug" => $categorySlug, 
             "id" => $id,
+            "titleSlug" => $titleSlug,
         ]);
     }
 
@@ -317,6 +336,9 @@ class BlogController extends AbstractController
     //             $tl = strtolower($title);
     //             $ucf = ucfirst($tl);
     //             $article->setTitle($ucf);
+    //         }
+    //         if($article->isParoleLibre() == null) {
+    //             $article->setParoleLibre(0);
     //         }
             
     //         $articleRepository->save($article, true);

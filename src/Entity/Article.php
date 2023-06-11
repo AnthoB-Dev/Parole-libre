@@ -19,11 +19,11 @@ class Article
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?category $category = null;
+    private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -57,6 +57,9 @@ class Article
 
     #[ORM\Column(length: 255)]
     private ?string $titleSlug = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $paroleLibre = null;
 
     public function __construct()
     {
@@ -304,5 +307,17 @@ class Article
         $articleComments = $this->getArticleComments();
 
         return $articleComments->count();
+    }
+
+    public function isParoleLibre(): ?bool
+    {
+        return $this->paroleLibre;
+    }
+
+    public function setParoleLibre(?bool $paroleLibre): self
+    {
+        $this->paroleLibre = $paroleLibre;
+
+        return $this;
     }
 }

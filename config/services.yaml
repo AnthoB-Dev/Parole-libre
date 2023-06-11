@@ -7,6 +7,13 @@ parameters:
     upload_directory: "%kernel.project_dir%/public/upload_directory"
 services:
     # default configuration for services in *this* file
+    App\Twig\AppExtension:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+            $security: '@security.helper'
+        tags:
+            - { name: twig.extension }
+
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

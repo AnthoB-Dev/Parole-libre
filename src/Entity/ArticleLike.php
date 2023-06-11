@@ -15,11 +15,11 @@ class ArticleLike
 
     #[ORM\ManyToOne(inversedBy: 'articleLikes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'articleLikes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?article $article = null;
+    private ?Article $article = null;
 
     public function getId(): ?int
     {

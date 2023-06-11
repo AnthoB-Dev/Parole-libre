@@ -15,11 +15,11 @@ class CommentLike
 
     #[ORM\ManyToOne(inversedBy: 'commentLikes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentLikes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?articleComment $article_comment = null;
+    private ?ArticleComment $article_comment = null;
 
     public function getId(): ?int
     {

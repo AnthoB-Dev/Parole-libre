@@ -16,13 +16,6 @@
    const coloringSections = document.querySelectorAll(".container-body-category-content");
    const nav = document.querySelector('.container-header-nav');
    const articles = document.querySelectorAll("article");
-   
-   const politique = categoryPolitique.toUpperCase();
-   const economie = categoryEconomie.toUpperCase();
-   const geopolitique = categoryGeopolitique.toUpperCase();
-   const societe = categorySociete.toUpperCase();
-   const artsLitteratures = categoryArtsLitteratures.toUpperCase();
-   const paroleLibre = categoryParoleLibre.toUpperCase();
 
 
    // Sur chargement de la page et selon le chemin de la page, changement de la couleur de la bande de fond des sections. 

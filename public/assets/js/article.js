@@ -161,6 +161,5 @@
          changeColorsInNewArticle(v);
       });
    }
-
    
 })();

@@ -27,14 +27,16 @@
                         {% for heroArticle in recentHeroArticles %}
                             <article class="container-carrousel-cards">
 
-                                <div class="carrousel-article-category">
+                                <div class="carrousel-article-category bg-{{heroArticle.category.categorySlug}}">
                                     <h4>{{heroArticle.category.name}}</h4>
                                     <h5> {{heroArticle.subtitle}} </h5>
                                 </div>
 
                                 <div class="carrousel-article-image">
-                                    <img src="{{asset("upload_directory/" ~ heroArticle.image)}}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
-                                    <span>{{heroArticle.imageCaption}}</span>
+                                    <a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">
+                                        <img src="{{asset("upload_directory/" ~ heroArticle.image)}}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+                                        <span>{{heroArticle.imageCaption}}</span>
+                                    </a>
                                 </div>
 
                                 <div class="carrousel-article-title">
@@ -196,30 +198,31 @@
 
                                 <div class="body-categories-cards">
                                 {% for article in categoryArticles %}
-                                    <article class="body-categories-cards-container">
-
-                                        <div class="container-card-image">
-                                            <a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
-                                                <img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
-                                            </a>
-                                        </div>
-                                        <div class="container-card-title">
-                                            <h4 class="txt-{{article.category.categorySlug}}">{{article.title}}</h4>
-                                        </div>
-                                        <div class="container-card-content">
-                                            <p>{{article.content}}</p>
-                                            <a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">Lire la suite</a>
-                                        </div>
-                                        <div class="container-card-actions">
-                                            <p>
-                                                <span class="greyedOut">Auteur
-                                                </span>{{article.user.pseudo}}
-                                                <span class="greyedOut">le
-                                                </span>{{article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR')}}
-                                            </p>
-                                        </div>
-                                        <input type="hidden" class="articleId" value="{{article.id}}" data-category='{{article.category.name}}'>
-                                    </article>
+                                    {% if article.paroleLibre != 1 %}
+                                        <article class="body-categories-cards-container">
+                                            <div class="container-card-image">
+                                                <a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
+                                                    <img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
+                                                </a>
+                                            </div>
+                                            <div class="container-card-title">
+                                                <h4 class="txt-{{article.category.categorySlug}}">{{article.title}}</h4>
+                                            </div>
+                                            <div class="container-card-content">
+                                                <p>{{article.content}}</p>
+                                                <a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">Lire la suite</a>
+                                            </div>
+                                            <div class="container-card-actions">
+                                                <p>
+                                                    <span class="greyedOut">Auteur
+                                                    </span>{{article.user.pseudo}}
+                                                    <span class="greyedOut">le
+                                                    </span>{{article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR')}}
+                                                </p>
+                                            </div>
+                                            <input type="hidden" class="articleId" value="{{article.id}}" data-category='{{article.category.name}}'>
+                                        </article>
+                                    {% endif %}
                                 {% endfor %}
 
                                 </div>
@@ -256,7 +259,7 @@
                                                         <h5 class="bg-{{popularArticle.category.categorySlug}}">{{popularArticle.subtitle}}</h5>
                                                     </div>
                                                     <div class="body-sidebar-cards-content-content">
-                                                        <p>{{popularArticle.content}}</p>
+                                                        <p>{{popularArticle.title}}</p>
                                                     </div>
                                                 </div>
                                             </a>
