@@ -30,7 +30,7 @@ class BlogController extends AbstractController
         if($categorySlug != "parole-libre" && $id != 8) {
             $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
             $articles = $articleRepository->findAllArticlesByCategoryId($id);
-            $category = $articles[0]->getCategory()->getCategorySlug();
+            $category = $articles[0]->getCategory()->getName();
             $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
         } else {
             $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByParoleLibre(3);
@@ -153,8 +153,8 @@ class BlogController extends AbstractController
     }
 
     // Article - Update :
-    #[Route("/writer/parole-libre/article/{id}/modifier", name: "app_article_edit")]
-    public function editParoleLibre(ArticleRepository $articleRepository, Request $request, $id, Security $security): Response
+    #[Route("/writer/parole-libre/article/{id}/modifier/{titleSlug}", name: "app_article_edit")]
+    public function editParoleLibre(ArticleRepository $articleRepository, Request $request, $id, Security $security, $titleSlug): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);
         $slugify = new Slugify();
@@ -184,6 +184,7 @@ class BlogController extends AbstractController
                 return $this->redirectToRoute("app_category_article", [
                     "categorySlug" => $article->getCategory()->getCategorySlug(),
                     "id" => $id,
+                    "titleSlug" => $titleSlug,
                 ]);
             }
 
@@ -191,6 +192,7 @@ class BlogController extends AbstractController
                 "form" => $form->createView(),
                 "articleTitle" => $articleTitle,
                 "articleImage" => $articleImage,
+                "article" => $article,
             ]);
         }
     }

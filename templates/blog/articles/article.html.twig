@@ -36,7 +36,7 @@
                   </div>
                   {% if app.user == article.user and is_granted("ROLE_WRITER") or is_granted("ROLE_ADMIN") %}
                      <div id="editButton">
-                        <a href="{{path("app_article_edit", {"id": article.id})}}"><i class="fas fa-pencil-alt"></i> Modifier l'article</a>
+                        <a href="{{path("app_article_edit", {"id": article.id, "titleSlug": article.titleSlug})}}"><i class="fas fa-pencil-alt"></i> Modifier l'article</a>
                      </div>
                   {% endif %}
 
