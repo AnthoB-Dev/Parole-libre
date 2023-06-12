@@ -86,6 +86,20 @@
     
     </section>
 
+    <div class="container-content-prebody">
+        <p>Vous aussi vous souhaitez publier un article ?</p>
+        {% if app.user %}
+            {% if app.user.isWriter %}
+                <p>Alors n'attendez plus et faite valoir votre liberté d'expression! Rendez-vous <a href="{{path("app_article_new")}}">ici</a> pour commencer la rédaction d'un article.</p>
+            {% else %}
+                <p>Vous en avez la possibilité si vous ne vous êtes pas défini en tant qu'auteur lors de l'inscription d'aller modifier cela dans votre</p>
+                <p><a href=""><i class="fa-solid fa-user"></i> profile</a>.</p>
+            {% endif %}
+        {% else %}
+            <p>Pour cela, <a href="{{path("app_login")}}" class="connectionLink"><i class="fa-solid fa-right-to-bracket"></i> connectez-vous</a> ou <a href="{{path("app_register")}}" class="registerLink"><i class="fa-solid fa-user-plus"></i> inscrivez-vous</a> et faites valoir votre liberté d'expression!</p>
+        {% endif %}
+    </div>
+
     <section class="container-content-body">
 
     

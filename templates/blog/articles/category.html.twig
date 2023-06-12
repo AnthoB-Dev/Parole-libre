@@ -8,7 +8,7 @@
 
 {% block main %}
 
-	<section class="container-content-header{% if category == "Parole Libre" %} paroleLibre{% endif %}">
+	<section class="container-content-header">
 
 		<div class="container-title-header">
 			<h2>Dernières publications ajoutés</h2>
@@ -90,12 +90,12 @@
 
 	</section>
 
-	{% if category == "Parole Libre" %}
+	{% if category %}
       <div class="container-content-prebody">
 			<p>Vous aussi vous souhaitez publier un article ?</p>
 			{% if app.user %}
 				{% if app.user.isWriter %}
-					<p>Alors n'attendez plus et faite valoir votre liberté d'expression! Rendez-vous <a href="{{path("app_article_new")}}">ici</a> pour commencer.</p>
+					<p>Alors n'attendez plus et faite valoir votre liberté d'expression! Rendez-vous <a href="{{path("app_article_new")}}">ici</a> pour commencer la rédaction d'un article.</p>
 				{% else %}
 					<p>Vous en avez la possibilité si vous ne vous êtes pas défini en tant qu'auteur lors de l'inscription d'aller modifier cela dans votre</p>
 					<p><a href=""><i class="fa-solid fa-user"></i> profile</a>.</p>
