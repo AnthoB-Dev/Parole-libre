@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{user.pseudo}} - Profil{% endblock %}
+
+{% block javascripts %}
+    <script src="{{asset("assets/js/home.js")}}" defer></script>
+{% endblock %}
+
+{% block main %}
+
+    <section class="container-content-header">
+
+        <div class="container-title-header">
+            <h2>Profil utilisateur de '{{user.pseudo}}'</h2>
+        </div>
+
+        <div class="container-carrousel-header">
+
+            <div class="wrapper-carrousel-chevrons chevron-left">
+                <i class="fa-solid fa-chevron-left"></i>
+            </div>
+
+            <div class="wrapper-carrousel-mid">
+                <div class="container-carrousel-groups">
+                    <div class="carrousel-group-1">
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wrapper-carrousel-chevrons chevron-right">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        
+        </div>
+    
+    </section>
+
+{% endblock %}

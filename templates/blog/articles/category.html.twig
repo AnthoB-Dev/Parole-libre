@@ -8,87 +8,93 @@
 
 {% block main %}
 
-	<section class="container-content-header">
+	{% if app.request.attributes.get("_route")|starts_with("app_category") %}
+		<section class="container-content-header" style="padding-top: 0">
 
-		<div class="container-title-header">
-			<h2>Dernières publications ajoutés</h2>
-		</div>
-
-		<div class="container-carrousel-header">
-
-			<div class="wrapper-carrousel-chevrons chevron-left">
-				<i class="fa-solid fa-chevron-left"></i>
+			<div class="container-category-title">
+				<h1>{{category}}</h1>
 			</div>
 
-			<div class="wrapper-carrousel-mid">
-				<div class="container-carrousel-groups">
-					<div class="carrousel-group-1">
+			<div class="container-title-header">
+				<h2>Dernières publications ajoutés</h2>
+			</div>
 
-						{% for heroArticle in heroArticles %}
-							<article class="container-carrousel-cards">
+			<div class="container-carrousel-header">
 
-								<div class="carrousel-article-category bg-{{heroArticle.category.categorySlug}}">
-									<h4>{{heroArticle.category.name}}</h4>
-									<h5>{{heroArticle.subtitle}}</h5>
-								</div>
+				<div class="wrapper-carrousel-chevrons chevron-left">
+					{# <i class="fa-solid fa-chevron-left"></i> #}
+				</div>
 
-								<div class="carrousel-article-image">
-									<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">
-										<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
-										<span>{{heroArticle.imageCaption}}</span>
-									</a>
-								</div>
+				<div class="wrapper-carrousel-mid">
+					<div class="container-carrousel-groups">
+						<div class="carrousel-group-1">
 
-								<div class="carrousel-article-title">
-									<h3>{{heroArticle.title}}</h3>
-								</div>
+							{% for heroArticle in heroArticles %}
+								<article class="container-carrousel-cards">
 
-								<div class="carrousel-article-content">
-									<p class="cutoff-text-8">{{heroArticle.content}}</p>
-									<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
-								</div>
+									<div class="carrousel-article-category bg-{{heroArticle.category.categorySlug}}">
+										<h4>{{heroArticle.category.name}}</h4>
+										<h5>{{heroArticle.subtitle}}</h5>
+									</div>
 
-								<div class="carrousel-article-actions">
-									<div class="article-action author">
-										<span class="greyedOut">Auteur</span> {{heroArticle.user.pseudo}}
-                           </div>
-									<div class="article-action publishedAt">
-										<span class="greyedOut">le</span> {{ heroArticle.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}
-                           </div>
-									<div class="article-action likes">
-										<div>
-											{% if heroArticle.getArticleCommentsCount() != 0 %}
-                                    <p>{{heroArticle.getArticleCommentsCount()}}</p>
-                                 {% else %}
-                                    <p>0</p>
-                                 {% endif %}
-											<i class="fa-regular fa-comment-dots"></i>
+									<div class="carrousel-article-image">
+										<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">
+											<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+											<span>{{heroArticle.imageCaption}}</span>
+										</a>
+									</div>
+
+									<div class="carrousel-article-title">
+										<h3>{{heroArticle.title}}</h3>
+									</div>
+
+									<div class="carrousel-article-content">
+										<p class="cutoff-text-8">{{heroArticle.content}}</p>
+										<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
+									</div>
+
+									<div class="carrousel-article-actions">
+										<div class="article-action author">
+											<span class="greyedOut">Auteur</span> {{heroArticle.user.pseudo}}
 										</div>
-										<div>
-											{% if heroArticle.getArticleLikesCount() != 0 %}
-                                    <p>{{heroArticle.getArticleLikesCount()}}</p>
-                                 {% else %}
-                                    <p>0</p>
-                                 {% endif %}
-											<i class="fa-regular fa-thumbs-up"></i>
+										<div class="article-action publishedAt">
+											<span class="greyedOut">le</span> {{ heroArticle.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}
+										</div>
+										<div class="article-action likes">
+											<div>
+												{% if heroArticle.getArticleCommentsCount() != 0 %}
+													<p>{{heroArticle.getArticleCommentsCount()}}</p>
+												{% else %}
+													<p>0</p>
+												{% endif %}
+												<i class="fa-regular fa-comment-dots"></i>
+											</div>
+											<div>
+												{% if heroArticle.getArticleLikesCount() != 0 %}
+													<p>{{heroArticle.getArticleLikesCount()}}</p>
+												{% else %}
+													<p>0</p>
+												{% endif %}
+												<i class="fa-regular fa-thumbs-up"></i>
+											</div>
 										</div>
 									</div>
-								</div>
-								<input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category="{{heroArticle.category.name}}">
+									<input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category="{{heroArticle.category.name}}">
 
-							</article>
-						{% endfor %}
+								</article>
+							{% endfor %}
+						</div>
 					</div>
 				</div>
+
+				<div class="wrapper-carrousel-chevrons chevron-right">
+					{# <i class="fa-solid fa-chevron-right"></i> #}
+				</div>
+
 			</div>
 
-			<div class="wrapper-carrousel-chevrons chevron-right">
-				<i class="fa-solid fa-chevron-right"></i>
-			</div>
-
-		</div>
-
-	</section>
+		</section>
+	{% endif %}
 
 	{% if category %}
       <div class="container-content-prebody">

@@ -6,6 +6,7 @@ use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class IndexController extends AbstractController
 {
@@ -24,6 +25,16 @@ class IndexController extends AbstractController
             "popularArticles" => $popularArticles,
             "lastParoles" => $lastParoles,
             "lastComments" => $lastComments,
+        ]);
+    }
+
+    #[Route("/profil", name:"profil")]
+    public function showProfile(Security $security)
+    {
+        $user = $security->getUser();
+
+        return $this->render("index/profil.html.twig", [
+            "user" => $user,
         ]);
     }
 

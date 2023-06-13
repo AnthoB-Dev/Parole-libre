@@ -158,11 +158,11 @@
                                     <i class="fas fa-undo cancelIcon hidden"></i>
                                  {% endif %}
 
-                                 {% if comment.user != app.user %}
+                                 {# {% if comment.user != app.user %}
                                     <div>
                                        <i class="fa-solid fa-triangle-exclamation"></i>
                                     </div>
-                                 {% endif %}
+                                 {% endif %} #}
                               {% endif %}
 
                               {% if app.user and is_granted("ROLE_ADMIN") %}

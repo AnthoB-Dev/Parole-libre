@@ -63,10 +63,13 @@
 
         </main>
 
-
-        <footer id="footer-container">
-        
-        </footer>
+        {% if app.request.attributes.get('_route')|starts_with('app_admin') %}
+            {# Pas de footer en admin #}
+        {% else %}
+            <footer id="footer-container">
+                {% include "commons/_generic-footer.html.twig" %}
+            </footer>
+        {% endif %}
             
     </body>
 </html>

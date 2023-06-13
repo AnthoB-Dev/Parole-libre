@@ -129,6 +129,7 @@ class BlogController extends AbstractController
             $slugify = new Slugify();
             $slug = $slugify->slugify($article->getTitle());
             $article->setTitleSlug($slug);
+            $article->setParoleLibre(true);
 
             // Défini l'image
             $file = $form->get("image")->getData();
@@ -144,7 +145,11 @@ class BlogController extends AbstractController
 
             $articleRepository->save($article, true);
 
-            return $this->redirectToRoute("app_category", ["categorySlug" => "parole-libre", "id" => 8]);
+            return $this->redirectToRoute("app_category_article", [
+                "categorySlug" => $article->getCategory()->getCategorySlug(), 
+                "id" => $article->getId(),
+                "titleSlug" => $article->getTitleSlug(),
+            ]);
         }
 
         return $this->render("blog/articles/newArticle.html.twig", [

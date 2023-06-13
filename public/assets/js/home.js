@@ -13,6 +13,10 @@
    const categoryParoleLibre = "parole libre";
    const clrParoleLibre = "#33673B";
 
+   const headerNavbar = document.querySelector("#header-navbar");
+   const headerNavLinks = headerNavbar.querySelectorAll("li");
+   const path = window.location.pathname;
+
    const coloringSections = document.querySelectorAll(".container-body-category-content");
    const nav = document.querySelector('.container-header-nav');
    const articles = document.querySelectorAll("article");
@@ -100,5 +104,12 @@
          nav.classList.remove('sticky');
       }
    }
+
+   headerNavLinks.forEach(e => {
+      const link = e.querySelector("a");
+      if (link.getAttribute('href') === path) {
+         e.classList.add('active');
+      }
+   })
 
 }())

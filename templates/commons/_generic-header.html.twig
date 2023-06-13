@@ -1,14 +1,14 @@
 <div class="container-header-content">
    <div class="container-header-icons">
       <div class="container-boxes">
-         <div class="social-box">
-            <a href="#" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a>
+         <div class="social-box" data-descr="Twitter">
+            <a href="https://twitter.com/" target="blank" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a>
          </div>
-         <div class="social-box">
-            <a href="#" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a>
+         <div class="social-box" data-descr="Facebook">
+            <a href="https://facebook.com/" target="blank" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a>
          </div>
-         <div class="social-box">
-            <a href="#" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a>
+         <div class="social-box" data-descr="Tiktok">
+            <a href="https://www.tiktok.com/explore" target="blank" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a>
          </div>
       </div>
    </div>
@@ -19,15 +19,15 @@
    </div>
    <div class="container-header-icons">
       <div class="container-boxes no-shadows">
-         <div class="social-box"><a href="#" class="icon-search"><i class="fa-solid fa-magnifying-glass"></i></a></div>
+         {# <div class="social-box"><a href="#" class="icon-search"><i class="fa-solid fa-magnifying-glass"></i></a></div> #}
          {% if app.user %}
-            <div class="social-box"><a href="#" class="icon-user"><i class="fa-solid fa-user"></i></a></div>
+            {# <div class="social-box"><a href="{{path("profil")}}" class="icon-user"><i class="fa-solid fa-user"></i></a></div> #}
             {% if "ROLE_ADMIN" in app.user.roles or "ROLE_SUPERADMIN" in app.user.roles %}
-               <div class="social-box"><a href="{{path("app_admin_index")}}" class="icon-user"><i class="fa-solid fa-gear"></i></a></div>
+               <div class="social-box" data-descr="Panel admin"><a href="{{path("app_admin_index")}}" class="icon-user"><i class="fa-solid fa-gear"></i></a></div>
             {% endif %}
-            <div class="social-box"><a href="{{path("app_logout")}}" class="icon-user"><i class="fa-solid fa-right-from-bracket"></i></a></div>
+            <div class="social-box" data-descr="Déconnexion"><a href="{{path("app_logout")}}" class="icon-user"><i class="fa-solid fa-right-from-bracket"></i></a></div>
          {% else %}
-            <div class="social-box"><a href="{{path("app_login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>
+            <div class="social-box" data-descr="Connexion"><a href="{{path("app_login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>
          {% endif %}
          <div class="social-box burger" id="burger">
             <div class="top-bar"></div>
@@ -45,7 +45,7 @@
    <a href="{{path("accueil")}}" class="burger-navlink"><i class="fa-solid fa-house"></i>Accueil</a>
 
    {% if app.user %}
-      <a href="#" class="burger-navlink"><i class="fa-solid fa-user"></i>Profil</a>
+      {# <a href="{{path("profil")}}" class="burger-navlink"><i class="fa-solid fa-user"></i>Profil</a> #}
 
       {% if is_granted("ROLE_ADMIN") %}
          <a href="{{path("app_admin_index")}}" class="burger-navlink"><i class="fa-solid fa-gear"></i>Panel admin</a>
@@ -71,9 +71,9 @@
    <div class="container-nav-socials">
       <h5 id="nopad">Réseaux sociaux</h5>
       <div>
-         <div class="social-box"><a href="#" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a></div>
-         <div class="social-box"><a href="#" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a></div>
-         <div class="social-box"><a href="#" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a></div>
+         <div class="social-box"><a href="https://twitter.com/" target="blank" class="brand-twitter"><i class="fa-brands fa-twitter"></i></a></div>
+         <div class="social-box"><a href="https://facebook.com/" target="blank" class="brand-facebook"><i class="fa-brands fa-facebook"></i></a></div>
+         <div class="social-box"><a href="https://www.tiktok.com/explore" target="blank" class="brand-tiktok"><i class="fa-brands fa-tiktok"></i></a></div>
       </div>
    </div>
 </div>
