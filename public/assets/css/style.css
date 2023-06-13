@@ -35,10 +35,6 @@
   --clr-brand-tiktok: #000000;
   --clr-black: #0E0F19;
   --clr-grey: #87878C;
-  --icons-w50: 50px;
-  --images-w480: 480px;
-  --images-w320: 320px;
-  --images-w150: 150px;
   --spacing-categories: 225px;
 }
 
@@ -93,6 +89,30 @@ html {
   -webkit-box-orient: vertical;
   -moz-box-orient: vertical;
   -webkit-line-clamp: var(--max-lines);
+}
+
+.info-pop {
+  position: relative;
+}
+.info-pop::before {
+  content: attr(data-descr);
+  position: absolute;
+  min-width: max-content;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.info-pop:hover::before {
+  opacity: 1;
+  visibility: visible;
 }
 
 .txt-politique {
@@ -458,26 +478,6 @@ a {
   overflow: hidden;
   border: solid 1px white;
   position: relative;
-}
-#header-container .container-header-content .container-header-icons .container-boxes .social-box::before {
-  content: attr(data-descr);
-  position: absolute;
-  min-width: max-content;
-  bottom: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 5px 10px;
-  background-color: #fff;
-  color: #000;
-  border-radius: 4px;
-  font-size: 12px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-#header-container .container-header-content .container-header-icons .container-boxes .social-box:hover::before {
-  opacity: 1;
-  visibility: visible;
 }
 #header-container .container-header-content .container-header-icons .container-boxes .social-box a {
   width: 100%;
@@ -2116,6 +2116,7 @@ a {
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons {
   display: flex;
   align-items: center;
+  position: relative;
 }
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons > i {
   padding: 0.3rem 0.6rem;
@@ -2382,6 +2383,7 @@ a {
   flex-basis: 40%;
   display: flex;
   flex-direction: column;
+  max-height: 500px;
 }
 .container-content-body .wrapper-body-content .container-body-category-articles .container-body-category-article a .wrapper-category-image img {
   width: 100%;
@@ -2494,6 +2496,9 @@ a {
   }
   .container-content-body .wrapper-body-content .container-body-category-articles .container-body-category-article a {
     flex-direction: column;
+  }
+  .container-content-body .wrapper-body-content .container-body-category-articles .container-body-category-article a .wrapper-category-image {
+    aspect-ratio: 1;
   }
   .container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-comments .container-parole-title {
     border-radius: 0 0 0 0;
