@@ -2362,6 +2362,14 @@ a {
   display: flex;
   font-size: 32px;
 }
+.container-content-body .wrapper-body-content .container-body-category-articles .container-body-category-article a .wrapper-category-content p {
+  width: 100%;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 8;
+}
 .container-content-body .wrapper-body-content .container-body-category-articles .container-body-category-article a .wrapper-category-content .container-content-footer {
   display: flex;
   justify-content: flex-end;
