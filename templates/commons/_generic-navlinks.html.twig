@@ -1,8 +1,11 @@
 <nav class="container-header-nav">
    <ul class="header-navlinks" id="header-navbar">
       <li><a href="{{path("accueil")}}">Accueil</a></li>
+
       {% for category in getCategories() %}
-         <li class="{{category.categorySlug}}"><a href="{{path("app_category", {"categorySlug": category.categorySlug, "id": category.id}) }}">{{category.name}}</a></li>
+         <li class="{{category.categorySlug}}">
+            <a href="{{path("app_category", {"categorySlug": category.categorySlug, "id": category.id}) }}">{{category.name}}</a>
+         </li>
       {% endfor %}
    </ul>
 </nav>

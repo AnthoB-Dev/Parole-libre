@@ -107,7 +107,7 @@
 
    headerNavLinks.forEach(e => {
       const link = e.querySelector("a");
-      if (link.getAttribute('href') === path) {
+      if(link.getAttribute('href') === path) {
          e.classList.add('active');
       }
    })

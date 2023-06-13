@@ -61,36 +61,6 @@ html {
   scroll-behavior: smooth;
 }
 
-.cutoff-text-8 {
-  --max-lines: 8;
-  width: 100%;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-line-clamp: var(--max-lines);
-}
-
-.cutoff-text-6 {
-  --max-lines: 6;
-  width: 100%;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-line-clamp: var(--max-lines);
-}
-
-.cutoff-text-3 {
-  --max-lines: 6;
-  width: 100%;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-line-clamp: var(--max-lines);
-}
-
 .info-pop {
   position: relative;
 }
@@ -610,9 +580,6 @@ a {
   height: 3px;
   background-color: #0E0F19;
   border-radius: 5px;
-}
-.container-header-nav .header-navlinks .active.accueil::before {
-  background-color: var(--clr-logo-unSat-blue);
 }
 .container-header-nav .header-navlinks .active.economie::before {
   background-color: var(--clr-economie);
@@ -1719,16 +1686,10 @@ a {
   }
 }
 @media only screen and (max-width: 550px) {
-  .container-content-header .container-carrousel-header .wrapper-carrousel-chevrons {
-    flex-basis: 10%;
-  }
-  .container-content-header .container-carrousel-header .wrapper-carrousel-mid {
-    flex-basis: 80%;
-  }
   .container-content-body {
     padding: 0 1rem;
   }
-  .container-content-body .wrapper-body-content .container-body-categories .container-categories-content .wrapper-body-categories-content .container-body-category-content .body-categories-cards .body-categories-cards-container {
+  .container-content-body .wrapper-body-content .container-body-categories .container-categories-content .wrapper-body-categories-content .body-categories-cards .body-categories-cards-container {
     max-width: 100%;
   }
   .container-content-body .wrapper-body-content .container-body-categories .container-categories-content .wrapper-body-categories-sidebar .container-body-sidebar-content .container-body-sidebar-cards .body-sidebar-cards-author .body-sidebar-cards-author-spans span {
