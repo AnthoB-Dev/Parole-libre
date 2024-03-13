@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\ReportReason;
+use App\Form\ArticleType;
 use App\Form\CategoryType;
 use App\Form\ReportReasonType;
 use App\Repository\ArticleRepository;
@@ -12,14 +13,14 @@ use App\Repository\CategoryRepository;
 use App\Repository\ReportReasonRepository;
 use DateTimeImmutable;
 use DateTimeZone;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+// use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('/admin', name: 'app_admin_')]
-#[Security('is_granted("ROLE_ADMIN")')]
 class AdminController extends AbstractController
 {
 
@@ -63,7 +64,6 @@ class AdminController extends AbstractController
 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
 
         if($form->isSubmitted() && $form->isValid()) {
             $article->setUser($user);

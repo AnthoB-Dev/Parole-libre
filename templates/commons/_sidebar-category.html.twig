@@ -11,7 +11,7 @@
 		{% for comment in lastCategoryComments %}
 			{% if comment.cId %}
 				<article class="parole-card">
-					<a href="{{ path("app_category_article", {"categorySlug": comment.categorySlug, "id": comment.id, "titleSlug": comment.titleSlug}) }}#{{comment.cId}}">
+					<a href="{{ path("category.show", {"categorySlug": comment.categorySlug, "id": comment.id, "titleSlug": comment.titleSlug}) }}#{{comment.cId}}">
 						<div class="container-body-sidebar-cards">
 							<div class="body-sidebar-cards-author">
 								<div class="body-sidebar-cards-author-spans">

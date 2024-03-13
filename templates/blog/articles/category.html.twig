@@ -8,7 +8,7 @@
 
 {% block main %}
 
-	{% if app.request.attributes.get("_route")|starts_with("app_category") %}
+	{% if app.request.attributes.get("_route")|starts_with("category") %}
 		<section class="container-content-header" style="padding-top: 0">
 
 			<div class="container-category-title">
@@ -38,7 +38,7 @@
 									</div>
 
 									<div class="carrousel-article-image">
-										<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">
+										<a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">
 											<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
 											<span>{{heroArticle.imageCaption}}</span>
 										</a>
@@ -50,7 +50,7 @@
 
 									<div class="carrousel-article-content">
 										<p class="cutoff-text-8">{{heroArticle.content}}</p>
-										<a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
+										<a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
 									</div>
 
 									<div class="carrousel-article-actions">
@@ -128,7 +128,7 @@
 					<article class="container-body-category-article">
 						<div class="pastille bg-{{article.category.categorySlug}}"></div>
 
-						<a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
+						<a href="{{path("article.show", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
 
 							<div class="wrapper-category-image">
 								<img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">

@@ -11,6 +11,7 @@ use App\Form\ArticleType;
 use App\Repository\ArticleCommentRepository;
 use App\Repository\ArticleLikeRepository;
 use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\CommentLikeRepository;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -22,23 +23,46 @@ use Symfony\Bundle\SecurityBundle\Security as Security;
 use Cocur\Slugify\Slugify;
 
 class BlogController extends AbstractController
-{    
+{
     // Articles - Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
-    #[Route("articles/{categorySlug}/{id}", name:"app_category")]
-    public function categoryPage(ArticleRepository $articleRepository, $id, $categorySlug): Response
+    #[Route("/{categorySlug}", name:"category.show", requirements: ["categorySlug" => "[a-z0-9-]+"])]
+    public function categoryPage(ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug): Response
     {
-        if($categorySlug != "parole-libre" && $id != 8) {
-            $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
-            $articles = $articleRepository->findAllArticlesByCategoryId($id);
-            $category = $articles[0]->getCategory()->getName();
-            $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
-        } else {
-            $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByParoleLibre(3);
-            $articles = $articleRepository->findAllArticlesOfParoleLibre();
-            $category = "Parole Libre";
-            $lastCategoryComments = $articleRepository->findParolesLibresAndRecentComments(10);
-        }
+        if($categorySlug != "accueil") {
+            $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
+            $id = $category->getId();
         
+            if($categorySlug != "parole-libre" && $id != 8) {
+                $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
+                $articles = $articleRepository->findAllArticlesByCategoryId($id);
+                $category = $articles[0]->getCategory()->getName();
+                $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
+            } else {
+                $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByParoleLibre(3);
+                $articles = $articleRepository->findAllArticlesOfParoleLibre();
+                $category = "Parole Libre";
+                $lastCategoryComments = $articleRepository->findParolesLibresAndRecentComments(10);
+            }
+
+        } else { 
+            // ! BUG !
+            // Code dupliqué du controller IndexController pour l'accueil, car sans ça lorsque je suis sur /accueil j'ai une erreur comme quoi les variables du dessus sont vide
+            // Problème apparu losque j'ai changer la route de category.show
+            $recentHeroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategories(3, 1, 2, 5, 6, 7);
+            $articles = $articleRepository->findArticlesRecentlyPublishedByCategories(2, 1, 2, 5, 6, 7);
+            $popularArticles = $articleRepository->findByPopularityOfCategories(6, 1, 2, 5, 6, 7);
+            $lastParoles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(10, 8);
+            $lastComments = $articleRepository->findArticlesByRecentComments(10);
+
+            return $this->render("index/accueil.html.twig", [
+                "recentHeroArticles" => $recentHeroArticles,
+                "articles" => $articles,
+                "popularArticles" => $popularArticles,
+                "lastParoles" => $lastParoles,
+                "lastComments" => $lastComments,
+            ]);
+        }
+
         return $this->render('blog/articles/category.html.twig', [
             "heroArticles" => $heroArticles,
             "articles" => $articles,
@@ -51,65 +75,76 @@ class BlogController extends AbstractController
     // Commentaires - Create : Ajout d'un commentaire sur le dit article
     // Commentaires - Read : Récupères les commentaires lié à l'article
     // Commentaires - Update : Prépare un form de modification pour chaque commentaire présent, puis appel la fonction updateComment pour gérer la modification 
-    #[Route("/{categorySlug}/article/{id}/{titleSlug}", name:"app_category_article")]
-    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, $categorySlug, $titleSlug): Response
+    #[Route("/{categorySlug}/{titleSlug}-{id}", name:"article.show", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, int $id, ArticleCommentRepository $articleCommentRepository, $categorySlug, string $titleSlug): Response
     {
-        $article = $articleRepository->findOneBy(["id" => $id]);
-        $articleComments = $articleCommentRepository->findBy(["article" => $id], ["createdAt" => "DESC"]);
-        $articleCategory = $article->getCategory()->getName();
-        $updateForms = [];
-        
-        $comment = new ArticleComment();
-        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
-        
-        $commentForm = $this->createForm(ArticleCommentType::class, $comment);
-        $commentForm->handleRequest($request);
+        if(isset($titleSlug) || isset($id)) {
+            $article = $articleRepository->findOneBy(["id" => $id]) ?: null;
+            $articles = $articleRepository->findBy(["titleSlug" => $titleSlug]) ?: [];
 
-        if($commentForm->isSubmitted() && $commentForm->isValid()) {
-            $comment->setCreatedAt($date);
-            $comment->setUser($security->getUser());
-            $comment->setArticle($article);
-            $articleCommentRepository->save($comment, true);
-            $this->addFlash("commentAdded", "Commentaire ajouté");
-            return $this->redirectToRoute("app_category_article", [
-                "categorySlug" => $categorySlug, 
-                "id" => $id, 
-                "titleSlug" => $titleSlug
-            ]);
-        }
-        
-        foreach($articleComments as $articleComment) {
-
-            $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
-                'action' => $this->generateUrl('app_article_comment_update', [
-                    "categorySlug" => $categorySlug,
-                    "id" => $articleComment->getArticle()->getId(),
-                    "titleSlug" => $titleSlug, 
-                    "commentId" => $articleComment->getId(),
-                ]),
-                'method' => 'POST',
-            ]);
-            $updateForm->handleRequest($request);
-            $updateForms[$articleComment->getId()] = $updateForm->createView();
-    
-            if($updateForm->isSubmitted() && $updateForm->isValid()) {
-                $articleCommentRepository->save($articleComment, true);
-                $this->addFlash('commentUpdated', 'Commentaire mis à jour');
-                return $this->redirectToRoute('app_category_article', [
-                    "categorySlug" => $categorySlug, 
-                    "id" => $id,
-                    "titleSlug" => $article->getCategory()->getCategorySlug(),
+            if(!$article || !$articles) {
+                return $this->redirectToRoute("category.show", [
+                    "categorySlug" => $categorySlug
                 ]);
             }
-        }
         
-        return $this->render("blog/articles/article.html.twig", [
-            "article" => $article,
-            "category" => $articleCategory,
-            "articleComments" => $articleComments,
-            "commentForm" => $commentForm->createView(),
-            'updateForms' => $updateForms,
-        ]);
+            $article = $articleRepository->findOneBy(["id" => $id]);
+            $articleComments = $articleCommentRepository->findBy(["article" => $id], ["createdAt" => "DESC"]);
+            $articleCategory = $article->getCategory()->getName();
+            $updateForms = [];
+            
+            $comment = new ArticleComment();
+            $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
+            
+            $commentForm = $this->createForm(ArticleCommentType::class, $comment);
+            $commentForm->handleRequest($request);
+
+            if($commentForm->isSubmitted() && $commentForm->isValid()) {
+                $comment->setCreatedAt($date);
+                $comment->setUser($security->getUser());
+                $comment->setArticle($article);
+                $articleCommentRepository->save($comment, true);
+                $this->addFlash("commentAdded", "Commentaire ajouté");
+                return $this->redirectToRoute("article.show", [
+                    "categorySlug" => $categorySlug, 
+                    "id" => $id, 
+                    "titleSlug" => $titleSlug
+                ]);
+            }
+            
+            foreach($articleComments as $articleComment) {
+
+                $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
+                    'action' => $this->generateUrl('app_article_comment_update', [
+                        "categorySlug" => $categorySlug,
+                        "id" => $articleComment->getArticle()->getId(),
+                        "titleSlug" => $titleSlug, 
+                        "commentId" => $articleComment->getId(),
+                    ]),
+                    'method' => 'POST',
+                ]);
+                $updateForm->handleRequest($request);
+                $updateForms[$articleComment->getId()] = $updateForm->createView();
+        
+                if($updateForm->isSubmitted() && $updateForm->isValid()) {
+                    $articleCommentRepository->save($articleComment, true);
+                    $this->addFlash('commentUpdated', 'Commentaire mis à jour');
+                    return $this->redirectToRoute('article.show', [
+                        "categorySlug" => $categorySlug, 
+                        "id" => $id,
+                        "titleSlug" => $article->getCategory()->getCategorySlug(),
+                    ]);
+                }
+            }
+            
+            return $this->render("blog/articles/article.html.twig", [
+                "article" => $article,
+                "category" => $articleCategory,
+                "articleComments" => $articleComments,
+                "commentForm" => $commentForm->createView(),
+                'updateForms' => $updateForms,
+            ]);
+        }
     }
 
     // Article - Create :
@@ -145,7 +180,7 @@ class BlogController extends AbstractController
 
             $articleRepository->save($article, true);
 
-            return $this->redirectToRoute("app_category_article", [
+            return $this->redirectToRoute("article.show", [
                 "categorySlug" => $article->getCategory()->getCategorySlug(), 
                 "id" => $article->getId(),
                 "titleSlug" => $article->getTitleSlug(),
@@ -186,7 +221,7 @@ class BlogController extends AbstractController
                 $article->setUpdatedAt($date);
 
                 $articleRepository->save($article, true);
-                return $this->redirectToRoute("app_category_article", [
+                return $this->redirectToRoute("article.show", [
                     "categorySlug" => $article->getCategory()->getCategorySlug(),
                     "id" => $id,
                     "titleSlug" => $titleSlug,
@@ -228,7 +263,7 @@ class BlogController extends AbstractController
             $articleLikeRepository->save($like, true);
         }
 
-        return $this->redirectToRoute("app_category_article", [
+        return $this->redirectToRoute("article.show", [
             "categorySlug" => $categorySlug, 
             "id" => $articleId,
             "titleSlug" => $article->getTitleSlug(),
@@ -251,7 +286,7 @@ class BlogController extends AbstractController
                 $comment->setUpdatedAt($date);
                 $articleCommentRepository->save($comment, true);
                 $this->addFlash('commentUpdated', 'Commentaire mis à jour');
-                return $this->redirectToRoute('app_category_article', [
+                return $this->redirectToRoute('article.show', [
                     'categorySlug' => $categorySlug, 
                     'id' => $id,
                     "titleSlug" => $titleSlug,
@@ -272,7 +307,7 @@ class BlogController extends AbstractController
         $comment = $articleCommentRepository->remove($comment, true);
         $this->addFlash("commentaryDeleted", "Le commentaire a été supprimé.");
 
-        return $this->redirectToRoute("app_category_article", [
+        return $this->redirectToRoute("article.show", [
             "categorySlug" => $categorySlug, 
             "id" => $id,
             "titleSlug" => $titleSlug,
@@ -311,46 +346,10 @@ class BlogController extends AbstractController
             $commentLikeRepository->save($like, true);
         }
 
-        return $this->redirectToRoute("app_category_article", [
+        return $this->redirectToRoute("article.show", [
             "categorySlug" => $categorySlug, 
             "id" => $id,
             "titleSlug" => $titleSlug,
         ]);
     }
-
-    // #[Route("/updateAll")] 
-    // public function updateAll(ArticleRepository $articleRepository)
-    // {
-    //     $articles = $articleRepository->findAll();
-    //     foreach ($articles as $article) {
-    //         $imageCaption = $article->getImageCaption();
-    //         $title = $article->getTitle();
-    //         $titleSlug = $article->getTitleSlug();
-    //         $image = $article->getImage();
-            
-    //         if(!$imageCaption) {
-    //             $article->setImageCaption("Légende d'image par défaut");
-    //         }
-    //         if(!$titleSlug) {
-    //             $slugify = new Slugify();
-    //             $slug = $slugify->slugify($title);
-    //             $article->setTitleSlug($slug);
-    //         }
-    //         if($image == "default.webp") {
-    //             $article->setImage("default.jpg");
-    //         }
-    //         if($title) {
-    //             $tl = strtolower($title);
-    //             $ucf = ucfirst($tl);
-    //             $article->setTitle($ucf);
-    //         }
-    //         if($article->isParoleLibre() == null) {
-    //             $article->setParoleLibre(0);
-    //         }
-            
-    //         $articleRepository->save($article, true);
-            
-    //     }
-    //     return $this->redirectToRoute("accueil");
-    // }
 }

@@ -63,7 +63,7 @@
       <nav>
          <ul>
             {% for category in getCategories() %}
-               <li class="burger-navlink"><a href="{{path("app_category", {"categorySlug": category.categorySlug, "id": category.id}) }}">{{category.name}}</a></li>
+               <li class="burger-navlink"><a href="{{path("category.show", {"categorySlug": category.categorySlug, "id": category.id}) }}">{{category.name}}</a></li>
             {% endfor %}
          </ul>
       </nav>

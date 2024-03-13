@@ -33,7 +33,7 @@
                                 </div>
 
                                 <div class="carrousel-article-image">
-                                    <a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">
+                                    <a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}"> 
                                         <img src="{{asset("upload_directory/" ~ heroArticle.image)}}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
                                         <span>{{heroArticle.imageCaption}}</span>
                                     </a>
@@ -45,7 +45,7 @@
 
                                 <div class="carrousel-article-content">
                                     <p> {{heroArticle.content}} </p>
-                                    <a href="{{path("app_category_article", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
+                                    <a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">Lire la suite</a>
                                 </div>
 
                                 <div class="carrousel-article-actions">
@@ -193,7 +193,7 @@
 
                     <div class="container-categories-title">
                         <h2>{{categoryArticles[0].category.name}}</h2>
-                        <a href="{{path("app_category", {"categorySlug": categoryArticles[0].category.categorySlug, "id": categoryArticles[0].category.id} )}}" class="btnShowMore">voir plus</a>
+                        <a href="{{path("category.show", {"categorySlug": categoryArticles[0].category.categorySlug, "id": categoryArticles[0].category.id} )}}" class="btnShowMore">voir plus</a>
                     </div>
 
                     <div class="container-categories-content">
@@ -215,7 +215,7 @@
                                     {% if article.paroleLibre != 1 %}
                                         <article class="body-categories-cards-container">
                                             <div class="container-card-image">
-                                                <a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
+                                                <a href="{{path("article.show", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}"> 
                                                     <img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
                                                 </a>
                                             </div>
@@ -224,7 +224,7 @@
                                             </div>
                                             <div class="container-card-content">
                                                 <p>{{article.content}}</p>
-                                                <a href="{{path("app_category_article", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">Lire la suite</a>
+                                                <a href="{{path("article.show", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">Lire la suite</a>
                                             </div>
                                             <div class="container-card-actions">
                                                 <p>
@@ -257,7 +257,7 @@
                                 {% for popularArticle in items %}
                                     {% if popularArticle.category.name == categoryArticles[0].category.name %}
                                         <article class="container-body-sidebar-cards">
-                                            <a href="{{path("app_category_article", {"categorySlug": popularArticle.category.categorySlug, "id": popularArticle.id, "titleSlug": popularArticle.titleSlug})}}#{{popularArticle.id}}">
+                                            <a href="{{path("article.show", {"categorySlug": popularArticle.category.categorySlug, "id": popularArticle.id, "titleSlug": popularArticle.titleSlug})}}#{{popularArticle.id}}"> 
                                                 <div class="body-sidebar-cards-author">
                                                     <div class="body-sidebar-cards-author-spans">
                                                         <span class="greyedOut">Par</span>
