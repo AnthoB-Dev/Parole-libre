@@ -20,6 +20,8 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
+ *
+ * @implements DataTransformerInterface<int|float, string>
  */
 class NumberToLocalizedStringTransformer implements DataTransformerInterface
 {
@@ -30,7 +32,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     private ?int $scale;
     private ?string $locale;
 
-    public function __construct(int $scale = null, ?bool $grouping = false, ?int $roundingMode = \NumberFormatter::ROUND_HALFUP, string $locale = null)
+    public function __construct(?int $scale = null, ?bool $grouping = false, ?int $roundingMode = \NumberFormatter::ROUND_HALFUP, ?string $locale = null)
     {
         $this->scale = $scale;
         $this->grouping = $grouping ?? false;

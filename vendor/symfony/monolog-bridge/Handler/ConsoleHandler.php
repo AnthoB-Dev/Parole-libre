@@ -37,9 +37,6 @@ if (Logger::API >= 3) {
     {
         abstract private function doIsHandling(array|LogRecord $record): bool;
 
-        /**
-         * {@inheritdoc}
-         */
         public function isHandling(LogRecord $record): bool
         {
             return $this->doIsHandling($record);
@@ -57,9 +54,6 @@ if (Logger::API >= 3) {
     {
         abstract private function doIsHandling(array|LogRecord $record): bool;
 
-        /**
-         * {@inheritdoc}
-         */
         public function isHandling(array $record): bool
         {
             return $this->doIsHandling($record);
@@ -109,7 +103,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
      * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
      *                                                level (leave empty to use the default mapping)
      */
-    public function __construct(OutputInterface $output = null, bool $bubble = true, array $verbosityLevelMap = [], array $consoleFormatterOptions = [])
+    public function __construct(?OutputInterface $output = null, bool $bubble = true, array $verbosityLevelMap = [], array $consoleFormatterOptions = [])
     {
         parent::__construct(Logger::DEBUG, $bubble);
         $this->output = $output;
@@ -121,17 +115,11 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
         $this->consoleFormatterOptions = $consoleFormatterOptions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     private function doIsHandling(array|LogRecord $record): bool
     {
         return $this->updateLevel() && parent::isHandling($record);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     private function doHandle(array|LogRecord $record): bool
     {
         // we have to update the logging level each time because the verbosity of the
@@ -141,6 +129,8 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
 
     /**
      * Sets the console output to use for printing logs.
+     *
+     * @return void
      */
     public function setOutput(OutputInterface $output)
     {
@@ -160,6 +150,8 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * Before a command is executed, the handler gets activated and the console output
      * is set in order to know where to write the logs.
+     *
+     * @return void
      */
     public function onCommand(ConsoleCommandEvent $event)
     {
@@ -173,15 +165,14 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
 
     /**
      * After a command has been executed, it disables the output.
+     *
+     * @return void
      */
     public function onTerminate(ConsoleTerminateEvent $event)
     {
         $this->close();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -196,9 +187,6 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
         $this->output->write((string) $record['formatted'], false, $this->output->getVerbosity());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultFormatter(): FormatterInterface
     {
         if (!class_exists(CliDumper::class)) {

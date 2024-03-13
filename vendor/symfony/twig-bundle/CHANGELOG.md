@@ -1,6 +1,22 @@
 CHANGELOG
 =========
 
+6.4
+---
+
+ * Allow omitting the `autoescape_service_method` option when `autoescape_service` is set to an invokable service id
+
+6.3
+---
+
+ * Deprecate the `Twig_Environment` autowiring alias, use `Twig\Environment` instead
+
+6.2
+---
+
+ * Add the `twig.mailer.html_to_text_converter` option to allow configuring custom `HtmlToTextConverterInterface`
+   implementations to be used by the `twig.mime_body_renderer` service
+
 6.1
 ---
 

@@ -25,7 +25,9 @@
          filter.addEventListener("click", closeBurger);
       }
    }
-
-   btnBurger.addEventListener("click", burgerToggle);
+    
+    if(btnBurger) {
+        btnBurger.addEventListener("click", burgerToggle);
+    }
 
 })();

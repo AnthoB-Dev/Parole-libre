@@ -34,9 +34,6 @@ final class UsageTrackingTokenStorage implements TokenStorageInterface, ServiceS
         $this->container = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getToken(): ?TokenInterface
     {
         if ($this->shouldTrackUsage()) {
@@ -47,10 +44,7 @@ final class UsageTrackingTokenStorage implements TokenStorageInterface, ServiceS
         return $this->storage->getToken();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setToken(TokenInterface $token = null): void
+    public function setToken(?TokenInterface $token = null): void
     {
         $this->storage->setToken($token);
 

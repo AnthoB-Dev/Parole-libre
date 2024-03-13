@@ -54,7 +54,7 @@ class CachingFactoryDecorator implements ChoiceListFactoryInterface, ResetInterf
         if (\is_object($value)) {
             $value = spl_object_hash($value);
         } elseif (\is_array($value)) {
-            array_walk_recursive($value, function (&$v) {
+            array_walk_recursive($value, static function (&$v) {
                 if (\is_object($v)) {
                     $v = spl_object_hash($v);
                 }
@@ -77,9 +77,6 @@ class CachingFactoryDecorator implements ChoiceListFactoryInterface, ResetInterf
         return $this->decoratedFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createListFromChoices(iterable $choices, mixed $value = null, mixed $filter = null): ChoiceListInterface
     {
         if ($choices instanceof \Traversable) {
@@ -113,9 +110,6 @@ class CachingFactoryDecorator implements ChoiceListFactoryInterface, ResetInterf
         return $this->lists[$hash];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createListFromLoader(ChoiceLoaderInterface $loader, mixed $value = null, mixed $filter = null): ChoiceListInterface
     {
         $cache = true;
@@ -152,10 +146,11 @@ class CachingFactoryDecorator implements ChoiceListFactoryInterface, ResetInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @param bool $duplicatePreferredChoices
      */
-    public function createView(ChoiceListInterface $list, mixed $preferredChoices = null, mixed $label = null, mixed $index = null, mixed $groupBy = null, mixed $attr = null, mixed $labelTranslationParameters = []): ChoiceListView
+    public function createView(ChoiceListInterface $list, mixed $preferredChoices = null, mixed $label = null, mixed $index = null, mixed $groupBy = null, mixed $attr = null, mixed $labelTranslationParameters = []/* , bool $duplicatePreferredChoices = true */): ChoiceListView
     {
+        $duplicatePreferredChoices = \func_num_args() > 7 ? func_get_arg(7) : true;
         $cache = true;
 
         if ($preferredChoices instanceof Cache\PreferredChoice) {
@@ -202,11 +197,12 @@ class CachingFactoryDecorator implements ChoiceListFactoryInterface, ResetInterf
                 $index,
                 $groupBy,
                 $attr,
-                $labelTranslationParameters
+                $labelTranslationParameters,
+                $duplicatePreferredChoices,
             );
         }
 
-        $hash = self::generateHash([$list, $preferredChoices, $label, $index, $groupBy, $attr, $labelTranslationParameters]);
+        $hash = self::generateHash([$list, $preferredChoices, $label, $index, $groupBy, $attr, $labelTranslationParameters, $duplicatePreferredChoices]);
 
         if (!isset($this->views[$hash])) {
             $this->views[$hash] = $this->decoratedFactory->createView(
@@ -216,13 +212,17 @@ class CachingFactoryDecorator implements ChoiceListFactoryInterface, ResetInterf
                 $index,
                 $groupBy,
                 $attr,
-                $labelTranslationParameters
+                $labelTranslationParameters,
+                $duplicatePreferredChoices,
             );
         }
 
         return $this->views[$hash];
     }
 
+    /**
+     * @return void
+     */
     public function reset()
     {
         $this->lists = [];

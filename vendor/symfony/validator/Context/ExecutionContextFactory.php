@@ -26,15 +26,12 @@ class ExecutionContextFactory implements ExecutionContextFactoryInterface
     private TranslatorInterface $translator;
     private ?string $translationDomain;
 
-    public function __construct(TranslatorInterface $translator, string $translationDomain = null)
+    public function __construct(TranslatorInterface $translator, ?string $translationDomain = null)
     {
         $this->translator = $translator;
         $this->translationDomain = $translationDomain;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createContext(ValidatorInterface $validator, mixed $root): ExecutionContextInterface
     {
         return new ExecutionContext(

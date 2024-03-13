@@ -32,14 +32,14 @@ class ViolationMapper implements ViolationMapperInterface
     private ?TranslatorInterface $translator;
     private bool $allowNonSynchronized = false;
 
-    public function __construct(FormRendererInterface $formRenderer = null, TranslatorInterface $translator = null)
+    public function __construct(?FormRendererInterface $formRenderer = null, ?TranslatorInterface $translator = null)
     {
         $this->formRenderer = $formRenderer;
         $this->translator = $translator;
     }
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
     public function mapViolation(ConstraintViolation $violation, FormInterface $form, bool $allowNonSynchronized = false)
     {
@@ -179,8 +179,8 @@ class ViolationMapper implements ViolationMapperInterface
                 if (false !== $label) {
                     if (null === $label && null !== $this->formRenderer) {
                         $label = $this->formRenderer->humanize($scope->getName());
-                    } elseif (null === $label) {
-                        $label = $scope->getName();
+                    } else {
+                        $label ??= $scope->getName();
                     }
 
                     if (null !== $this->translator) {

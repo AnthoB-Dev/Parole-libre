@@ -19,6 +19,8 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
  * Transforms between a normalized date interval and an interval string/array.
  *
  * @author Steffen Roßkamp <steffen.rosskamp@gimmickmedia.de>
+ *
+ * @implements DataTransformerInterface<\DateInterval, array>
  */
 class DateIntervalToArrayTransformer implements DataTransformerInterface
 {
@@ -46,7 +48,7 @@ class DateIntervalToArrayTransformer implements DataTransformerInterface
      * @param string[]|null $fields The date fields
      * @param bool          $pad    Whether to use padding
      */
-    public function __construct(array $fields = null, bool $pad = false)
+    public function __construct(?array $fields = null, bool $pad = false)
     {
         $this->fields = $fields ?? ['years', 'months', 'days', 'hours', 'minutes', 'seconds', 'invert'];
         $this->pad = $pad;

@@ -8,7 +8,11 @@
         {% set icon %}
             {% set status = collector.invalidEntityCount > 0 ? 'red' : collector.querycount > 50 ? 'yellow' %}
 
-            <span class="icon">{{ include('@Doctrine/Collector/' ~ (profiler_markup_version < 3 ? 'icon' : 'database') ~ '.svg') }}</span>
+            {% if profiler_markup_version >= 3 %}
+                {{ include('@Doctrine/Collector/database.svg') }}
+            {% else %}
+                <span class="icon">{{ include('@Doctrine/Collector/icon.svg') }}</span>
+            {% endif %}
 
             {% if collector.querycount == 0 and collector.invalidEntityCount > 0 %}
                 <span class="sf-toolbar-value">{{ collector.invalidEntityCount }}</span>
@@ -98,6 +102,16 @@
         .time-bar { display: block; position: absolute; top: 0; left: 0; bottom: 0; background: #e0e0e0; }
         .sql-runnable.sf-toggle-content.sf-toggle-visible { display: flex; flex-direction: column; }
         .sql-runnable button { align-self: end; }
+        {% if profiler_markup_version >= 3 %}
+        .highlight .keyword   { color: var(--highlight-keyword); font-weight: bold; }
+        .highlight .word      { color: var(--color-text); }
+        .highlight .variable  { color: var(--highlight-variable); }
+        .highlight .symbol    { color: var(--color-text); }
+        .highlight .comment   { color: var(--highlight-comment); }
+        .highlight .string    { color: var(--highlight-string); }
+        .highlight .number    { color: var(--highlight-constant); font-weight: bold; }
+        .highlight .error     { color: var(--highlight-error); }
+        {% endif %}
     </style>
 
     <h2>Query Metrics</h2>
@@ -433,9 +447,16 @@
             var targetElement = document.getElementById(targetId);
 
             if (targetElement.style.display != 'block') {
-                Sfjs.load(targetId, link.href, null, function(xhr, el) {
-                    el.innerHTML = 'An error occurred while loading the query explanation.';
-                });
+                if (targetElement.getAttribute('data-sfurl') !== link.href) {
+                    fetch(link.href, {
+                        headers: {'X-Requested-With': 'XMLHttpRequest'}
+                    }).then(async function (response) {
+                        targetElement.innerHTML = await response.text()
+                        targetElement.setAttribute('data-sfurl', link.href)
+                    }, function () {
+                        targetElement.innerHTML = 'An error occurred while loading the query explanation.';
+                    })
+                }
 
                 targetElement.style.display = 'block';
                 link.innerHTML = 'Hide query explanation';
@@ -476,15 +497,13 @@
             });
 
             for (i = 0; i < items.length; ++i) {
-                Sfjs.removeClass(items[i], i % 2 ? 'even' : 'odd');
-                Sfjs.addClass(items[i], i % 2 ? 'odd' : 'even');
                 target.appendChild(items[i]);
             }
         }
 
         if (navigator.clipboard) {
             document.querySelectorAll('[data-clipboard-text]').forEach(function(button) {
-                Sfjs.removeClass(button, 'hidden');
+                button.classList.remove('hidden');
                 button.addEventListener('click', function() {
                     navigator.clipboard.writeText(button.getAttribute('data-clipboard-text'));
                 })

@@ -41,7 +41,7 @@ class ExpressionLanguageSyntax extends Constraint
     public $service;
     public $allowedVariables;
 
-    public function __construct(array $options = null, string $message = null, string $service = null, array $allowedVariables = null, array $groups = null, mixed $payload = null)
+    public function __construct(?array $options = null, ?string $message = null, ?string $service = null, ?array $allowedVariables = null, ?array $groups = null, mixed $payload = null)
     {
         parent::__construct($options, $groups, $payload);
 
@@ -50,9 +50,6 @@ class ExpressionLanguageSyntax extends Constraint
         $this->allowedVariables = $allowedVariables ?? $this->allowedVariables;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validatedBy(): string
     {
         return $this->service ?? static::class.'Validator';

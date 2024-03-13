@@ -33,7 +33,7 @@
       // Suppression toutes les classes de page précédentes
       container.classList.remove('accueil', 'politique', 'economie', 'geopolitique', 'societe', 'arts', 'paroleLibre');
 
-      if(pathname === '/parole-libre/public/accueil') {
+      if(pathname === '/accueil') {
          
          container.classList.add('accueil');
 
@@ -76,22 +76,22 @@
             })
          })
 
-      } else if (pathname.startsWith('/parole-libre/public/articles/politique')) {
+      } else if (pathname.startsWith('/articles/politique')) {
          container.classList.add('politique');
          
-      } else if (pathname.startsWith('/parole-libre/public/articles/economie')) {
+      } else if (pathname.startsWith('/articles/economie')) {
          container.classList.add('economie');
 
-      } else if (pathname.startsWith('/parole-libre/public/articles/geopolitique')) {
+      } else if (pathname.startsWith('/articles/geopolitique')) {
          container.classList.add('geopolitique');
 
-      } else if (pathname.startsWith('/parole-libre/public/articles/societe')) {
+      } else if (pathname.startsWith('/articles/societe')) {
          container.classList.add('societe');
 
-      } else if (pathname.startsWith('/parole-libre/public/articles/arts-litteratures')) {
+      } else if (pathname.startsWith('/articles/arts-litteratures')) {
          container.classList.add('artsLitteratures');
 
-      } else if (pathname.startsWith('/parole-libre/public/articles/parole-libre')) {
+      } else if (pathname.startsWith('/articles/parole-libre')) {
          container.classList.add('paroleLibre');
       }   
    }
@@ -107,7 +107,7 @@
 
    headerNavLinks.forEach(e => {
       const link = e.querySelector("a");
-      if(link.getAttribute('href') === path) {
+      if (link.getAttribute('href') === path) {
          e.classList.add('active');
       }
    })

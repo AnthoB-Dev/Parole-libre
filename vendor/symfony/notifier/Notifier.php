@@ -33,7 +33,7 @@ final class Notifier implements NotifierInterface
     /**
      * @param ChannelInterface[]|ContainerInterface $channels
      */
-    public function __construct(array|ContainerInterface $channels, ChannelPolicyInterface $policy = null)
+    public function __construct(array|ContainerInterface $channels, ?ChannelPolicyInterface $policy = null)
     {
         $this->channels = $channels;
         $this->policy = $policy;
@@ -72,7 +72,7 @@ final class Notifier implements NotifierInterface
     {
         $channels = $notification->getChannels($recipient);
         if (!$channels) {
-            $errorPrefix = sprintf('Unable to determine which channels to use to send the "%s" notification', \get_class($notification));
+            $errorPrefix = sprintf('Unable to determine which channels to use to send the "%s" notification', $notification::class);
             $error = 'you should either pass channels in the constructor, override its "getChannels()" method';
             if (null === $this->policy) {
                 throw new LogicException(sprintf('%s; %s, or configure a "%s".', $errorPrefix, $error, ChannelPolicy::class));

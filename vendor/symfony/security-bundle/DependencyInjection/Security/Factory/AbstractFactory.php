@@ -14,12 +14,8 @@ namespace Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * AbstractFactory is the base class for all classes inheriting from
- * AbstractAuthenticationListener.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
@@ -53,6 +49,9 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         $this->options[$name] = $default;
     }
 
+    /**
+     * @return void
+     */
     public function addConfiguration(NodeDefinition $node)
     {
         $builder = $node->children();
@@ -65,7 +64,12 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         ;
 
         foreach (array_merge($this->options, $this->defaultSuccessHandlerOptions, $this->defaultFailureHandlerOptions) as $name => $default) {
-            if (\is_bool($default)) {
+            if ('require_previous_session' === $name) {
+                $builder
+                    ->booleanNode($name)
+                    ->setDeprecated('symfony/security-bundle', '6.4', 'Option "%node%" at "%path%" is deprecated, it will be removed in version 7.0. Setting it has no effect anymore.')
+                    ->defaultValue($default);
+            } elseif (\is_bool($default)) {
                 $builder->booleanNode($name)->defaultValue($default);
             } else {
                 $builder->scalarNode($name)->defaultValue($default);
@@ -73,6 +77,9 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         }
     }
 
+    /**
+     * @return string
+     */
     protected function createAuthenticationSuccessHandler(ContainerBuilder $container, string $id, array $config)
     {
         $successHandlerId = $this->getSuccessHandlerId($id);
@@ -92,6 +99,9 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         return $successHandlerId;
     }
 
+    /**
+     * @return string
+     */
     protected function createAuthenticationFailureHandler(ContainerBuilder $container, string $id, array $config)
     {
         $id = $this->getFailureHandlerId($id);
@@ -109,11 +119,17 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         return $id;
     }
 
+    /**
+     * @return string
+     */
     protected function getSuccessHandlerId(string $id)
     {
         return 'security.authentication.success_handler.'.$id.'.'.str_replace('-', '_', $this->getKey());
     }
 
+    /**
+     * @return string
+     */
     protected function getFailureHandlerId(string $id)
     {
         return 'security.authentication.failure_handler.'.$id.'.'.str_replace('-', '_', $this->getKey());

@@ -39,7 +39,7 @@ class SendFailedMessageForRetryListener implements EventSubscriberInterface
     private ?EventDispatcherInterface $eventDispatcher;
     private int $historySize;
 
-    public function __construct(ContainerInterface $sendersLocator, ContainerInterface $retryStrategyLocator, LoggerInterface $logger = null, EventDispatcherInterface $eventDispatcher = null, int $historySize = 10)
+    public function __construct(ContainerInterface $sendersLocator, ContainerInterface $retryStrategyLocator, ?LoggerInterface $logger = null, ?EventDispatcherInterface $eventDispatcher = null, int $historySize = 10)
     {
         $this->sendersLocator = $sendersLocator;
         $this->retryStrategyLocator = $retryStrategyLocator;
@@ -48,6 +48,9 @@ class SendFailedMessageForRetryListener implements EventSubscriberInterface
         $this->historySize = $historySize;
     }
 
+    /**
+     * @return void
+     */
     public function onMessageFailed(WorkerMessageFailedEvent $event)
     {
         $retryStrategy = $this->getRetryStrategyForTransport($event->getReceiverName());
@@ -56,7 +59,7 @@ class SendFailedMessageForRetryListener implements EventSubscriberInterface
 
         $message = $envelope->getMessage();
         $context = [
-            'class' => \get_class($message),
+            'class' => $message::class,
         ];
 
         $shouldRetry = $retryStrategy && $this->shouldRetry($throwable, $envelope, $retryStrategy);
@@ -89,7 +92,7 @@ class SendFailedMessageForRetryListener implements EventSubscriberInterface
     private function withLimitedHistory(Envelope $envelope, StampInterface ...$stamps): Envelope
     {
         foreach ($stamps as $stamp) {
-            $history = $envelope->all(\get_class($stamp));
+            $history = $envelope->all($stamp::class);
             if (\count($history) < $this->historySize) {
                 $envelope = $envelope->with($stamp);
                 continue;
@@ -101,7 +104,7 @@ class SendFailedMessageForRetryListener implements EventSubscriberInterface
                 [$stamp]
             );
 
-            $envelope = $envelope->withoutAll(\get_class($stamp))->with(...$history);
+            $envelope = $envelope->withoutAll($stamp::class)->with(...$history);
         }
 
         return $envelope;
@@ -125,7 +128,7 @@ class SendFailedMessageForRetryListener implements EventSubscriberInterface
         // if ALL nested Exceptions are an instance of UnrecoverableExceptionInterface we should not retry
         if ($e instanceof HandlerFailedException) {
             $shouldNotRetry = true;
-            foreach ($e->getNestedExceptions() as $nestedException) {
+            foreach ($e->getWrappedExceptions() as $nestedException) {
                 if ($nestedException instanceof RecoverableExceptionInterface) {
                     return true;
                 }

@@ -31,7 +31,7 @@ class ExpressionVoter implements CacheableVoterInterface
     private AuthorizationCheckerInterface $authChecker;
     private ?RoleHierarchyInterface $roleHierarchy;
 
-    public function __construct(ExpressionLanguage $expressionLanguage, AuthenticationTrustResolverInterface $trustResolver, AuthorizationCheckerInterface $authChecker, RoleHierarchyInterface $roleHierarchy = null)
+    public function __construct(ExpressionLanguage $expressionLanguage, AuthenticationTrustResolverInterface $trustResolver, AuthorizationCheckerInterface $authChecker, ?RoleHierarchyInterface $roleHierarchy = null)
     {
         $this->expressionLanguage = $expressionLanguage;
         $this->trustResolver = $trustResolver;
@@ -49,9 +49,6 @@ class ExpressionVoter implements CacheableVoterInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
         $result = VoterInterface::ACCESS_ABSTAIN;
@@ -61,9 +58,7 @@ class ExpressionVoter implements CacheableVoterInterface
                 continue;
             }
 
-            if (null === $variables) {
-                $variables = $this->getVariables($token, $subject);
-            }
+            $variables ??= $this->getVariables($token, $subject);
 
             $result = VoterInterface::ACCESS_DENIED;
             if ($this->expressionLanguage->evaluate($attribute, $variables)) {

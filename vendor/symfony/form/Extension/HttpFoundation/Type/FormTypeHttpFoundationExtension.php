@@ -24,22 +24,19 @@ class FormTypeHttpFoundationExtension extends AbstractTypeExtension
 {
     private RequestHandlerInterface $requestHandler;
 
-    public function __construct(RequestHandlerInterface $requestHandler = null)
+    public function __construct(?RequestHandlerInterface $requestHandler = null)
     {
         $this->requestHandler = $requestHandler ?? new HttpFoundationRequestHandler();
     }
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->setRequestHandler($this->requestHandler);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getExtendedTypes(): iterable
     {
         return [FormType::class];

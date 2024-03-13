@@ -81,11 +81,11 @@ class Button implements \IteratorAggregate, FormInterface
         throw new BadMethodCallException('Buttons cannot have children.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setParent(FormInterface $parent = null): static
+    public function setParent(?FormInterface $parent = null): static
     {
+        if (1 > \func_num_args()) {
+            trigger_deprecation('symfony/form', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+        }
         if ($this->submitted) {
             throw new AlreadySubmittedException('You cannot set the parent of a submitted button.');
         }
@@ -95,9 +95,6 @@ class Button implements \IteratorAggregate, FormInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): ?FormInterface
     {
         return $this->parent;
@@ -110,7 +107,7 @@ class Button implements \IteratorAggregate, FormInterface
      *
      * @throws BadMethodCallException
      */
-    public function add(string|FormInterface $child, string $type = null, array $options = []): static
+    public function add(string|FormInterface $child, ?string $type = null, array $options = []): static
     {
         throw new BadMethodCallException('Buttons cannot have children.');
     }
@@ -147,17 +144,11 @@ class Button implements \IteratorAggregate, FormInterface
         throw new BadMethodCallException('Buttons cannot have children.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function all(): array
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getErrors(bool $deep = false, bool $flatten = true): FormErrorIterator
     {
         return new FormErrorIterator($this, []);
@@ -266,9 +257,6 @@ class Button implements \IteratorAggregate, FormInterface
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isDisabled(): bool
     {
         if ($this->parent?->isDisabled()) {
@@ -340,26 +328,17 @@ class Button implements \IteratorAggregate, FormInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRoot(): FormInterface
     {
         return $this->parent ? $this->parent->getRoot() : $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isRoot(): bool
     {
         return null === $this->parent;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createView(FormView $parent = null): FormView
+    public function createView(?FormView $parent = null): FormView
     {
         if (null === $parent && $this->parent) {
             $parent = $this->parent->createView();

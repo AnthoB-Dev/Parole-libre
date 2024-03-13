@@ -18,6 +18,8 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
+ *
+ * @extends BaseDateTimeTransformer<string>
  */
 class DateTimeToStringTransformer extends BaseDateTimeTransformer
 {
@@ -45,7 +47,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      * @param string      $format         The date format
      * @param string|null $parseFormat    The parse format when different from $format
      */
-    public function __construct(string $inputTimezone = null, string $outputTimezone = null, string $format = 'Y-m-d H:i:s', string $parseFormat = null)
+    public function __construct(?string $inputTimezone = null, ?string $outputTimezone = null, string $format = 'Y-m-d H:i:s', ?string $parseFormat = null)
     {
         parent::__construct($inputTimezone, $outputTimezone);
 
@@ -83,10 +85,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
             throw new TransformationFailedException('Expected a \DateTimeInterface.');
         }
 
-        if (!$dateTime instanceof \DateTimeImmutable) {
-            $dateTime = clone $dateTime;
-        }
-
+        $dateTime = \DateTimeImmutable::createFromInterface($dateTime);
         $dateTime = $dateTime->setTimezone(new \DateTimeZone($this->outputTimezone));
 
         return $dateTime->format($this->generateFormat);

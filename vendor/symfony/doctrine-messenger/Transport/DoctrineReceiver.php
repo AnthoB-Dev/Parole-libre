@@ -33,15 +33,12 @@ class DoctrineReceiver implements ListableReceiverInterface, MessageCountAwareIn
     private Connection $connection;
     private SerializerInterface $serializer;
 
-    public function __construct(Connection $connection, SerializerInterface $serializer = null)
+    public function __construct(Connection $connection, ?SerializerInterface $serializer = null)
     {
         $this->connection = $connection;
         $this->serializer = $serializer ?? new PhpSerializer();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(): iterable
     {
         try {
@@ -68,9 +65,6 @@ class DoctrineReceiver implements ListableReceiverInterface, MessageCountAwareIn
         return [$this->createEnvelopeFromData($doctrineEnvelope)];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function ack(Envelope $envelope): void
     {
         try {
@@ -80,9 +74,6 @@ class DoctrineReceiver implements ListableReceiverInterface, MessageCountAwareIn
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reject(Envelope $envelope): void
     {
         try {
@@ -92,9 +83,6 @@ class DoctrineReceiver implements ListableReceiverInterface, MessageCountAwareIn
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMessageCount(): int
     {
         try {
@@ -104,10 +92,7 @@ class DoctrineReceiver implements ListableReceiverInterface, MessageCountAwareIn
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function all(int $limit = null): iterable
+    public function all(?int $limit = null): iterable
     {
         try {
             $doctrineEnvelopes = $this->connection->findAll($limit);
@@ -120,9 +105,6 @@ class DoctrineReceiver implements ListableReceiverInterface, MessageCountAwareIn
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find(mixed $id): ?Envelope
     {
         try {

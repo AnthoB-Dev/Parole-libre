@@ -41,7 +41,7 @@ abstract class AbstractPreAuthenticatedAuthenticator implements InteractiveAuthe
     private string $firewallName;
     private ?LoggerInterface $logger;
 
-    public function __construct(UserProviderInterface $userProvider, TokenStorageInterface $tokenStorage, string $firewallName, LoggerInterface $logger = null)
+    public function __construct(UserProviderInterface $userProvider, TokenStorageInterface $tokenStorage, string $firewallName, ?LoggerInterface $logger = null)
     {
         $this->userProvider = $userProvider;
         $this->tokenStorage = $tokenStorage;
@@ -91,10 +91,9 @@ abstract class AbstractPreAuthenticatedAuthenticator implements InteractiveAuthe
 
     public function authenticate(Request $request): Passport
     {
-        return new SelfValidatingPassport(
-            new UserBadge($request->attributes->get('_pre_authenticated_username'), $this->userProvider->loadUserByIdentifier(...)),
-            [new PreAuthenticatedUserBadge()]
-        );
+        $userBadge = new UserBadge($request->attributes->get('_pre_authenticated_username'), $this->userProvider->loadUserByIdentifier(...));
+
+        return new SelfValidatingPassport($userBadge, [new PreAuthenticatedUserBadge()]);
     }
 
     public function createToken(Passport $passport, string $firewallName): TokenInterface

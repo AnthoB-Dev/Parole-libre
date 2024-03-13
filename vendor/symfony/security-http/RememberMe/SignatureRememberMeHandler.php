@@ -34,22 +34,19 @@ final class SignatureRememberMeHandler extends AbstractRememberMeHandler
 {
     private SignatureHasher $signatureHasher;
 
-    public function __construct(SignatureHasher $signatureHasher, UserProviderInterface $userProvider, RequestStack $requestStack, array $options, LoggerInterface $logger = null)
+    public function __construct(SignatureHasher $signatureHasher, UserProviderInterface $userProvider, RequestStack $requestStack, array $options, ?LoggerInterface $logger = null)
     {
         parent::__construct($userProvider, $requestStack, $options, $logger);
 
         $this->signatureHasher = $signatureHasher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createRememberMeCookie(UserInterface $user): void
     {
         $expires = time() + $this->options['lifetime'];
         $value = $this->signatureHasher->computeSignatureHash($user, $expires);
 
-        $details = new RememberMeDetails(\get_class($user), $user->getUserIdentifier(), $expires, $value);
+        $details = new RememberMeDetails($user::class, $user->getUserIdentifier(), $expires, $value);
         $this->createCookie($details);
     }
 

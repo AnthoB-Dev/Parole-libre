@@ -30,7 +30,7 @@ class FormValidator extends ConstraintValidator
     private \SplObjectStorage $resolvedGroups;
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
     public function validate(mixed $form, Constraint $formConstraint)
     {

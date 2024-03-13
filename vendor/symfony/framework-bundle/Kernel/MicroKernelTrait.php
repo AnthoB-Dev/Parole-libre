@@ -58,6 +58,7 @@ trait MicroKernelTrait
             $container->import($configDir.'/{services}_'.$this->environment.'.yaml');
         } else {
             $container->import($configDir.'/{services}.php');
+            $container->import($configDir.'/{services}_'.$this->environment.'.php');
         }
     }
 
@@ -84,7 +85,7 @@ trait MicroKernelTrait
         }
 
         if (false !== ($fileName = (new \ReflectionObject($this))->getFileName())) {
-            $routes->import($fileName, 'annotation');
+            $routes->import($fileName, 'attribute');
         }
     }
 
@@ -104,9 +105,6 @@ trait MicroKernelTrait
         return $this->getConfigDir().'/bundles.php';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheDir(): string
     {
         if (isset($_SERVER['APP_CACHE_DIR'])) {
@@ -116,17 +114,20 @@ trait MicroKernelTrait
         return parent::getCacheDir();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function getBuildDir(): string
+    {
+        if (isset($_SERVER['APP_BUILD_DIR'])) {
+            return $_SERVER['APP_BUILD_DIR'].'/'.$this->environment;
+        }
+
+        return parent::getBuildDir();
+    }
+
     public function getLogDir(): string
     {
         return $_SERVER['APP_LOG_DIR'] ?? parent::getLogDir();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function registerBundles(): iterable
     {
         $contents = require $this->getBundlesPath();
@@ -138,7 +139,7 @@ trait MicroKernelTrait
     }
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
@@ -180,12 +181,10 @@ trait MicroKernelTrait
             /* @var ContainerPhpFileLoader $kernelLoader */
             $kernelLoader = $loader->getResolver()->resolve($file);
             $kernelLoader->setCurrentDir(\dirname($file));
-            $instanceof = &\Closure::bind(function &() { return $this->instanceof; }, $kernelLoader, $kernelLoader)();
+            $instanceof = &\Closure::bind(fn &() => $this->instanceof, $kernelLoader, $kernelLoader)();
 
             $valuePreProcessor = AbstractConfigurator::$valuePreProcessor;
-            AbstractConfigurator::$valuePreProcessor = function ($value) {
-                return $this === $value ? new Reference('kernel') : $value;
-            };
+            AbstractConfigurator::$valuePreProcessor = fn ($value) => $this === $value ? new Reference('kernel') : $value;
 
             try {
                 $configureContainer->getClosure($this)(new ContainerConfigurator($container, $kernelLoader, $instanceof, $file, $file, $this->getEnvironment()), $loader, $container);

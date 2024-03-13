@@ -18,24 +18,6 @@ class <?= $class_name; ?> extends ServiceEntityRepository<?= $with_password_upgr
     {
         parent::__construct($registry, <?= $entity_class_name; ?>::class);
     }
-
-    public function save(<?= $entity_class_name ?> $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(<?= $entity_class_name ?> $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
 <?php if ($include_example_comments): // When adding a new method without existing default comments, the blank line is automatically added.?>
 
 <?php endif; ?>
@@ -46,12 +28,12 @@ class <?= $class_name; ?> extends ServiceEntityRepository<?= $with_password_upgr
     public function upgradePassword(<?= sprintf('%s ', $password_upgrade_user_interface->getShortName()); ?>$user, string $newHashedPassword): void
     {
         if (!$user instanceof <?= $entity_class_name ?>) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         $user->setPassword($newHashedPassword);
-
-        $this->save($user, true);
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
     }
 
 <?php endif ?>

@@ -59,7 +59,7 @@ class TranslationDebugCommand extends Command
     private array $codePaths;
     private array $enabledLocales;
 
-    public function __construct(TranslatorInterface $translator, TranslationReaderInterface $reader, ExtractorInterface $extractor, string $defaultTransPath = null, string $defaultViewsPath = null, array $transPaths = [], array $codePaths = [], array $enabledLocales = [])
+    public function __construct(TranslatorInterface $translator, TranslationReaderInterface $reader, ExtractorInterface $extractor, ?string $defaultTransPath = null, ?string $defaultViewsPath = null, array $transPaths = [], array $codePaths = [], array $enabledLocales = [])
     {
         parent::__construct();
 
@@ -73,10 +73,7 @@ class TranslationDebugCommand extends Command
         $this->enabledLocales = $enabledLocales;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDefinition([
@@ -121,9 +118,6 @@ EOF
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -186,7 +180,7 @@ EOF
         }
 
         // No defined or extracted messages
-        if (empty($allMessages) || null !== $domain && empty($allMessages[$domain])) {
+        if (!$allMessages || null !== $domain && empty($allMessages[$domain])) {
             $outputMessage = sprintf('No defined or extracted messages for locale "%s"', $locale);
 
             if (null !== $domain) {
@@ -218,14 +212,14 @@ EOF
                         $states[] = self::MESSAGE_MISSING;
 
                         if (!$input->getOption('only-unused')) {
-                            $exitCode = $exitCode | self::EXIT_CODE_MISSING;
+                            $exitCode |= self::EXIT_CODE_MISSING;
                         }
                     }
                 } elseif ($currentCatalogue->defines($messageId, $domain)) {
                     $states[] = self::MESSAGE_UNUSED;
 
                     if (!$input->getOption('only-missing')) {
-                        $exitCode = $exitCode | self::EXIT_CODE_UNUSED;
+                        $exitCode |= self::EXIT_CODE_UNUSED;
                     }
                 }
 
@@ -239,7 +233,7 @@ EOF
                     if ($fallbackCatalogue->defines($messageId, $domain) && $value === $fallbackCatalogue->get($messageId, $domain)) {
                         $states[] = self::MESSAGE_EQUALS_FALLBACK;
 
-                        $exitCode = $exitCode | self::EXIT_CODE_FALLBACK;
+                        $exitCode |= self::EXIT_CODE_FALLBACK;
 
                         break;
                     }

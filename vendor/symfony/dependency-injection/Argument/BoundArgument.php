@@ -28,7 +28,7 @@ final class BoundArgument implements ArgumentInterface
     private int $type;
     private ?string $file;
 
-    public function __construct(mixed $value, bool $trackUsage = true, int $type = 0, string $file = null)
+    public function __construct(mixed $value, bool $trackUsage = true, int $type = 0, ?string $file = null)
     {
         $this->value = $value;
         if ($trackUsage) {
@@ -40,18 +40,12 @@ final class BoundArgument implements ArgumentInterface
         $this->file = $file;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getValues(): array
     {
         return [$this->value, $this->identifier, $this->used, $this->type, $this->file];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
         if (5 === \count($values)) {
             [$this->value, $this->identifier, $this->used, $this->type, $this->file] = $values;

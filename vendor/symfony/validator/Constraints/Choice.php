@@ -38,6 +38,7 @@ class Choice extends Constraint
     protected static $errorNames = self::ERROR_NAMES;
 
     public $choices;
+    /** @var callable|string|null */
     public $callback;
     public $multiple = false;
     public $strict = true;
@@ -47,10 +48,8 @@ class Choice extends Constraint
     public $multipleMessage = 'One or more of the given values is invalid.';
     public $minMessage = 'You must select at least {{ limit }} choice.|You must select at least {{ limit }} choices.';
     public $maxMessage = 'You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.';
+    public bool $match = true;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOption(): ?string
     {
         return 'choices';
@@ -58,18 +57,19 @@ class Choice extends Constraint
 
     public function __construct(
         string|array $options = [],
-        array $choices = null,
-        callable|string $callback = null,
-        bool $multiple = null,
-        bool $strict = null,
-        int $min = null,
-        int $max = null,
-        string $message = null,
-        string $multipleMessage = null,
-        string $minMessage = null,
-        string $maxMessage = null,
-        array $groups = null,
-        mixed $payload = null
+        ?array $choices = null,
+        callable|string|null $callback = null,
+        ?bool $multiple = null,
+        ?bool $strict = null,
+        ?int $min = null,
+        ?int $max = null,
+        ?string $message = null,
+        ?string $multipleMessage = null,
+        ?string $minMessage = null,
+        ?string $maxMessage = null,
+        ?array $groups = null,
+        mixed $payload = null,
+        ?bool $match = null,
     ) {
         if (\is_array($options) && $options && array_is_list($options)) {
             $choices ??= $options;
@@ -90,5 +90,6 @@ class Choice extends Constraint
         $this->multipleMessage = $multipleMessage ?? $this->multipleMessage;
         $this->minMessage = $minMessage ?? $this->minMessage;
         $this->maxMessage = $maxMessage ?? $this->maxMessage;
+        $this->match = $match ?? $this->match;
     }
 }

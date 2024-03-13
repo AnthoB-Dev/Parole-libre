@@ -21,6 +21,8 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
  * handle the request.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @template-implements UserProviderInterface<UserInterface>
  */
 class ChainUserProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
@@ -69,9 +71,6 @@ class ChainUserProvider implements UserProviderInterface, PasswordUpgraderInterf
         throw $ex;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function refreshUser(UserInterface $user): UserInterface
     {
         $supportedUserFound = false;
@@ -101,9 +100,6 @@ class ChainUserProvider implements UserProviderInterface, PasswordUpgraderInterf
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsClass(string $class): bool
     {
         foreach ($this->providers as $provider) {
@@ -115,9 +111,6 @@ class ChainUserProvider implements UserProviderInterface, PasswordUpgraderInterf
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         foreach ($this->providers as $provider) {

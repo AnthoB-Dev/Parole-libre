@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 class UniqueValidator extends ConstraintValidator
 {
     /**
-     * {@inheritdoc}
+     * @return void
      */
     public function validate(mixed $value, Constraint $constraint)
     {
@@ -64,9 +64,7 @@ class UniqueValidator extends ConstraintValidator
     private function getNormalizer(Unique $unique): callable
     {
         if (null === $unique->normalizer) {
-            return static function ($value) {
-                return $value;
-            };
+            return static fn ($value) => $value;
         }
 
         return $unique->normalizer;

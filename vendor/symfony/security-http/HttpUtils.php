@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Encapsulates the logic needed to create sub-requests, redirect the user, and match URLs.
@@ -38,7 +37,7 @@ class HttpUtils
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator = null, UrlMatcherInterface|RequestMatcherInterface $urlMatcher = null, string $domainRegexp = null, string $secureDomainRegexp = null)
+    public function __construct(?UrlGeneratorInterface $urlGenerator = null, UrlMatcherInterface|RequestMatcherInterface|null $urlMatcher = null, ?string $domainRegexp = null, ?string $secureDomainRegexp = null)
     {
         $this->urlGenerator = $urlGenerator;
         $this->urlMatcher = $urlMatcher;
@@ -50,7 +49,7 @@ class HttpUtils
      * Creates a redirect Response.
      *
      * @param string $path   A path (an absolute path (/foo), an absolute URL (http://...), or a route name (foo))
-     * @param int    $status The status code
+     * @param int    $status The HTTP status code (302 "Found" by default)
      */
     public function createRedirectResponse(Request $request, string $path, int $status = 302): RedirectResponse
     {
@@ -75,19 +74,17 @@ class HttpUtils
 
         static $setSession;
 
-        if (null === $setSession) {
-            $setSession = \Closure::bind(static function ($newRequest, $request) { $newRequest->session = $request->session; }, null, Request::class);
-        }
+        $setSession ??= \Closure::bind(static function ($newRequest, $request) { $newRequest->session = $request->session; }, null, Request::class);
         $setSession($newRequest, $request);
 
-        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
-            $newRequest->attributes->set(Security::AUTHENTICATION_ERROR, $request->attributes->get(Security::AUTHENTICATION_ERROR));
+        if ($request->attributes->has(SecurityRequestAttributes::AUTHENTICATION_ERROR)) {
+            $newRequest->attributes->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, $request->attributes->get(SecurityRequestAttributes::AUTHENTICATION_ERROR));
         }
-        if ($request->attributes->has(Security::ACCESS_DENIED_ERROR)) {
-            $newRequest->attributes->set(Security::ACCESS_DENIED_ERROR, $request->attributes->get(Security::ACCESS_DENIED_ERROR));
+        if ($request->attributes->has(SecurityRequestAttributes::ACCESS_DENIED_ERROR)) {
+            $newRequest->attributes->set(SecurityRequestAttributes::ACCESS_DENIED_ERROR, $request->attributes->get(SecurityRequestAttributes::ACCESS_DENIED_ERROR));
         }
-        if ($request->attributes->has(Security::LAST_USERNAME)) {
-            $newRequest->attributes->set(Security::LAST_USERNAME, $request->attributes->get(Security::LAST_USERNAME));
+        if ($request->attributes->has(SecurityRequestAttributes::LAST_USERNAME)) {
+            $newRequest->attributes->set(SecurityRequestAttributes::LAST_USERNAME, $request->attributes->get(SecurityRequestAttributes::LAST_USERNAME));
         }
 
         if ($request->get('_format')) {
@@ -110,6 +107,11 @@ class HttpUtils
     public function checkRequestPath(Request $request, string $path): bool
     {
         if ('/' !== $path[0]) {
+            // Shortcut if request has already been matched before
+            if ($request->attributes->has('_route')) {
+                return $path === $request->attributes->get('_route');
+            }
+
             try {
                 // matching a request is more powerful than matching a URL path + context, so try that first
                 if ($this->urlMatcher instanceof RequestMatcherInterface) {
@@ -138,7 +140,9 @@ class HttpUtils
      */
     public function generateUri(Request $request, string $path): string
     {
-        if (str_starts_with($path, 'http') || !$path) {
+        $url = parse_url($path);
+
+        if ('' === $path || isset($url['scheme'], $url['host'])) {
             return $path;
         }
 

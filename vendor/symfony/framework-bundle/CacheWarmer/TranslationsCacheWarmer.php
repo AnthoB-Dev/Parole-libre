@@ -34,32 +34,26 @@ class TranslationsCacheWarmer implements CacheWarmerInterface, ServiceSubscriber
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return string[]
+     * @param string|null $buildDir
      */
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir /* , string $buildDir = null */): array
     {
         $this->translator ??= $this->container->get('translator');
 
         if ($this->translator instanceof WarmableInterface) {
-            return (array) $this->translator->warmUp($cacheDir);
+            $buildDir = 1 < \func_num_args() ? func_get_arg(1) : null;
+
+            return (array) $this->translator->warmUp($cacheDir, $buildDir);
         }
 
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isOptional(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedServices(): array
     {
         return [

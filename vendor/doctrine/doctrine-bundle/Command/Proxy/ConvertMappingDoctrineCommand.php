@@ -15,6 +15,8 @@ use function assert;
  * formats.
  *
  * @deprecated use Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand instead
+ *
+ * @psalm-suppress UndefinedClass ORM < 3
  */
 class ConvertMappingDoctrineCommand extends ConvertMappingCommand
 {
@@ -24,6 +26,7 @@ class ConvertMappingDoctrineCommand extends ConvertMappingCommand
     protected function configure()
     {
         parent::configure();
+
         $this
             ->setName('doctrine:mapping:convert');
 

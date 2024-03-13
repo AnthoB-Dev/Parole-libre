@@ -24,7 +24,7 @@ class ServiceLocator extends BaseServiceLocator
     private array $serviceMap;
     private ?array $serviceTypes;
 
-    public function __construct(\Closure $factory, array $serviceMap, array $serviceTypes = null)
+    public function __construct(\Closure $factory, array $serviceMap, ?array $serviceTypes = null)
     {
         $this->factory = $factory;
         $this->serviceMap = $serviceMap;
@@ -32,9 +32,6 @@ class ServiceLocator extends BaseServiceLocator
         parent::__construct($serviceMap);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $id): mixed
     {
         return match (\count($this->serviceMap[$id] ?? [])) {
@@ -44,11 +41,8 @@ class ServiceLocator extends BaseServiceLocator
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProvidedServices(): array
     {
-        return $this->serviceTypes ??= array_map(function () { return '?'; }, $this->serviceMap);
+        return $this->serviceTypes ??= array_map(fn () => '?', $this->serviceMap);
     }
 }

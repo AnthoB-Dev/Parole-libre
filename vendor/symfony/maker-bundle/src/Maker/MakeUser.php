@@ -64,7 +64,7 @@ final class MakeUser extends AbstractMaker
 
     public static function getCommandDescription(): string
     {
-        return 'Creates a new security user class';
+        return 'Create a new security user class';
     }
 
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
@@ -104,7 +104,7 @@ final class MakeUser extends AbstractMaker
         }
         $input->setOption('is-entity', $userIsEntity);
 
-        $identityFieldName = $io->ask('Enter a property name that will be the unique "display" name for the user (e.g. <comment>email, username, uuid</comment>)', 'email', [Validator::class, 'validatePropertyName']);
+        $identityFieldName = $io->ask('Enter a property name that will be the unique "display" name for the user (e.g. <comment>email, username, uuid</comment>)', 'email', Validator::validatePropertyName(...));
         $input->setOption('identity-property-name', $identityFieldName);
 
         $io->text('Will this app need to hash/check user passwords? Choose <comment>No</comment> if passwords are not needed or will be checked/hashed by some other system (e.g. a single sign-on server).');
@@ -231,7 +231,7 @@ final class MakeUser extends AbstractMaker
         $io->text($nextSteps);
     }
 
-    public function configureDependencies(DependencyBuilder $dependencies, InputInterface $input = null): void
+    public function configureDependencies(DependencyBuilder $dependencies, ?InputInterface $input = null): void
     {
         // checking for SecurityBundle guarantees security.yaml is present
         $dependencies->addClassDependency(

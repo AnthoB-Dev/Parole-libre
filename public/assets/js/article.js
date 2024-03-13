@@ -32,33 +32,33 @@
       // Obtention du chemin de la page actuelle
       const pathname = window.location.pathname;
       
-      if (pathname.startsWith('/parole-libre/public/politique')) {
+      if (pathname.startsWith('/politique')) {
          articleCategorySpan.style= "background-color: " + clrPolitique + " !important;";
          articleTitle.style= "border-bottom: solid 2px " + clrPolitique + " !important;";
          articleTitle.firstElementChild.style="color: " + clrPolitique + " !important;";
          // carrouselArticleTitle.firstElementChild.style="color: " + clrPolitique + " !important;";
 
-      } else if (pathname.startsWith('/parole-libre/public/economie')) {
+      } else if (pathname.startsWith('/economie')) {
          articleCategorySpan.style= "background-color: " + clrEconomie + " !important;";
          articleTitle.style= "border-bottom: solid 2px " + clrEconomie + " !important;";
          articleTitle.firstElementChild.style="color: " + clrEconomie + " !important;";
 
-      } else if (pathname.startsWith('/parole-libre/public/geopolitique')) {
+      } else if (pathname.startsWith('/geopolitique')) {
          articleCategorySpan.style= "background-color: " + clrGeopolitique + " !important;";
          articleTitle.style= "border-bottom: solid 2px " + clrGeopolitique + " !important;";
          articleTitle.firstElementChild.style="color: " + clrGeopolitique + " !important;";
 
-      } else if (pathname.startsWith('/parole-libre/public/societe')) {
+      } else if (pathname.startsWith('/societe')) {
          articleCategorySpan.style= "background-color: " + clrSociete + " !important;";
          articleTitle.style= "border-bottom: solid 2px " + clrSociete + " !important;";
          articleTitle.firstElementChild.style="color: " + clrSociete + " !important;";
 
-      } else if (pathname.startsWith('/parole-libre/public/arts-litteratures')) {
+      } else if (pathname.startsWith('/arts-litteratures')) {
          articleCategorySpan.style= "background-color: " + clrArtsLitteratures + " !important;";
          articleTitle.style= "border-bottom: solid 2px " + clrArtsLitteratures + " !important;";
          articleTitle.firstElementChild.style="color: " + clrArtsLitteratures + " !important;";
 
-      } else if (pathname.startsWith('/parole-libre/public/parole-libre')) {
+      } else if (pathname.startsWith('/parole-libre')) {
          articleCategorySpan.style= "background-color: " + clrParoleLibre + " !important;";
          articleTitle.style= "border-bottom: solid 2px " + clrParoleLibre + " !important;";
          articleTitle.firstElementChild.style="color: " + clrParoleLibre + " !important;";

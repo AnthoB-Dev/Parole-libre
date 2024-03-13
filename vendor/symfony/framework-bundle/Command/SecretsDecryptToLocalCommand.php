@@ -31,7 +31,7 @@ final class SecretsDecryptToLocalCommand extends Command
     private AbstractVault $vault;
     private ?AbstractVault $localVault;
 
-    public function __construct(AbstractVault $vault, AbstractVault $localVault = null)
+    public function __construct(AbstractVault $vault, ?AbstractVault $localVault = null)
     {
         $this->vault = $vault;
         $this->localVault = $localVault;
@@ -39,7 +39,7 @@ final class SecretsDecryptToLocalCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force overriding of secrets that already exist in the local vault')
