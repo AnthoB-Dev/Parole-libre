@@ -283,10 +283,7 @@ class TagAwareAdapter implements TagAwareAdapterInterface, TagAwareCacheInterfac
         return $this->pool instanceof PruneableInterface && $this->pool->prune();
     }
 
-    /**
-     * @return void
-     */
-    public function reset()
+    public function reset(): void
     {
         $this->commit();
         $this->knownTagVersions = [];
@@ -299,10 +296,7 @@ class TagAwareAdapter implements TagAwareAdapterInterface, TagAwareCacheInterfac
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
     }
 
-    /**
-     * @return void
-     */
-    public function __wakeup()
+    public function __wakeup(): void
     {
         throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }

@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+7.0
+---
+
+ * Enabling SecurityBundle and not configuring it is not allowed
+ * Remove the `enable_authenticator_manager` config option
+ * Remove the `security.firewalls.logout.csrf_token_generator` config option, use `security.firewalls.logout.csrf_token_manager` instead
+ * Remove the `require_previous_session` config option from authenticators
+
 6.4
 ---
 
