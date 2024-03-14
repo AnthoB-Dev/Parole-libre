@@ -13,6 +13,9 @@ services:
             $security: '@security.helper'
         tags:
             - { name: twig.extension }
+    
+    annotation_reader:
+        class: Doctrine\Common\Annotations\AnnotationReader
 
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
