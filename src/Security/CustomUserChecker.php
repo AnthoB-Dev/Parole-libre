@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationExc
 
 class CustomUserChecker implements UserCheckerInterface
 {
-   public function checkPreAuth(UserInterface $user)
+   public function checkPreAuth(UserInterface $user): void
    {
       if (!$user instanceof User) {
          return;
@@ -22,7 +22,7 @@ class CustomUserChecker implements UserCheckerInterface
       }
    }
 
-   public function checkPostAuth(UserInterface $user)
+   public function checkPostAuth(UserInterface $user): void
    {
       // if (!$user instanceof User) {
       //    return;

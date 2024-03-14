@@ -5,11 +5,17 @@ A faire :
         Revoir le design du profil
         Revoir les borders / bow-shadows pour les rendre moins aggressive
         CKEditor
+        Caroussel
 
     Back :
         Finir le schéma des routes (ci dessous)
         Implémenter easyAdmin pour le côté admin
         Gestion des codes d'erreurs (ErrorController ?) (Potentiellement lié à Controllers.b)
+
+
+En cours :
+    MàJ Symfony 7.0
+
 
 
 Routes : 

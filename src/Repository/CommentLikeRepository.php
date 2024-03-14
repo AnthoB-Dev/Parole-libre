@@ -39,7 +39,7 @@ class CommentLikeRepository extends ServiceEntityRepository
         }
     }
 
-    
+
 
 //    /**
 //     * @return CommentLike[] Returns an array of CommentLike objects
