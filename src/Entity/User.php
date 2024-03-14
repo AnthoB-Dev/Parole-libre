@@ -62,6 +62,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?ReportReason $banReason = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ArticleComment::class, orphanRemoval: true)]
+    private Collection $articleComments;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -330,5 +333,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->banReason = $banReason;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ArticleComment>
+     */
+    public function getArticleComments(): Collection
+    {
+        return $this->articleComments;
     }
 }
