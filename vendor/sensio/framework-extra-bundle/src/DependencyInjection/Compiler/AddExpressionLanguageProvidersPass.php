@@ -20,7 +20,7 @@ class AddExpressionLanguageProvidersPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->hasDefinition('sensio_framework_extra.security.expression_language.default')) {
             $definition = $container->findDefinition('sensio_framework_extra.security.expression_language.default');

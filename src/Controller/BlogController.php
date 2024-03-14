@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security as Security;
 use Cocur\Slugify\Slugify;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class BlogController extends AbstractController
 {
@@ -141,7 +142,7 @@ class BlogController extends AbstractController
                 "article" => $article,
                 "category" => $articleCategory,
                 "articleComments" => $articleComments,
-                "commentForm" => $commentForm->createView(),
+                "commentForm" => $commentForm,
                 'updateForms' => $updateForms,
             ]);
         }
@@ -188,7 +189,7 @@ class BlogController extends AbstractController
         }
 
         return $this->render("blog/articles/newArticle.html.twig", [
-            "form" => $form->createView(),
+            "form" => $form,
         ]);
     }
 
@@ -229,7 +230,7 @@ class BlogController extends AbstractController
             }
 
             return $this->render("blog/articles/editArticle.html.twig", [
-                "form" => $form->createView(),
+                "form" => $form,
                 "articleTitle" => $articleTitle,
                 "articleImage" => $articleImage,
                 "article" => $article,
@@ -239,7 +240,7 @@ class BlogController extends AbstractController
 
     // Article (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un article
     #[Route("/{categorySlug}/article/{id}/{titleSlug}/like-article/{articleId}", name:"app_article_like_add")]
-    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, $categorySlug, $articleId, ArticleLikeRepository $articleLikeRepository)
+    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, $categorySlug, $articleId, ArticleLikeRepository $articleLikeRepository): RedirectResponse
     {
         
         $currentUser = $security->getUser();     
@@ -294,7 +295,7 @@ class BlogController extends AbstractController
             }
     
             return $this->render('blog/articles/article.html.twig', [
-                'updateForm' => $updateForm->createView(),
+                'updateForm' => $updateForm,
             ]);
         }
     }
@@ -316,7 +317,7 @@ class BlogController extends AbstractController
 
     // Commentaires (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un commentaire
     #[Route("/{categorySlug}/article/{id}/{titleSlug}/like-comment/{commentId}", name:"app_comment_like_add")]
-    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository, $titleSlug)
+    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository, $titleSlug): RedirectResponse
     {
         
         $currentUser = $security->getUser();     

@@ -8,7 +8,7 @@ use App\Entity\CommentLike;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentLikeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;

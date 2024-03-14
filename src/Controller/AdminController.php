@@ -87,7 +87,7 @@ class AdminController extends AbstractController
         }
         
         return $this->render("admin/content/articles/addArticle.html.twig", [
-            "form" => $form->createView(),
+            "form" => $form,
         ]);
     }
 
@@ -119,7 +119,7 @@ class AdminController extends AbstractController
         }
         
         return $this->render("admin/content/articles/editArticle.html.twig", [
-            "form" => $form->createView(),
+            "form" => $form,
             "article" => $article,
         ]);
     }
@@ -191,7 +191,7 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/structure/categoryAdd.html.twig', [
-            "form" => $form->createView(),
+            "form" => $form,
             "categories" => $categories,
         ]);
     }
@@ -226,7 +226,7 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/structure/reportReasonAdd.html.twig', [
-            "form" => $form->createView(),
+            "form" => $form,
             "reportReasons" => $reportReasons,
         ]);
     }

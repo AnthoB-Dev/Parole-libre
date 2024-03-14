@@ -29,7 +29,7 @@ class IndexController extends AbstractController
     }
 
     #[Route("/profil", name:"profil")]
-    public function showProfile(Security $security)
+    public function showProfile(Security $security): Response
     {
         $user = $security->getUser();
 

@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AddParamConverterPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasDefinition('sensio_framework_extra.converter.manager')) {
             return;
