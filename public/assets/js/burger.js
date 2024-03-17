@@ -27,7 +27,7 @@
    }
     
    if(btnBurger) {
-   btnBurger.addEventListener("click", burgerToggle);
+      btnBurger.addEventListener("click", burgerToggle);
    }
 
 })();

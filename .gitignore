@@ -24,4 +24,4 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /sass/
-/.Todo.txt
+/Todo.txt
