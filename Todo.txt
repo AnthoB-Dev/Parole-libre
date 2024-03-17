@@ -12,11 +12,13 @@ A faire :
         Finir le schéma des routes (ci dessous)
         Implémenter easyAdmin pour le côté admin
         Gestion des codes d'erreurs (404 etc) (ErrorController ?) (Potentiellement lié à Controllers.b)
+        Changer les condition : if($security->getUser() == $comment->getUser()) (faisable avec les Voters)
 
 
 En cours :
     a.Changer tout le routing
-
+    b.Gerer le message d'erreur lorsque la route est /parole-libre/{categorySlug} qui n'est pas présent lorsque la route est /{categorySlug}
+    
 
 
 Routes : 

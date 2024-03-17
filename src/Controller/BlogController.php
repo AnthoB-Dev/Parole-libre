@@ -26,12 +26,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class BlogController extends AbstractController
 {
     #[Route("/categorie", name:"category.redirect")]
+    #[Route("/auteur")]
+    #[Route("/auteur/modifier")]
     public function redirection(): RedirectResponse
     {
         return $this->redirectToRoute("accueil");
     }
     
-    // Articles - Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
+    // Category - Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
     #[Route("/categorie/{categorySlug}", name:"category.show", requirements: ["categorySlug" => "[a-z0-9-]+"])]
     public function categoryPage(ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug): Response
     {
@@ -66,11 +68,13 @@ class BlogController extends AbstractController
     // Commentaires - Read : Récupères les commentaires lié à l'article
     // Commentaires - Update : Prépare un form de modification pour chaque commentaire présent, puis appel la fonction updateComment pour gérer la modification 
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}", name:"article.show", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, int $id, ArticleCommentRepository $articleCommentRepository, string $categorySlug, string $titleSlug, CategoryRepository $categoryRepository): Response
+    #[Route("/categorie/parole-libre/{categorySlug}/{titleSlug}-{id}", name:"article.show.paroleLibre", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, int $id, ArticleCommentRepository $articleCommentRepository, CategoryRepository $categoryRepository, string $categorySlug, string $titleSlug): Response
     {
         $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
         $articleByRouteId = $articleRepository->findOneBy(["id" => $id]) ?: null;
         $categoryChecker = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]) ?: null;
+        $routeIsParoleLibre = strpos($request->getPathInfo(), "/categorie/parole-libre") === 0 ? true : false;
 
         // Définition de la variable $article selon si le titleSlug ou l'id fourni dans l'url correspond bien à un article existant
         // Dans le cas où il n'y aurait pas de correspondance et que ni le slug ni l'id n'est un article valide
@@ -82,6 +86,8 @@ class BlogController extends AbstractController
             $article = $articleByRouteId;
             
         } elseif(!isset($articleByRouteSlug) && !isset($articleByRouteId)) {
+            dd($categoryChecker);
+
             if($categoryChecker) {
                 return $this->redirectToRoute("category.show", [
                     "categorySlug" => $categorySlug
@@ -93,10 +99,18 @@ class BlogController extends AbstractController
 
         // Vérification de l'url pour déterminer si le slug et l'id correspondent bien au même article
         // Si ce n'est pas le cas je redirige une nouvelle fois vers l'article en reparametrant les slugs et l'id de la route de l'article (qui est forcément défini à ce stade grâce aux conditions précedente)
+        // Et enfin si l'article est un "Parole Libre" je redirige vers cette fonction mais avec une route différente
         if($articleByRouteId !== $articleByRouteSlug 
            ||  $categorySlug !== $article->getCategory()->getCategorySlug()) {
 
             return $this->redirectToRoute("article.show", [
+                "categorySlug" => $article->getCategory()->getCategorySlug(),
+                "titleSlug" => $article->getTitleSlug(),
+                "id" => $article->getId(),
+            ]);
+
+        } elseif($article->isParoleLibre() && !$routeIsParoleLibre) {
+            return $this->redirectToRoute("article.show.paroleLibre", [
                 "categorySlug" => $article->getCategory()->getCategorySlug(),
                 "titleSlug" => $article->getTitleSlug(),
                 "id" => $article->getId(),
@@ -150,7 +164,6 @@ class BlogController extends AbstractController
                 ]);
             }
         }
-        
         return $this->render("blog/articles/article.html.twig", [
             "article" => $article,
             "category" => $articleCategory,
@@ -158,15 +171,11 @@ class BlogController extends AbstractController
             "commentForm" => $commentForm,
             'updateForms' => $updateForms,
         ]);
-        
-        return $this->redirectToRoute("category.show", [
-            "categorySlug" => $categorySlug
-        ]);
     }
 
     // Article - Create :
     #[Route("/auteur/ajouter", name: "article.new")]
-    public function newParoleLibre(Security $security, Request $request, ArticleRepository $articleRepository): Response
+    public function newParoleLibre(Request $request, Security $security, ArticleRepository $articleRepository): Response
     {
         $article = new Article();
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
@@ -211,7 +220,7 @@ class BlogController extends AbstractController
 
     // Article - Update :
     #[Route("/auteur/modifier/{titleSlug}-{id}", name:"article.edit", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function editParoleLibre(ArticleRepository $articleRepository, Request $request, int $id, Security $security, string $titleSlug): Response
+    public function editParoleLibre(Request $request, Security $security, ArticleRepository $articleRepository, int $id, string $titleSlug): Response
     {
         $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
         $articleByRouteId = $articleRepository->findOneBy(["id" => $id]) ?: null;
@@ -277,7 +286,7 @@ class BlogController extends AbstractController
 
     // Article (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un article
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/like", name:"article.like", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, string $categorySlug, int $id, ArticleLikeRepository $articleLikeRepository): RedirectResponse
+    public function toggleArticleLike(Security $security, ArticleRepository $articleRepository, ArticleLikeRepository $articleLikeRepository, string $categorySlug, int $id, ): RedirectResponse
     {
         $currentUser = $security->getUser();
         $article = $articleRepository->findOneBy(["id" => $id]);
@@ -309,7 +318,7 @@ class BlogController extends AbstractController
 
     // Commentaires - Update : Modification d'un commentaire posté
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/update", name:"comment.update", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository, int $commentId, Security $security, string $categorySlug, int $id, string $titleSlug): Response
+    public function updateComment(Request $request, Security $security, ArticleCommentRepository $articleCommentRepository, int $commentId, string $categorySlug, int $id, string $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
@@ -338,11 +347,18 @@ class BlogController extends AbstractController
 
     // Commentaires - Delete : Suppression d'un commentaire
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/delete", name:"comment.delete", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function delComment(ArticleCommentRepository $articleCommentRepository, int $id, int $commentId, string $categorySlug, string $titleSlug): Response
+    public function delComment(Security $security, ArticleCommentRepository $articleCommentRepository, int $id, int $commentId, string $categorySlug, string $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
-        $comment = $articleCommentRepository->remove($comment, true);
-        $this->addFlash("commentaryDeleted", "Le commentaire a été supprimé.");
+        if($security->getUser() == $comment->getUser() || $security->isGranted("ROLE_ADMIN")) {
+            dd("Le commentaire a été supprimé.");
+            $comment = $articleCommentRepository->remove($comment, true);
+            $this->addFlash("commentaryDeleted", "Le commentaire a été supprimé.");
+        } else {
+            dd("Le commentaire n'a pas été supprimé car vous n'êtes pas son auteur.");
+
+            $this->addFlash("commentaryNotDeleted", "Le commentaire n'a pas été supprimé car vous n'êtes pas son auteur.");
+        }
 
         return $this->redirectToRoute("article.show", [
             "categorySlug" => $categorySlug, 
@@ -353,7 +369,7 @@ class BlogController extends AbstractController
 
     // Commentaires (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un commentaire
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/{commentId}/like", name:"comment.like", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, int $commentId, Security $security, int $id, string $categorySlug, ArticleCommentRepository $articleCommentRepository, string $titleSlug): RedirectResponse
+    public function toggleCommentLike(Security $security, CommentLikeRepository $commentLikeRepository, ArticleCommentRepository $articleCommentRepository, int $commentId, int $id, string $categorySlug, string $titleSlug): RedirectResponse
     {
         
         $currentUser = $security->getUser();     

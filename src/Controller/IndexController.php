@@ -10,7 +10,6 @@ use Symfony\Bundle\SecurityBundle\Security as Security;
 
 class IndexController extends AbstractController
 {
-    // #[Route("/")]
     #[Route("/accueil", name:"accueil")]
     public function index(ArticleRepository $articleRepository): Response
     {
