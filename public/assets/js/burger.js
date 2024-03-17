@@ -26,8 +26,8 @@
       }
    }
     
-    if(btnBurger) {
-        btnBurger.addEventListener("click", burgerToggle);
-    }
+   if(btnBurger) {
+   btnBurger.addEventListener("click", burgerToggle);
+   }
 
 })();

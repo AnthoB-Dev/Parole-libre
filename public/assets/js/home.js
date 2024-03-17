@@ -23,17 +23,23 @@
 
 
    // Sur chargement de la page et selon le chemin de la page, changement de la couleur de la bande de fond des sections. 
-   window.onload = function() {
-      // Obtention du chemin de la page actuelle
+   window.onload = function categoryBgSwapper() {
       const pathname = window.location.pathname;
+      let path = "";
+
+      if (pathname.startsWith("/parole-libre/public/categorie/parole-libre")) {
+         path = "/parole-libre/public/categorie/parole-libre";
+      } else {
+         path = "/parole-libre/public/categorie";
+      }
       
       // Sélection de l'élément à modifier
       const container = document.querySelector('.container-carrousel-header');
 
       // Suppression toutes les classes de page précédentes
       container.classList.remove('accueil', 'politique', 'economie', 'geopolitique', 'societe', 'arts', 'paroleLibre');
-
-      if(pathname === '/accueil') {
+      
+      if(pathname === '/accueil' || pathname === "/parole-libre/public/accueil") {
          
          container.classList.add('accueil');
 
@@ -76,22 +82,22 @@
             })
          })
 
-      } else if (pathname.startsWith('/articles/politique')) {
+      } else if (pathname.startsWith(path + '/politique')) {
          container.classList.add('politique');
          
-      } else if (pathname.startsWith('/articles/economie')) {
+      } else if (pathname.startsWith(path + '/economie')) {
          container.classList.add('economie');
 
-      } else if (pathname.startsWith('/articles/geopolitique')) {
+      } else if (pathname.startsWith(path + '/geopolitique')) {
          container.classList.add('geopolitique');
 
-      } else if (pathname.startsWith('/articles/societe')) {
+      } else if (pathname.startsWith(path + '/societe')) {
          container.classList.add('societe');
 
-      } else if (pathname.startsWith('/articles/arts-litteratures')) {
+      } else if (pathname.startsWith(path + '/arts-litteratures')) {
          container.classList.add('artsLitteratures');
 
-      } else if (pathname.startsWith('/articles/parole-libre')) {
+      } else if (pathname.startsWith(path)) {
          container.classList.add('paroleLibre');
       }   
    }

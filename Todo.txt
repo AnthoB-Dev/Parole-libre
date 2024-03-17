@@ -1,5 +1,6 @@
 A faire :
     Résolution des bugs
+    Documenter le code
 
     Front :
         Revoir le design du profil
@@ -18,7 +19,7 @@ A faire :
 En cours :
     a.Changer tout le routing
     b.Gerer le message d'erreur lorsque la route est /parole-libre/{categorySlug} qui n'est pas présent lorsque la route est /{categorySlug}
-    
+
 
 
 Routes : 
