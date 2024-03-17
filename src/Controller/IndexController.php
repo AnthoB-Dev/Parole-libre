@@ -10,9 +10,10 @@ use Symfony\Bundle\SecurityBundle\Security as Security;
 
 class IndexController extends AbstractController
 {
+    // #[Route("/")]
     #[Route("/accueil", name:"accueil")]
     public function index(ArticleRepository $articleRepository): Response
-    {        
+    {
         $recentHeroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategories(3, 1, 2, 5, 6, 7);
         $articles = $articleRepository->findArticlesRecentlyPublishedByCategories(2, 1, 2, 5, 6, 7);
         $popularArticles = $articleRepository->findByPopularityOfCategories(6, 1, 2, 5, 6, 7);

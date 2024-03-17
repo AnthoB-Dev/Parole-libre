@@ -10,11 +10,11 @@ A faire :
     Back :
         Finir le schéma des routes (ci dessous)
         Implémenter easyAdmin pour le côté admin
-        Gestion des codes d'erreurs (ErrorController ?) (Potentiellement lié à Controllers.b)
+        Gestion des codes d'erreurs (404 etc) (ErrorController ?) (Potentiellement lié à Controllers.b)
 
 
 En cours :
-    MàJ Symfony 7.0
+    a.Changer tout le routing
 
 
 
@@ -34,23 +34,25 @@ Routes :
 
 Bug :
     JavaScript :
-        a.Couleurs dynamique selon la categorie : cassé depuis le changement des routes (tout est en vert (catégorie Parole Libre))
+        a.Couleurs dynamique selon la categorie (article.show) : cassé depuis le changement des routes (tout est en vert (catégorie Parole Libre))
 
 
 Controllers :
-    a.Changer tout le routing
+    
     b.Gérer l'entrée d'une url invalide (exemple : /politique/bullshit)
 
     BlogController :
         En cours :
 
         A faire :
-            a.Fonction categoryPage() : modifier la route pour ajouter /categorie/{categorySlug} ce qui devrait corriger le bug lié à /accueil
+            
     
         Bug :
-            a.Fonction categoryPage() : cette fonction est appelé lorsque je suis sur /accueil (qui est censé utiliser index() de IndexController lorsque sur cette route)
-            b.Fonction showArticle() : Seulement l'id est pris en compte pour trouver un article (ce qui fait que le slug ne sert à rien : si je rentre l'id d'un article différent, celui ci sera affiché avec le mauvais slug)
+            Fonction showArticle() : Seulement l'id est pris en compte pour trouver un article (ce qui fait que le slug ne sert à rien : si je rentre l'id d'un article différent, celui ci sera affiché avec le mauvais slug)
 
 
 Fait :
     Gérer l'entrée d'une url invalide (exemple : /politique/bullshit-1)
+    MàJ Symfony 7.0
+    Fonction categoryPage() : modifier la route pour ajouter /categorie/{categorySlug} ce qui devrait corriger le bug lié à /accueil
+    Fonction categoryPage() : cette fonction est appelé lorsque je suis sur /accueil qui est censé utiliser index() de IndexController lorsque sur cette route

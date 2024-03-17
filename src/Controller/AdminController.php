@@ -13,7 +13,6 @@ use App\Repository\CategoryRepository;
 use App\Repository\ReportReasonRepository;
 use DateTimeImmutable;
 use DateTimeZone;
-// use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

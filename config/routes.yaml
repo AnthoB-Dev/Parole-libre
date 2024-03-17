@@ -4,3 +4,9 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+redirect_home:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: accueil
+        permanent: true
