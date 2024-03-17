@@ -33,7 +33,7 @@ class BlogController extends AbstractController
     
     // Articles - Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
     #[Route("/categorie/{categorySlug}", name:"category.show", requirements: ["categorySlug" => "[a-z0-9-]+"])]
-    public function categoryPage(ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug, Request $req): Response
+    public function categoryPage(ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug): Response
     {
         if($categorySlug != "accueil") {
             $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
@@ -66,7 +66,7 @@ class BlogController extends AbstractController
     // Commentaires - Read : Récupères les commentaires lié à l'article
     // Commentaires - Update : Prépare un form de modification pour chaque commentaire présent, puis appel la fonction updateComment pour gérer la modification 
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}", name:"article.show", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, $id, ArticleCommentRepository $articleCommentRepository, string $categorySlug, string $titleSlug, CategoryRepository $categoryRepository): Response
+    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, int $id, ArticleCommentRepository $articleCommentRepository, string $categorySlug, string $titleSlug, CategoryRepository $categoryRepository): Response
     {
         $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
         $articleByRouteId = $articleRepository->findOneBy(["id" => $id]) ?: null;
@@ -129,7 +129,7 @@ class BlogController extends AbstractController
         foreach($articleComments as $articleComment) {
 
             $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
-                'action' => $this->generateUrl('app_article_comment_update', [
+                'action' => $this->generateUrl('comment.update', [
                     "categorySlug" => $categorySlug,
                     "id" => $articleComment->getArticle()->getId(),
                     "titleSlug" => $titleSlug, 
@@ -211,7 +211,7 @@ class BlogController extends AbstractController
 
     // Article - Update :
     #[Route("/auteur/modifier/{titleSlug}-{id}", name:"article.edit", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function editParoleLibre(ArticleRepository $articleRepository, Request $request, $id, Security $security, $titleSlug): Response
+    public function editParoleLibre(ArticleRepository $articleRepository, Request $request, int $id, Security $security, string $titleSlug): Response
     {
         $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
         $articleByRouteId = $articleRepository->findOneBy(["id" => $id]) ?: null;
@@ -277,10 +277,9 @@ class BlogController extends AbstractController
 
     // Article (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un article
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/like", name:"article.like", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
-    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, $categorySlug, $id, ArticleLikeRepository $articleLikeRepository): RedirectResponse
+    public function toggleArticleLike(ArticleRepository $articleRepository, Security $security, string $categorySlug, int $id, ArticleLikeRepository $articleLikeRepository): RedirectResponse
     {
-        
-        $currentUser = $security->getUser();     
+        $currentUser = $security->getUser();
         $article = $articleRepository->findOneBy(["id" => $id]);
         $articleLike = $articleLikeRepository->findOneBy([
             'user' => $currentUser,
@@ -309,8 +308,8 @@ class BlogController extends AbstractController
     }
 
     // Commentaires - Update : Modification d'un commentaire posté
-    #[Route("/categorie/{categorySlug}/article/{id}/{titleSlug}/comment/{commentId}/update", name:"app_article_comment_update")]
-    public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository, $commentId, Security $security, $categorySlug, $id, $titleSlug): Response
+    #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/update", name:"comment.update", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    public function updateComment(Request $request, ArticleCommentRepository $articleCommentRepository, int $commentId, Security $security, string $categorySlug, int $id, string $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
@@ -338,8 +337,8 @@ class BlogController extends AbstractController
     }
 
     // Commentaires - Delete : Suppression d'un commentaire
-    #[Route("/categorie/{categorySlug}/article/{id}/{titleSlug}/comment/{commentId}/delete", name:"app_article_comment_del")]
-    public function delComment(ArticleCommentRepository $articleCommentRepository, $id, $commentId, $categorySlug, $titleSlug): Response
+    #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/delete", name:"comment.delete", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    public function delComment(ArticleCommentRepository $articleCommentRepository, int $id, int $commentId, string $categorySlug, string $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         $comment = $articleCommentRepository->remove($comment, true);
@@ -353,8 +352,8 @@ class BlogController extends AbstractController
     }
 
     // Commentaires (likes) - Create / Read / Delete : Affiche le nombre de j'aime, ajoute ou retire un j'aime d'un commentaire
-    #[Route("/categorie/{categorySlug}/article/{id}/{titleSlug}/like-comment/{commentId}", name:"app_comment_like_add")]
-    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, $commentId, Security $security, $id, $categorySlug, ArticleCommentRepository $articleCommentRepository, $titleSlug): RedirectResponse
+    #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/{commentId}/like", name:"comment.like", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    public function toggleCommentLike(CommentLikeRepository $commentLikeRepository, int $commentId, Security $security, int $id, string $categorySlug, ArticleCommentRepository $articleCommentRepository, string $titleSlug): RedirectResponse
     {
         
         $currentUser = $security->getUser();     

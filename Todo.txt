@@ -6,6 +6,7 @@ A faire :
         Revoir les borders / bow-shadows pour les rendre moins aggressive
         CKEditor
         Caroussel
+        Ajax pour les likes
 
     Back :
         Finir le schéma des routes (ci dessous)
