@@ -72,7 +72,7 @@ class BlogController extends AbstractController
     public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, int $id, ArticleCommentRepository $articleCommentRepository, CategoryRepository $categoryRepository, string $categorySlug, string $titleSlug): Response
     {
         $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
-        $articleByRouteId = $articleRepository->findOneBy(["id" => $id]) ?: null;
+        $articleByRouteId = $articleRepository->find($id) ?: null;
         $categoryChecker = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]) ?: null;
         $routeIsParoleLibre = strpos($request->getPathInfo(), "/categorie/parole-libre") === 0 ? true : false;
 
@@ -331,7 +331,7 @@ class BlogController extends AbstractController
             if($updateForm->isSubmitted() && $updateForm->isValid()) {
                 $comment->setUpdatedAt($date);
                 $articleCommentRepository->save($comment, true);
-                $this->addFlash('commentUpdated', 'Commentaire mis à jour');
+                $this->addFlash('success', 'Commentaire mis à jour');
                 return $this->redirectToRoute('article.show', [
                     'categorySlug' => $categorySlug, 
                     "titleSlug" => $titleSlug,
