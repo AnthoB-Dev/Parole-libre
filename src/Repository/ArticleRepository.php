@@ -51,7 +51,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->select("a.id", "a.title", "a.subtitle", "a.image", "a.content", "a.createdAt", "a.updatedAt", "category.name", "user.pseudo")
             ->join('a.user', 'user')
             ->join('a.category', 'category')
-            ->orderBy("a.id", "ASC")
+            ->orderBy("a.id", "DESC")
             ->getQuery()
             ->getResult()
         ;

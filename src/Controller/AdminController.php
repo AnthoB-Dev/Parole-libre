@@ -18,6 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin', name: 'app_admin_')]
 class AdminController extends AbstractController
@@ -121,6 +124,24 @@ class AdminController extends AbstractController
             "form" => $form,
             "article" => $article,
         ]);
+    }
+
+    /**
+     * Supprime un article ainsi que son image associé dans le dossier upload_directory. 
+     */
+    #[Route("/contenu/articles/{id}/delete", name: "admin.article.delete", methods:"DELETE")]
+    #[IsGranted("ROLE_ADMIN")]
+    public function deleteArticle(Article $article, ArticleRepository $articleRepo, ParameterBagInterface $params, Filesystem $fileSystem): Response
+    {
+        $imagePath = $article->getImage();
+        $uploadDirectoryPath = $params->get("upload_directory");
+
+        $articleRepo->remove($article, true);
+        $fileSystem->remove($uploadDirectoryPath . "/" . $imagePath);
+
+        $this->addFlash("success", "Article supprimé");
+        
+        return $this->redirectToRoute("app_admin_content_articles_index");
     }
 
     //----------------- /COMMENTAIRES -----------------//

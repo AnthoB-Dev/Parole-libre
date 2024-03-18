@@ -16,8 +16,8 @@
                         <h5> {{article.subtitle}} </h5>
                     </div>
 
-                    <div class="carrousel-article-image">
-                        <img src="{{article.image}}" alt="Photo représentant le sujet de l'article '{{article.title}}'">
+                    <div class="carrousel-article-image" style="display: flex; justify-content: center; margin: 2rem 0;">
+                        <img src="{{asset("upload_directory/" ~ article.image)}}" alt="Photo représentant le sujet de l'article '{{article.title}}'" style="max-width:50%; max-height:400px;">
                     </div>
 
                     <div class="carrousel-article-title">
@@ -45,11 +45,13 @@
 
                     <div style="margin-left: auto; padding-right: 1rem; display:flex; gap:.5rem;">
                         <a href="{{ path("app_admin_content_article_edit", {"id": article.id} ) }}" style="padding: .5rem; color: green; border: solid 1px; border-radius: 5px; text-decoration: none;">Modifier</a>
-                        <a href="" style="padding: .5rem; color: red; border: solid 1px; border-radius: 5px; text-decoration: none;">Supprimer</a></div>
+                        <form action="{{path("app_admin_admin.article.delete", {"id": article.id})}}" method="post" class="article_delete_form">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" style="padding: .5rem; color: red; border: solid 1px; border-radius: 5px; text-decoration: none; background-color:#fff; height:100%;">Supprimer</button>
+                        </form>
                     </div>
                 </article>
             {% endfor %}
         </div>
    </div>
-
 {% endblock %}

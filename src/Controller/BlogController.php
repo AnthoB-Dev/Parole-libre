@@ -20,8 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security as Security;
-use Cocur\Slugify\Slugify;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class BlogController extends AbstractController
 {
@@ -86,7 +86,6 @@ class BlogController extends AbstractController
             $article = $articleByRouteId;
             
         } elseif(!isset($articleByRouteSlug) && !isset($articleByRouteId)) {
-            dd($categoryChecker);
 
             if($categoryChecker) {
                 return $this->redirectToRoute("category.show", [
@@ -187,11 +186,9 @@ class BlogController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $article->setUser($user);
             $article->setCreatedAt($date);
-            $slugify = new Slugify();
-            $slug = $slugify->slugify($article->getTitle());
-            $article->setTitleSlug($slug);
-            $article->setParoleLibre(true);
-
+            if($security->isGranted('ROLE_AUTHOR')) {
+                $article->setParoleLibre(true);
+            }
             // Défini l'image
             $file = $form->get("image")->getData();
             if($file) {
@@ -245,13 +242,11 @@ class BlogController extends AbstractController
                 "id" => $article->getId(),
             ]);
         }
-        $slugify = new Slugify();
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
         
         if($security->getUser() == $article->getUser() ); {
             $articleTitle = $article->getTitle();
             $articleImage = $article->getImage();
-            $slug = $slugify->slugify($articleTitle);
             $form = $this->createForm(ArticleType::class, $article);
             $form->handleRequest($request);
 
@@ -265,10 +260,8 @@ class BlogController extends AbstractController
                     $article->setImage($newFileName);
                 }
                 
-                $article->setTitleSlug($slug);
                 $article->setUpdatedAt($date);
                 $this->addFlash("success", "Article modifié avec succès");
-
                 $articleRepository->save($article, true);
                 return $this->redirectToRoute("article.show", [
                     "categorySlug" => $article->getCategory()->getCategorySlug(),
