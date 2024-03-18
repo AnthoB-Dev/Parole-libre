@@ -132,7 +132,7 @@ class BlogController extends AbstractController
             $comment->setUser($security->getUser());
             $comment->setArticle($article);
             $articleCommentRepository->save($comment, true);
-            $this->addFlash("commentAdded", "Commentaire ajouté");
+            $this->addFlash("success", "Commentaire ajouté");
             return $this->redirectToRoute("article.show", [
                 "categorySlug" => $categorySlug, 
                 "titleSlug" => $titleSlug,
@@ -156,7 +156,7 @@ class BlogController extends AbstractController
     
             if($updateForm->isSubmitted() && $updateForm->isValid()) {
                 $articleCommentRepository->save($articleComment, true);
-                $this->addFlash('commentUpdated', 'Commentaire mis à jour');
+                $this->addFlash('succcess', 'Commentaire mis à jour');
                 return $this->redirectToRoute('article.show', [
                     "categorySlug" => $categorySlug, 
                     "titleSlug" => $article->getCategory()->getCategorySlug(),
@@ -174,7 +174,7 @@ class BlogController extends AbstractController
     }
 
     // Article - Create :
-    #[Route("/auteur/ajouter", name: "article.new")]
+    #[Route("/auteur/ajouter", name: "article.new", methods: ["GET", "POST"])]
     public function newParoleLibre(Request $request, Security $security, ArticleRepository $articleRepository): Response
     {
         $article = new Article();
@@ -205,6 +205,7 @@ class BlogController extends AbstractController
             }
 
             $articleRepository->save($article, true);
+            $this->addFlash("success", "Article ajouté avec succès");
 
             return $this->redirectToRoute("article.show", [
                 "categorySlug" => $article->getCategory()->getCategorySlug(), 
@@ -219,7 +220,7 @@ class BlogController extends AbstractController
     }
 
     // Article - Update :
-    #[Route("/auteur/modifier/{titleSlug}-{id}", name:"article.edit", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    #[Route("/auteur/modifier/{titleSlug}-{id}", name:"article.edit", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
     public function editParoleLibre(Request $request, Security $security, ArticleRepository $articleRepository, int $id, string $titleSlug): Response
     {
         $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
@@ -266,6 +267,7 @@ class BlogController extends AbstractController
                 
                 $article->setTitleSlug($slug);
                 $article->setUpdatedAt($date);
+                $this->addFlash("success", "Article modifié avec succès");
 
                 $articleRepository->save($article, true);
                 return $this->redirectToRoute("article.show", [
@@ -317,7 +319,7 @@ class BlogController extends AbstractController
     }
 
     // Commentaires - Update : Modification d'un commentaire posté
-    #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/update", name:"comment.update", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/update", name:"comment.update", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
     public function updateComment(Request $request, Security $security, ArticleCommentRepository $articleCommentRepository, int $commentId, string $categorySlug, int $id, string $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
@@ -346,18 +348,15 @@ class BlogController extends AbstractController
     }
 
     // Commentaires - Delete : Suppression d'un commentaire
-    #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/delete", name:"comment.delete", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"])]
+    #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/comment/{commentId}/delete", name:"comment.delete", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["DELETE"])]
     public function delComment(Security $security, ArticleCommentRepository $articleCommentRepository, int $id, int $commentId, string $categorySlug, string $titleSlug): Response
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
         if($security->getUser() == $comment->getUser() || $security->isGranted("ROLE_ADMIN")) {
-            dd("Le commentaire a été supprimé.");
             $comment = $articleCommentRepository->remove($comment, true);
-            $this->addFlash("commentaryDeleted", "Le commentaire a été supprimé.");
+            $this->addFlash("success", "Le commentaire a été supprimé.");
         } else {
-            dd("Le commentaire n'a pas été supprimé car vous n'êtes pas son auteur.");
-
-            $this->addFlash("commentaryNotDeleted", "Le commentaire n'a pas été supprimé car vous n'êtes pas son auteur.");
+            $this->addFlash("error", "Le commentaire n'a pas été supprimé car vous n'êtes pas son auteur.");
         }
 
         return $this->redirectToRoute("article.show", [

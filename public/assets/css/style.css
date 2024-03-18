@@ -14,6 +14,30 @@
   flex-direction: column;
 }
 
+.flash-success {
+  width: 50%;
+  margin: 2rem auto 0;
+  padding: 1rem 0;
+  text-align: center;
+  color: #fff;
+  border: solid 2px rgba(255, 247, 247, 0.5607843137);
+  border-radius: 10px;
+  background-color: var(--clr-success);
+  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.6117647059);
+}
+
+.flash-error {
+  width: 50%;
+  margin: 2rem auto 0;
+  padding: 1rem 0;
+  text-align: center;
+  color: #fff;
+  border: solid 2px rgba(255, 247, 247, 0.5607843137);
+  border-radius: 10px;
+  background-color: var(--clr-error);
+  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.6117647059);
+}
+
 :root {
   --clr-politique: #ff4e00;
   --clr-economie: #FFB100;
@@ -35,6 +59,8 @@
   --clr-brand-tiktok: #000000;
   --clr-black: #0E0F19;
   --clr-grey: #87878C;
+  --clr-success: #00a300;
+  --clr-error: #e42030;
   --spacing-categories: 225px;
 }
 
@@ -59,36 +85,6 @@
 
 html {
   scroll-behavior: smooth;
-}
-
-.cutoff-text-8 {
-  --max-lines: 8;
-  width: 100%;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-line-clamp: var(--max-lines);
-}
-
-.cutoff-text-6 {
-  --max-lines: 6;
-  width: 100%;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-line-clamp: var(--max-lines);
-}
-
-.cutoff-text-3 {
-  --max-lines: 6;
-  width: 100%;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-line-clamp: var(--max-lines);
 }
 
 .info-pop {
