@@ -86,19 +86,6 @@
             </div>
          </article>
 
-         {% if app.flashes %}
-            <div class="alert alert-success" style="margin: 1rem 0; padding: 0; color: var(--clr-logo-red)">
-               {% for message in app.flashes('commentaryDeleted') %}
-                  <p style="color: var(--clr-logo-red); margin: 1rem 0;">{{ message|trim }}</p>
-               {% endfor %}
-            </div>
-            <div class="alert alert-success">
-               {% for message in app.flashes('commentAdded') %}
-                  <p style="color: var(--clr-logo-green); margin: 1rem 0;">{{ message|trim }}</p>
-               {% endfor %}
-            </div>
-         {% endif %}
-
          <div class="wrapper-body-comments" id="commentaries">
             <div class="container-comments-header">
                <h2>Commentaires</h2>

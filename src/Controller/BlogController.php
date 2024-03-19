@@ -177,7 +177,6 @@ class BlogController extends AbstractController
     public function newParoleLibre(Request $request, Security $security, ArticleRepository $articleRepository): Response
     {
         $article = new Article();
-        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
         $user = $security->getUser();
 
         $form = $this->createForm(ArticleType::class, $article);
@@ -185,7 +184,6 @@ class BlogController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             $article->setUser($user);
-            $article->setCreatedAt($date);
             if($security->isGranted('ROLE_AUTHOR')) {
                 $article->setParoleLibre(true);
             }
@@ -242,7 +240,6 @@ class BlogController extends AbstractController
                 "id" => $article->getId(),
             ]);
         }
-        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
         
         if($security->getUser() == $article->getUser() ); {
             $articleTitle = $article->getTitle();
@@ -260,7 +257,6 @@ class BlogController extends AbstractController
                     $article->setImage($newFileName);
                 }
                 
-                $article->setUpdatedAt($date);
                 $this->addFlash("success", "Article modifié avec succès");
                 $articleRepository->save($article, true);
                 return $this->redirectToRoute("article.show", [

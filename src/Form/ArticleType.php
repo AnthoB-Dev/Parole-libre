@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use DateTimeImmutable;
+use DateTimeZone;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -24,10 +26,12 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 class ArticleType extends AbstractType
 {
     private ?string $oldTitleSlug;
+    private ?DateTimeImmutable $createdAt;
 
     public function __construct()
     {
         $this->oldTitleSlug = null;
+        $this->createdAt = null;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -126,8 +130,8 @@ class ArticleType extends AbstractType
                     ]),
                 ],
             ])
-            ->addEventListener(FormEvents::PRE_SUBMIT, $this->getOldTitleSlug(...))
-            ->addEventListener(FormEvents::SUBMIT, $this->autoSlug(...))
+            ->addEventListener(FormEvents::PRE_SUBMIT, $this->getOldDatas(...))
+            ->addEventListener(FormEvents::SUBMIT, $this->autoPopulate(...))
         ;
     }
 
@@ -135,7 +139,7 @@ class ArticleType extends AbstractType
      * On PRE_SUBMIT event only\
      * Stock le slug pre submit dans la variable $oldTitleSlug
      */
-    public function getOldTitleSlug(FormEvent $event): ?string
+    public function getOldDatas(FormEvent $event): ?string
     {
         if(!empty($oldTitleSlug)) {
             $this->oldTitleSlug = $event->getForm()->getViewData()->getTitleSlug();
@@ -146,15 +150,26 @@ class ArticleType extends AbstractType
     }
 
     /**
-     * Permet de créer un slug automatiquement, basé sur le titre.
+     * Défini un slug automatiquement à partir du titre.\
+     * Défini la date de création.\
+     * Défini la date de mise à jour.
      */
-    public function autoSlug(SubmitEvent $event): void
+    public function autoPopulate(SubmitEvent $event): void
     {
         $data = $event->getData();
+        $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
+        
         if(empty($data->getTitleSlug()) || $data->getTitle() !== $this->oldTitleSlug) {
             $slugger = new AsciiSlugger;
             $titleSlug = $slugger->slug(strtolower($data->getTitle()));
             $data->setTitleSlug($titleSlug);
+        }
+        if(empty($data->getCreatedAt())) {
+            $data->setCreatedAt($date);
+            $data->setUpdatedAt($date);
+        }
+        if(!empty($data->getCreatedAt()) && $date !== $this->createdAt) {
+            $data->setUpdatedAt($date);
         }
     }
 
