@@ -22,11 +22,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin', name: 'app_admin_')]
+#[Route('/admin')]
+#[IsGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
 {
 
-    #[Route('/', name: 'index')]
+    #[Route('/', name: 'admin.index')]
     public function index(): Response
     {
         return $this->render('admin/index.html.twig');
@@ -38,7 +39,7 @@ class AdminController extends AbstractController
 
     //----- /CONTENU -----//
 
-    #[Route('/contenu', name: 'content')]
+    #[Route('/contenu', name: 'admin.content')]
     public function content(): Response
     {
         return $this->render('admin/content/content.html.twig');
@@ -47,7 +48,7 @@ class AdminController extends AbstractController
 
     //----------------- /ARTICLES -----------------//
 
-    #[Route("/contenu/articles/", name:"content_articles_index")]
+    #[Route("/contenu/articles/", name:"admin.articles")]
     public function indexArticles(ArticleRepository $articleRepository): Response
     {
         $articles = $articleRepository->findAllArticles();
@@ -57,7 +58,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route("/contenu/articles/ajouter-article", name:"content_article_add")]
+    #[Route("/contenu/articles/ajouter", name:"admin.articles.add")]
     public function addArticle(ArticleRepository $articleRepository, Request $request, Security $security): Response
     {
         $article = new Article();
@@ -85,7 +86,7 @@ class AdminController extends AbstractController
 
             $articleRepository->save($article, true);
 
-            return $this->redirectToRoute("app_admin_articles_index");
+            return $this->redirectToRoute("admin.articles");
         }
         
         return $this->render("admin/content/articles/addArticle.html.twig", [
@@ -93,7 +94,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route("/contenu/articles/modifier-article/{id}", name:"content_article_edit")]
+    #[Route("/contenu/articles/{id}/modifier", name: "admin.articles.edit")]
     public function editArticle(ArticleRepository $articleRepository, $id, Request $request): Response
     {
         $article = $articleRepository->findOneBy(["id" => $id]);
@@ -129,7 +130,7 @@ class AdminController extends AbstractController
     /**
      * Supprime un article ainsi que son image associé dans le dossier upload_directory. 
      */
-    #[Route("/contenu/articles/{id}/delete", name: "admin.article.delete", methods:"DELETE")]
+    #[Route("/contenu/articles/{id}/delete", name: "admin.articles.delete", methods:"DELETE")]
     #[IsGranted("ROLE_ADMIN")]
     public function deleteArticle(Article $article, ArticleRepository $articleRepo, ParameterBagInterface $params, Filesystem $fileSystem): Response
     {
@@ -141,12 +142,12 @@ class AdminController extends AbstractController
 
         $this->addFlash("success", "Article supprimé");
         
-        return $this->redirectToRoute("app_admin_content_articles_index");
+        return $this->redirectToRoute("admin.articles");
     }
 
     //----------------- /COMMENTAIRES -----------------//
 
-    #[Route('/contenu/commentaires ', name: 'commentaries')]
+    #[Route('/contenu/commentaires ', name: 'admin.commentaries')]
     public function commentaries(): Response
     {
         return $this->render('admin/content/commentaries.html.twig');
@@ -154,7 +155,7 @@ class AdminController extends AbstractController
 
     //----------------- /UTILISATEURS -----------------//
 
-    #[Route('/contenu/utilisateurs ', name: 'users')]
+    #[Route('/contenu/utilisateurs ', name: 'admin.users')]
     public function users(): Response
     {
         return $this->render('admin/content/users.html.twig');
@@ -162,7 +163,7 @@ class AdminController extends AbstractController
 
     //----------------- /SIGNALEMENTS -----------------//
 
-    #[Route('/contenu/signalements', name: 'reports')]
+    #[Route('/contenu/signalements', name: 'admin.reports')]
     public function reports(): Response
     {
         return $this->render('admin/content/reports.html.twig');
@@ -175,7 +176,8 @@ class AdminController extends AbstractController
 
     //----- /STRUCTURE -----//
 
-    #[Route('/structure', name: 'structure')]
+    #[Route('/structure', name: 'admin.structure')]
+    #[IsGranted("ROLE_SUPERADMIN")]
     public function structure(): Response
     {
         return $this->render('admin/structure/structure.html.twig');
@@ -183,7 +185,8 @@ class AdminController extends AbstractController
 
     //----------------- /CATEGORIES -----------------//
 
-    #[Route('/structure/categories', name: 'structure_categories')]
+    #[Route('/structure/categories', name: 'admin.structure.categories')]
+    #[IsGranted("ROLE_SUPERADMIN")]
     public function categories(CategoryRepository $categoryRepository): Response
     {
         $categories = $categoryRepository->findAll();
@@ -193,7 +196,8 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/structure/categories/add', name: 'structure_categories_add')]
+    #[Route('/structure/categories/ajouter', name: 'admin.structure.categories.add')]
+    #[IsGranted("ROLE_SUPERADMIN")]
     public function addCategories(Request $request, CategoryRepository $categoryRepository): Response
     {
         $category = new Category();
@@ -218,7 +222,8 @@ class AdminController extends AbstractController
 
     //----------------- /SIGNALEMENTS -----------------//
 
-    #[Route('/structure/signalements', name: 'structure_reportReasons')]
+    #[Route('/structure/signalements', name: 'admin.structure.reportReasons')]
+    #[IsGranted("ROLE_SUPERADMIN")]
     public function reportReasons(ReportReasonRepository $reportReasonRepository): Response
     {
         $reportReasons = $reportReasonRepository->findAll();
@@ -228,7 +233,8 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/structure/signalements/add', name: 'structure_reportReasons_add')]
+    #[Route('/structure/signalements/ajouter', name: 'admin.structure.reportReasons.add')]
+    #[IsGranted("ROLE_SUPERADMIN")]
     public function addReportReasons(Request $request, ReportReasonRepository $reportReasonRepository): Response
     {
         $reportReason = new ReportReason();

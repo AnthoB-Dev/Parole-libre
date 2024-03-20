@@ -44,8 +44,8 @@
                     </div>
 
                     <div style="margin-left: auto; padding-right: 1rem; display:flex; gap:.5rem;">
-                        <a href="{{ path("app_admin_content_article_edit", {"id": article.id} ) }}" style="padding: .5rem; color: green; border: solid 1px; border-radius: 5px; text-decoration: none;">Modifier</a>
-                        <form action="{{path("app_admin_admin.article.delete", {"id": article.id})}}" method="post" class="article_delete_form">
+                        <a href="{{ path("admin.articles.edit", {"id": article.id} ) }}" style="padding: .5rem; color: green; border: solid 1px; border-radius: 5px; text-decoration: none;">Modifier</a>
+                        <form action="{{path("admin.articles.delete", {"id": article.id})}}" method="post" class="article_delete_form">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" style="padding: .5rem; color: red; border: solid 1px; border-radius: 5px; text-decoration: none; background-color:#fff; height:100%;">Supprimer</button>
                         </form>

@@ -4,14 +4,14 @@
 
 {% block body %}
 
-{% block main %}
+   {% block main %}
 
-   <h1>Accueil - Structure du site</h1>
+      <h1>Accueil - Structure du site</h1>
 
-   <a href="{{path("app_admin_structure_categories")}}">Catégories</a>
-   <a href="{{path("app_admin_structure_reportReasons")}}">Raisons de signalement</a>
-   
-{% endblock %}
+      <a href="{{path("admin.structure.categories")}}">Catégories</a>
+      <a href="{{path("admin.structure.reportReasons")}}">Raisons de signalement</a>
+      
+   {% endblock %}
 
 
 {% endblock %}
