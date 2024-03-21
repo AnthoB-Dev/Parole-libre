@@ -33,6 +33,26 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/index.html.twig');
     }
+
+    /**
+     * - Utilitaire \
+     * -- Supprime les images de l'upload_directory non utilisées par ArticleRepository.
+     */
+    #[Route("/func-delete_unused_images", name: "admin.func.deleteUnused")]
+    public function deleteUnusedImages(ArticleRepository $articleRepo, Filesystem $fileSystem, ParameterBagInterface $params): RedirectResponse
+    {
+        $articles = $articleRepo->findAll();
+        $uploadDirectory = $params->get("upload_directory");
+        $uDImages = array_diff(scandir($uploadDirectory), array('.', '..'));
+        foreach ($articles as $article) {
+            $image = $article->getImage();
+            if (!in_array($image, $uDImages)) {
+                $fileSystem->remove($uploadDirectory . "/" . $image);
+            }
+        }
+        $this->addFlash("success", "Admin : Images non utilisées supprimées avec succès");
+        return $this->redirectToRoute("accueil");
+    }
     
     /**
      * - (Contenu) : 
@@ -84,7 +104,7 @@ class AdminController extends AbstractController
                 $file -> move($this->getParameter("upload_directory"), $newFileName);
                 $article -> setImage($newFileName);
             } else {
-                $article->setImage("default.png");
+                $article->setImage("000-default_article_image.jpg");
             }
 
             $articleRepository->save($article, true);

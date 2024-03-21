@@ -147,9 +147,8 @@ class ArticleType extends AbstractType
         if(!empty($oldTitleSlug)) {
             $this->oldTitleSlug = $event->getForm()->getViewData()->getTitleSlug();
             return $this;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**

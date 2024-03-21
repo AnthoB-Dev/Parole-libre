@@ -13,6 +13,7 @@ use App\Repository\ArticleLikeRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentLikeRepository;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security as Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -194,16 +197,30 @@ class BlogController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            // Défini l'image
-            $file = $form->get("image")->getData();
-            if($file) {
-                $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $fileExtension = $file->guessExtension();
-                $newFileName = str_replace(" ", "_", $originalFileName . "_" . uniqid() . "." . $fileExtension);
-                $file -> move($this->getParameter("upload_directory"), $newFileName);
-                $article -> setImage($newFileName);
+
+            $file = $form->get("image")->getData() ?: "000-default_article_image.jpg";
+
+            if($file !== "000-default_article_image.jpg") {
+
+                $date = new DateTime();
+                $formatedDate = $date->format("U"); // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)
+                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->guessExtension();
+                
+                $newFileName =
+                    $formatedDate
+                    . "-"
+                    . strtolower(str_replace([" ", "-"], "_", $fileName)
+                    . "-"
+                    . uniqid()
+                    . "."
+                    . $extension)
+                ;
+
+                $file->move($this->getParameter("upload_directory"), $newFileName);
+                $article->setImage($newFileName);
             } else {
-                $article->setImage("default.png");
+                $article->setImage("000-default_article_image.jpg");
             }
 
             $articleRepository->save($article, true);
@@ -216,6 +233,8 @@ class BlogController extends AbstractController
             ]);
         }
 
+        $this->addFlash("error", "L'article n'a pu être ajouté");
+
         return $this->render("blog/articles/newArticle.html.twig", [
             "form" => $form,
         ]);
@@ -227,7 +246,7 @@ class BlogController extends AbstractController
      */
     #[Route("/auteur/modifier/{titleSlug}-{id}", name:"article.edit", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
     #[IsGranted("ROLE_WRITER")]
-    public function editParoleLibre(Request $request, Security $security, Article $article, ArticleRepository $articleRepository, int $id, string $titleSlug): Response
+    public function editParoleLibre(Request $request, Security $security, ParameterBagInterface $params, Filesystem $fileSystem, Article $article, ArticleRepository $articleRepository, int $id, string $titleSlug): Response
     {
         if($security->getUser() === $article->getUser() || $security->isGranted("ROLE_ADMIN")) {
             $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
@@ -257,17 +276,32 @@ class BlogController extends AbstractController
             $form->handleRequest($request);
     
             if($form->isSubmitted() && $form->isValid()) {
+
                 $file = $form->get("image")->getData();
-                if($file) {
-                    $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    $fileExtension = $file->guessExtension();
-                    $newFileName = $originalFileName . "_" . uniqid() . "." . $fileExtension;
-                    $file->move($this->getParameter("upload_directory"), $newFileName);
-                    $article->setImage($newFileName);
-                }
+                $oldImage = $article->getImage();
+                $date = new DateTime();
+                $formatedDate = $date->format("U"); // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)
                 
-                $this->addFlash("success", "Article modifié avec succès");
+                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->guessExtension();
+                $newFileName = 
+                    $formatedDate 
+                    . "-" 
+                    . strtolower(str_replace([" ", "-"], "_", $fileName) 
+                    . "-" 
+                    . uniqid() 
+                    . "." 
+                    . $extension)
+                ;
+                
+                $file->move($this->getParameter("upload_directory"), $newFileName);
+                $fileSystem->remove($params->get("upload_directory") . "/" . $oldImage);
+                $article->setImage($newFileName);
+
+                $this->addFlash("success", "Article modifié avec succès.");
+                
                 $articleRepository->save($article, true);
+
                 return $this->redirectToRoute("article.show", [
                     "categorySlug" => $article->getCategory()->getCategorySlug(),
                     "titleSlug" => $titleSlug,
@@ -290,7 +324,6 @@ class BlogController extends AbstractController
             "id" => $article->getId(),
         ]);
     }
-
 
     /**
      * - Article likes : \
