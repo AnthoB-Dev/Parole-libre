@@ -20,11 +20,16 @@
    <div class="container-header-icons">
       <div class="container-boxes no-shadows">
          {# <div class="social-box"><a href="#" class="icon-search"><i class="fa-solid fa-magnifying-glass"></i></a></div> #}
-         {% if app.user %}
-            {# <div class="social-box"><a href="{{path("profil")}}" class="icon-user"><i class="fa-solid fa-user"></i></a></div> #}
+         {% if is_granted("ROLE_USER") %}
+            {% if is_granted("ROLE_WRITER") or is_granted("ROLE_AUTHOR") %}
+               <div class="social-box info-pop" data-descr="Nouvel article"><a href="{{path("article.add")}}" class="icon-plus"><i class="fa-solid fa-plus"></i></a></div>
+            {% endif %}
             {% if is_granted("ROLE_ADMIN") %}
                <div class="social-box info-pop" data-descr="Panel admin"><a href="{{path("admin.index")}}" class="icon-user"><i class="fa-solid fa-gear"></i></a></div>
             {% endif %}
+            <div class="social-box info-pop" data-descr="Profil">
+               <a href="{{path("profil")}}" class="icon-user"><i class="fa-solid fa-user"></i></a>
+            </div>
             <div class="social-box info-pop" data-descr="Déconnexion"><a href="{{path("app_logout")}}" class="icon-user"><i class="fa-solid fa-right-from-bracket"></i></a></div>
          {% else %}
             <div class="social-box info-pop" data-descr="Connexion"><a href="{{path("app_login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>

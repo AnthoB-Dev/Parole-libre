@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin')]
@@ -32,22 +33,20 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/index.html.twig');
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////// CONTENU //////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-
-    //----- /CONTENU -----//
-
+    
+    /**
+     * - (Contenu) : 
+     */
     #[Route('/contenu', name: 'admin.content')]
     public function content(): Response
     {
         return $this->render('admin/content/content.html.twig');
     }
 
-
-    //----------------- /ARTICLES -----------------//
-
+    /**
+     * - (Contenu) Articles : \
+     * -- Read : 
+     */
     #[Route("/contenu/articles/", name:"admin.articles")]
     public function indexArticles(ArticleRepository $articleRepository): Response
     {
@@ -58,6 +57,10 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * - (Contenu) Articles : \
+     * -- Create : 
+     */
     #[Route("/contenu/articles/ajouter", name:"admin.articles.add")]
     public function addArticle(ArticleRepository $articleRepository, Request $request, Security $security): Response
     {
@@ -94,6 +97,10 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * - (Contenu) Articles : \
+     * -- Update : 
+     */
     #[Route("/contenu/articles/{id}/modifier", name: "admin.articles.edit")]
     public function editArticle(ArticleRepository $articleRepository, $id, Request $request): Response
     {
@@ -128,11 +135,12 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Supprime un article ainsi que son image associé dans le dossier upload_directory. 
+     * - (Contenu) Articles : \
+     * -- Delete : Supprime un article ainsi que son image associé dans le dossier upload_directory. 
      */
     #[Route("/contenu/articles/{id}/delete", name: "admin.articles.delete", methods:"DELETE")]
     #[IsGranted("ROLE_ADMIN")]
-    public function deleteArticle(Article $article, ArticleRepository $articleRepo, ParameterBagInterface $params, Filesystem $fileSystem): Response
+    public function deleteArticle(Article $article, ArticleRepository $articleRepo, ParameterBagInterface $params, Filesystem $fileSystem): RedirectResponse
     {
         $imagePath = $article->getImage();
         $uploadDirectoryPath = $params->get("upload_directory");
@@ -145,37 +153,39 @@ class AdminController extends AbstractController
         return $this->redirectToRoute("admin.articles");
     }
 
-    //----------------- /COMMENTAIRES -----------------//
-
+    /**
+     * - (Contenu) Commentaires : \
+     * -- Read : 
+     */
     #[Route('/contenu/commentaires ', name: 'admin.commentaries')]
     public function commentaries(): Response
     {
         return $this->render('admin/content/commentaries.html.twig');
     }
 
-    //----------------- /UTILISATEURS -----------------//
-
+    /**
+     * - (Contenu) Utilisateurs : \
+     * -- Read : 
+     */
     #[Route('/contenu/utilisateurs ', name: 'admin.users')]
     public function users(): Response
     {
         return $this->render('admin/content/users.html.twig');
     }
 
-    //----------------- /SIGNALEMENTS -----------------//
-
+    /**
+     * - (Contenu) Signalements : \
+     * -- Read : 
+     */
     #[Route('/contenu/signalements', name: 'admin.reports')]
     public function reports(): Response
     {
         return $this->render('admin/content/reports.html.twig');
     }
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////// STRUCTURE //////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////
-
-    //----- /STRUCTURE -----//
-
+    /**
+     * - (Structure) : \
+     */
     #[Route('/structure', name: 'admin.structure')]
     #[IsGranted("ROLE_SUPERADMIN")]
     public function structure(): Response
@@ -183,8 +193,10 @@ class AdminController extends AbstractController
         return $this->render('admin/structure/structure.html.twig');
     }
 
-    //----------------- /CATEGORIES -----------------//
-
+    /**
+     * - (Structure) Categories : \
+     * -- Read : 
+     */
     #[Route('/structure/categories', name: 'admin.structure.categories')]
     #[IsGranted("ROLE_SUPERADMIN")]
     public function categories(CategoryRepository $categoryRepository): Response
@@ -196,6 +208,10 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * - (Structure) Categories : \
+     * -- Create : 
+     */
     #[Route('/structure/categories/ajouter', name: 'admin.structure.categories.add')]
     #[IsGranted("ROLE_SUPERADMIN")]
     public function addCategories(Request $request, CategoryRepository $categoryRepository): Response
@@ -220,8 +236,10 @@ class AdminController extends AbstractController
         ]);
     }
 
-    //----------------- /SIGNALEMENTS -----------------//
-
+    /**
+     * - (Structure) Signalements : \
+     * -- Read :
+     */
     #[Route('/structure/signalements', name: 'admin.structure.reportReasons')]
     #[IsGranted("ROLE_SUPERADMIN")]
     public function reportReasons(ReportReasonRepository $reportReasonRepository): Response
@@ -233,6 +251,10 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * - (Structure) Signalements : \
+     * -- Create : 
+     */
     #[Route('/structure/signalements/ajouter', name: 'admin.structure.reportReasons.add')]
     #[IsGranted("ROLE_SUPERADMIN")]
     public function addReportReasons(Request $request, ReportReasonRepository $reportReasonRepository): Response

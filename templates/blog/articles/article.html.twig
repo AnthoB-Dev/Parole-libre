@@ -103,12 +103,13 @@
 
                               {% if comment.updatedAt %}
                                  <span class="greyedOut" style="margin-left: .5rem;">édité le {{comment.updatedAt|format_datetime(pattern='d MMMM', locale='fr_FR')}} à {{ comment.updatedAt|date('H') }}h{{ comment.updatedAt|date('i') }}</span>
+                                 </span>
                               {% endif %}
                            </p>
                         </div>
                         <div class="comment-content">
                            <p>{{comment.content}}</p>
-                           {% if app.user and app.user == comment.user %}
+                           {% if app.user and app.user == comment.user or app.user and is_granted("ROLE_ADMIN") %}
                               {{ form_start(updateForms[comment.id], {"attr": {"class": "hidden"}}) }}
                                  {{ form_row(updateForms[comment.id].content) }}
                                  <button type="submit">Modifier</button>
@@ -140,9 +141,9 @@
                            </div>
                            <div class="action-icons">
                               {% if app.user and is_granted("ROLE_USER") %}
-                                 {% if comment.user == app.user %}
+                                 {% if comment.user == app.user or is_granted("ROLE_ADMIN") %}
                                     <i class="fas fa-pencil-alt editIcon"></i>
-                                    <i class="fas fa-undo cancelIcon hidden" data-descr="Annuler"></i>
+                                    <i class="fas fa-undo cancelIcon hidden"></i>
                                  {% endif %}
 
                                  {# {% if comment.user != app.user %}
@@ -153,9 +154,11 @@
                               {% endif %}
 
                               {% if app.user and is_granted("ROLE_ADMIN") %}
-                                 <a class="info-pop" data-descr="Supprimer" href="{{path("comment.delete", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id} )}}">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                 </a>
+                                 <form action="{{ path("comment.delete", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id}) }}" method="post" class="comment_delete_form">
+                                    <button type="submit" name="_method" value="DELETE">
+                                       <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                 </form>
                               {% endif %}
                            </div>
                         </div>
@@ -163,12 +166,12 @@
                   </div>
                {% endfor %}
             {% else %}
-                  <div class="container-comments-body">
-                     <h5>Aucun commentaires n'a encore été rédigé pour cet article. Réagissez le premier 
-                        {% if not app.user %} en vous <a href="{{path("app_login")}}">connectant!</a>
-                        {% else %}!{% endif %}
-                     </h5>
-                  </div>
+               <div class="container-comments-body">
+                  <h5>Aucun commentaires n'a encore été rédigé pour cet article. Réagissez le premier 
+                     {% if not app.user %} en vous <a href="{{path("app_login")}}">connectant!</a>
+                     {% else %}!{% endif %}
+                  </h5>
+               </div>
             {% endif %}
             {% if app.user %}
                <div class="container-addComment">

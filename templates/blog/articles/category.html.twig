@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Parole Libre - {{category}}{% endblock %}
+{% block title %}
+	{% if category != "Parole Libre" %}
+		Parole Libre - {{category}}
+	{% else %}
+		Parole Libre
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
 	<script src="{{asset("assets/js/home.js")}}" defer></script>
@@ -101,7 +107,7 @@
 			<p>Vous aussi vous souhaitez publier un article ?</p>
 			{% if app.user %}
 				{% if app.user.isWriter %}
-					<p>Alors n'attendez plus et faite valoir votre liberté d'expression! Rendez-vous <a href="{{path("article.new")}}">ici</a> pour commencer la rédaction d'un article.</p>
+					<p>Alors n'attendez plus et faite valoir votre liberté d'expression! Rendez-vous <a href="{{path("article.add")}}">ici</a> pour commencer la rédaction d'un article.</p>
 				{% else %}
 					<p>Vous en avez la possibilité si vous ne vous êtes pas défini en tant qu'auteur lors de l'inscription d'aller modifier cela dans votre</p>
 					<p><a href=""><i class="fa-solid fa-user"></i> profile</a>.</p>

@@ -502,6 +502,9 @@ a {
 #header-container .container-header-content .container-header-icons .container-boxes .social-box .icon-user i {
   color: var(--clr-logo-red);
 }
+#header-container .container-header-content .container-header-icons .container-boxes .social-box .icon-plus i {
+  color: rgb(0, 141, 0);
+}
 #header-container .container-header-content .container-header-icons .container-boxes .burger {
   display: flex;
   flex-direction: column;
@@ -2119,6 +2122,15 @@ a {
   padding: 0.3rem 0.6rem;
   cursor: pointer;
 }
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons form button {
+  background-color: #fff;
+  border: none;
+}
+.wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons form button i {
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  color: var(--clr-logo-red);
+}
 .wrapper-body-comments .container-comments-body .container-comment .comment-actions .action-icons .editIcon {
   color: #f58821;
 }
@@ -2405,6 +2417,7 @@ a {
   -webkit-box-orient: vertical;
   -moz-box-orient: vertical;
   -webkit-line-clamp: 8;
+  margin-bottom: auto;
 }
 .container-content-body .wrapper-body-content .container-body-category-articles .container-body-category-article a .wrapper-category-content .container-content-footer {
   display: flex;

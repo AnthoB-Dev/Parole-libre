@@ -3,6 +3,7 @@
    const articleCategorySpan = document.querySelector("#article-category-span");
    const articleTitle = document.querySelector(".article-header-title");
    const editIcons = document.querySelectorAll(".editIcon");
+   const formsOfSuppr = document.querySelectorAll(".comment_delete_form");
 
    const clrPolitique = "#FF4E00";
    const clrEconomie = "#FFB100";
@@ -85,13 +86,25 @@
       }
    };
 
+   formsOfSuppr.forEach(form => {
+      form.addEventListener("click", confSuppr);
+   });
+
+   /**
+    * Permet de confirmer une action.
+    * @param {PointerEvent} e preventDefault() si confirm = false, si true ne fait rien en retournant false.
+    */
+   function confSuppr(e) {
+      return !confirm("Confirmez vous vouloir effectué cette action?") ? e.preventDefault() : false;
+   }
+   
    /**
     * Sert à faire apparaitre le formulaire de modification d'un commentaire d'article \
     * Cherche la div parent du bouton de modification cliqué et si il existe, selectionne les élements enfants avec des querySelectors
     * @param {HTMLElement} editIcon Logo de modication d'un commentaire
     */
    const toggleCommentEditForm = (editIcon) => {
-      const parent = editIcon.parentElement?.parentElement?.parentElement;
+      const parent = editIcon.parentElement?.parentElement?.parentElement?.parentElement;
 
       if (parent) {
          const commentContent = parent.querySelector(".comment-content");
