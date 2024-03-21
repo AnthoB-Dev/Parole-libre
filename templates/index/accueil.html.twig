@@ -8,6 +8,17 @@
 
 {% block main %}
 
+    {% if usersToSwitch is not empty and is_granted("ROLE_SUPERADMIN") %}
+        <ul style="display:flex;gap: 15px;position: absolute;right: 3%;top: 2%;">
+            {% for switch in usersToSwitch %}
+            <li>
+                <a href="{{impersonation_path(switch.email)}}" style="color: #000"><i class="fa-solid fa-bug"></i> {{switch.roles[0]}}</a>
+            </li>  
+            {% endfor %}
+            <a href="{{path("accueil")}}?_switch_user=_exit"><i class="fa-solid fa-bug-slash"></i></a>
+        </ul>
+    {% endif %} 
+
     <section class="container-content-header">
 
         <div class="container-title-header">

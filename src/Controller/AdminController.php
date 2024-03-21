@@ -11,6 +11,7 @@ use App\Form\ReportReasonType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ReportReasonRepository;
+use App\Repository\UserRepository;
 use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -188,9 +189,12 @@ class AdminController extends AbstractController
      * -- Read : 
      */
     #[Route('/contenu/utilisateurs ', name: 'admin.users')]
-    public function users(): Response
+    public function users(UserRepository $userRepository): Response
     {
-        return $this->render('admin/content/users.html.twig');
+        $users = $userRepository->findAllAndOrderedByRole("ASC");
+        return $this->render('admin/content/users.html.twig', [
+            "users" => $users,
+        ]);
     }
 
     /**

@@ -6,4 +6,25 @@
 
    <h1>Utilisateurs</h1>
 
+   <table>
+      <thead>
+         <tr>
+            <th>Email</th>
+            <th>Pseudo</th>
+            <th>Roles</th>
+            <th>Impersonnifié</th>
+         </tr>
+      </thead>
+      <tbody>
+         {% for user in users %}
+         <tr>
+            <td> {{user.email}} </td>
+            <td> {{user.pseudo}} </td>
+            <td> {{user.roles|json_encode}} </td>
+            <td><a href=" {{ impersonation_path(user.email) }} "><i class="fa-solid fa-bug"></i></a></td>
+         </tr>
+         {% endfor %}
+      </tbody>
+   </table>
+
 {% endblock %}
