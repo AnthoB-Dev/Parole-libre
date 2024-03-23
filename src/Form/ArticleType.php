@@ -169,7 +169,7 @@ class ArticleType extends AbstractType
         }
         if(empty($data->getTitleSlug()) || $data->getTitle() !== $this->oldTitleSlug) {
             $slugger = new AsciiSlugger;
-            $titleSlug = $slugger->slug(strtolower($data->getTitle()));
+            $titleSlug = strtolower($slugger->slug(strtolower($data->getTitle())));
             $data->setTitleSlug($titleSlug);
         }
         if(empty($data->getCreatedAt())) {

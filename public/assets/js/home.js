@@ -17,12 +17,17 @@
    const headerNavLinks = headerNavbar.querySelectorAll("li");
    const path = window.location.pathname;
 
-   const coloringSections = document.querySelectorAll(".container-body-category-content");
    const nav = document.querySelector('.container-header-nav');
    const articles = document.querySelectorAll("article");
 
+   const carrouGroup = document.querySelector(".carrousel-group-1");
+   const carrouChilds = carrouGroup.querySelectorAll("article");
 
-   // Sur chargement de la page et selon le chemin de la page, changement de la couleur de la bande de fond des sections. 
+   
+   /**
+    * Sur chargement de la page et selon le chemin de la page, changement de la couleur de la bande de fond des sections.\
+    * Et appel widthChanger() à la fin de la fonction qui adapte un autre background de la const container : la bande blanche.
+    */
    window.onload = function categoryBgSwapper() {
       const pathname = window.location.pathname;
       let path = "";
@@ -98,10 +103,29 @@
 
       } else if (pathname.startsWith(path)) {
          container.classList.add('paroleLibre');
-      }   
+      }  
+      
+      widthChanger();
    }
 
-   // Sur scoll vers le bas, ajoute la classe "sticky à la nav" après 240px parcouru
+   /**
+    * Change la taille de la bande blanche présente derrière les heroArticles de chaque catégories pour correspondre au nombre d'articles présents dans carrousel-group.\
+    * La fonction part de la width du ::before de container-carrousel-groups 77% et divise par 3 (le nb max d'article dans le container) ce qui fait 25.66 et muliplie celui-ci par le nombre d'élement (articles) présent dans le container.\
+    * Ce qui permet d'adapter la taille de la bande blanche selon le nombre d'articles.\
+    * Pour modifer le ::before, j'ai créer un element <style> que j'ai injecté dans le dom avec le css modifé vu que j'ai pas trouvé comment faire ça mieux.
+    */
+   function widthChanger() {
+      const width = 25.66 * carrouChilds.length;
+      if(carrouChilds.length <= 3) {
+         const style = document.createElement('style');
+         style.textContent =  `.container-carrousel-groups::before {width: ${width}% !important;}`;
+         document.head.appendChild(style);
+      }
+   }
+
+   /**
+    * Sur scoll vers le bas, ajoute la classe "sticky à la nav" après 240px parcouru  
+    */
    window.onscroll = () => {
       if (window.scrollY >= 240) { 
          nav.classList.add('sticky');
@@ -110,6 +134,9 @@
       }
    }
 
+   /**
+    * Ajoute des classes css aux liens de la navigation du header. Active sur les nav principal et subActive sur les liens du drop down de Parole Libre.
+    */
    headerNavLinks.forEach(e => {
       const link = e.querySelector("a");
       if(link.getAttribute('href') === path) {

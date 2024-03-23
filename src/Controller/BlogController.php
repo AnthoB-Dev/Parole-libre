@@ -297,38 +297,39 @@ class BlogController extends AbstractController
             
             $form = $this->createForm(ArticleType::class, $article);
             $form->handleRequest($request);
-    
+            
             if($form->isSubmitted() && $form->isValid()) {
-
-                $file = $form->get("image")->getData();
+                
+                $file = $form->getData()->getImage();
                 $oldImage = $article->getImage();
                 $date = new DateTime();
                 $formatedDate = $date->format("U"); // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)
-                
-                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $extension = $file->guessExtension();
-                $newFileName = 
-                    $formatedDate 
-                    . "-" 
-                    . strtolower(str_replace([" ", "-"], "_", $fileName) 
-                    . "-" 
-                    . uniqid() 
-                    . "." 
-                    . $extension)
-                ;
-                
-                $file->move($this->getParameter("upload_directory"), $newFileName);
-                $fileSystem->remove($params->get("upload_directory") . "/" . $oldImage);
-                $article->setImage($newFileName);
 
+                if(empty($file) || $file !== $oldImage) { 
+                    $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $extension = $file->guessExtension();
+                    $newFileName = 
+                        $formatedDate 
+                        . "-" 
+                        . strtolower(str_replace([" ", "-"], "_", $fileName) 
+                        . "-" 
+                        . uniqid() 
+                        . "." 
+                        . $extension)
+                    ;
+                    
+                    $file->move($this->getParameter("upload_directory"), $newFileName);
+                    $fileSystem->remove($params->get("upload_directory") . "/" . $oldImage);
+                    $article->setImage($newFileName);
+                } 
                 $this->addFlash("success", "Article modifié avec succès.");
                 
                 $articleRepository->save($article, true);
 
-                return $this->redirectToRoute("article.show", [
+                return $this->redirectToRoute("article.show.paroleLibre", [
                     "categorySlug" => $article->getCategory()->getCategorySlug(),
-                    "titleSlug" => $titleSlug,
-                    "id" => $id,
+                    "titleSlug" => $article->getTitleSlug(),
+                    "id" => $article->getId(),
                 ]);
             }
     
