@@ -251,7 +251,7 @@ class AdminController extends AbstractController
             $categoryName = mb_convert_case($categoryName, MB_CASE_TITLE, "UTF-8");
             $category->setName($categoryName);
             $categoryRepository->save($category, true);
-            return $this->redirectToRoute("app_admin_structure_categories_add");
+            return $this->redirectToRoute("admin.structure.categories.add");
         }
 
         return $this->render('admin/structure/categoryAdd.html.twig', [
@@ -294,7 +294,7 @@ class AdminController extends AbstractController
             $reportReasonTitle = mb_convert_case($reportReasonTitle, MB_CASE_TITLE, "UTF-8");
             $reportReason->setTitle($reportReasonTitle);
             $reportReasonRepository->save($reportReason, true);
-            return $this->redirectToRoute("app_admin_structure_reportReasons_add");
+            return $this->redirectToRoute("admin.structure.reportReasons");
         }
 
         return $this->render('admin/structure/reportReasonAdd.html.twig', [

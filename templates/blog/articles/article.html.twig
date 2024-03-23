@@ -77,7 +77,7 @@
                      {% endif %}
                   {% else %}
                      <div id="btnLike">
-                        <p>Si vous avez aimer cet article, <a href="{{path("app_login")}}">connectez-vous</a> et laissez un j'aime</p>
+                        <p>Si vous avez aimer cet article, <a href="{{path("login")}}">connectez-vous</a> et laissez un j'aime</p>
                      </div>
                   {% endif %}
 
@@ -168,7 +168,7 @@
             {% else %}
                <div class="container-comments-body">
                   <h5>Aucun commentaires n'a encore été rédigé pour cet article. Réagissez le premier 
-                     {% if not app.user %} en vous <a href="{{path("app_login")}}">connectant!</a>
+                     {% if not app.user %} en vous <a href="{{path("login")}}">connectant!</a>
                      {% else %}!{% endif %}
                   </h5>
                </div>
@@ -190,7 +190,7 @@
             {% else %}
                <div class="container-addComment">
                   <div class="container-addComment-title">
-                     <h5>Réagissez à cet article en vous <a href="{{path("app_login")}}">connectant!</a></h5>
+                     <h5>Réagissez à cet article en vous <a href="{{path("login")}}">connectant!</a></h5>
                   </div>
                </div>
             {% endif %}

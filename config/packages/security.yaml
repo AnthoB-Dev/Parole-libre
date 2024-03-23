@@ -22,7 +22,7 @@ security:
                 secret: '%kernel.secret%'
                 always_remember_me: true
             logout:
-                path: app_logout
+                path: logout
                 # where to redirect after logout
                 target: accueil
 

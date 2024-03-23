@@ -30,9 +30,9 @@
             <div class="social-box info-pop" data-descr="Profil">
                <a href="{{path("profil")}}" class="icon-user"><i class="fa-solid fa-user"></i></a>
             </div>
-            <div class="social-box info-pop" data-descr="Déconnexion"><a href="{{path("app_logout")}}" class="icon-user"><i class="fa-solid fa-right-from-bracket"></i></a></div>
+            <div class="social-box info-pop" data-descr="Déconnexion"><a href="{{path("logout")}}" class="icon-user"><i class="fa-solid fa-right-from-bracket"></i></a></div>
          {% else %}
-            <div class="social-box info-pop" data-descr="Connexion"><a href="{{path("app_login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>
+            <div class="social-box info-pop" data-descr="Connexion"><a href="{{path("login")}}" class="icon-user"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i></a></div>
          {% endif %}
          <div class="social-box burger" id="burger">
             <div class="top-bar"></div>
@@ -56,11 +56,11 @@
          <a href="{{path("admin.index")}}" class="burger-navlink"><i class="fa-solid fa-gear"></i>Panel admin</a>
       {% endif %}
 
-      <a href="{{path("app_logout")}}" class="burger-navlink"><i class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
+      <a href="{{path("logout")}}" class="burger-navlink"><i class="fa-solid fa-right-from-bracket"></i>Déconnexion</a>
 
    {% else %}
 
-      <a href="{{path("app_login")}}" class="burger-navlink"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i>Connexion</a>
+      <a href="{{path("login")}}" class="burger-navlink"><i class="fa-solid fa-right-to-bracket" style="color: var(--clr-logo-green);"></i>Connexion</a>
 
    {% endif %}
    <div class="container-burger-links">

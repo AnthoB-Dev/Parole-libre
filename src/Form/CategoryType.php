@@ -28,7 +28,7 @@ class CategoryType extends AbstractType
                     ])
                 ],
             ])
-            ->add("slug", TextType::class, [
+            ->add("categorySlug", TextType::class, [
                 "label" => "Définir le slug de la catégorie (ce sera la route à afficher dans l'url ex: /parole-libre.",
                 "required" => true,
                 "constraints" => [
