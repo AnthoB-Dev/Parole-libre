@@ -2,7 +2,19 @@
    <ul class="header-navlinks" id="header-navbar">
       <li><a href="{{path("accueil")}}">Accueil</a></li>
       {% for category in getCategories() %}
-         <li class="{{category.categorySlug}}"><a href="{{path("category.show", {"categorySlug": category.categorySlug}) }}">{{category.name}}</a></li>
+         {% if category.name != "Parole Libre" %}
+            <li class="{{category.categorySlug}}"><a href="{{path("category.show", {"categorySlug": category.categorySlug}) }}">{{category.name}}</a></li>
+         {% endif %}
       {% endfor %}
+      <li class="parole-libre dropdown">
+         <a href="{{path("category.show", {"categorySlug": "parole-libre"}) }}" class="dropbtn">Parole Libre</a> <i class="fa-solid fa-caret-down"></i>
+         <ul class="dropdown-content">
+            {% for category in getCategories() %}
+               {% if category.name != "Parole Libre" %}
+                  <li class="{{category.categorySlug}}"><a href="{{path("category.paroleLibre.show", {"categorySlug": category.categorySlug})}}">{{category.name}}</a></li>
+               {% endif %}
+            {% endfor %}
+         </ul>
+      </li>
    </ul>
 </nav>

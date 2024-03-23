@@ -43,12 +43,12 @@ class BlogController extends AbstractController
     #[Route("/categorie/{categorySlug}", name:"category.show", requirements: ["categorySlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
     public function categoryPage(ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug): Response
     {
-        if($categorySlug != "accueil") {
+        if($categorySlug !== "accueil") {
             $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
             $id = $category->getId();
         
-            if($categorySlug != "parole-libre" && $id != 8) {
-                $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategory(3, $id);
+            if($categorySlug !== "parole-libre" && $id !== 8) {
+                $heroArticles = $articleRepository->findArticlesByCategory(3, $id);
                 $articles = $articleRepository->findAllArticlesByCategoryId($id);
                 $category = $articles[0]->getCategory()->getName();
                 $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
@@ -58,8 +58,31 @@ class BlogController extends AbstractController
                 $category = "Parole Libre";
                 $lastCategoryComments = $articleRepository->findParolesLibresAndRecentComments(10);
             }
-
         }
+
+        return $this->render('blog/articles/category.html.twig', [
+            "heroArticles" => $heroArticles,
+            "articles" => $articles,
+            "category" => $category,
+            "lastCategoryComments" => $lastCategoryComments,
+        ]);
+    }
+
+    /**
+     * - Category Parole Libre : \
+     * -- Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig) et où article.paroleLibre = true.
+     * TODO: Rendre accessible autrement qu'en tapant l'url
+     */
+    #[Route('/categorie/parole-libre/{categorySlug}', name:'category.paroleLibre.show', requirements: ["categorySlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
+    public function categoryPageAndParoleLibre(CategoryRepository $categoryRepository, ArticleRepository $articleRepository, $categorySlug): Response
+    {
+        $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
+        $id = $category->getId();
+        $category = $category->getName();
+        
+        $heroArticles = $articleRepository->findArticlesByCategory(3, $id, true);
+        $articles = $articleRepository->findAllArticlesByCategoryId($id, true);
+        $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id, true);
 
         return $this->render('blog/articles/category.html.twig', [
             "heroArticles" => $heroArticles,
@@ -125,7 +148,7 @@ class BlogController extends AbstractController
                 "id" => $article->getId(),
             ]);
         }
-
+        
         $articleComments = $articleCommentRepository->findBy(["article" => $id], ["createdAt" => "DESC"]);
         $articleCategory = $article->getCategory()->getName();
         $updateForms = [];

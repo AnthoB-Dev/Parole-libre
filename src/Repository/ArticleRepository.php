@@ -41,9 +41,10 @@ class ArticleRepository extends ServiceEntityRepository
 
 
     /**
-     * Récupère dans la bdd tous les articles ainsi que la category.name (récupérable avec article.name) et user.pseudo (récupérable avec article.pseudo)
+     * Récupère tous les articles, triés par date de creation du plus récent au plus ancien ainsi que la category.name et user.pseudo.
      * 
-     * @return array
+     * @param string orderBy DESC
+     * @return array|null
      */
     public function findAllArticles(): ?array
     {
@@ -58,17 +59,20 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd tous les articles par catégorie, triés par date de creation, du plus récent au plus ancien. Prend en paramètre l'id d'une catégorie (category.id)
+     * Récupère tous les articles d'une catégorie $categoryId, triés par date de creation du plus récent au plus ancien et où paroleLibre = true ou false.
      * 
-     * @return array
+     * @param int $categoryId
+     * @param bool $paroleLibre false (default)
+     * @param string orderBy DESC
+     * @return array|null
      */
-    public function findAllArticlesByCategoryId($categoryId): ?array
+    public function findAllArticlesByCategoryId(int $categoryId, bool $paroleLibre = false): ?array
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.category = :category')
             ->andWhere('a.paroleLibre = :paroleLibre')
             ->setParameter('category', $categoryId)
-            ->setParameter('paroleLibre', false)
+            ->setParameter('paroleLibre', $paroleLibre)
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -76,8 +80,11 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
+     * Récupère tous les articles, triés par date de creation du plus récent au plus ancien et où paroleLibre = true.
      * 
-     * @return array
+     * @param bool article.paroleLibre true
+     * @param string orderBy DESC 
+     * @return array|null
      */
     public function findAllArticlesOfParoleLibre(): ?array
     {
@@ -91,11 +98,16 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. Prend en paramètre(s) une ou plusieurs id(s) de catégories (category.id)
+     * Récupère $maxResults articles selon un tableau d'ids de catégories $categories, triés par date de creation du plus récent au plus ancien et où paroleLibre = false.
+     * Ce qui permet de récupérer $maxResults articles de charque catégories existante, modulo ParoleLibre puisque défini en false.
      * 
-     * @return array
+     * @param int $maxResults
+     * @param array $categories
+     * @param bool article.paroleLibre false
+     * @param string orderBy DESC
+     * @return array|null
      */
-    public function findArticlesByRecentlyPublishedAndByCategories($maxResults, ...$categories): ?array
+    public function findArticlesByRecentlyPublishedAndByCategories(int $maxResults, array $categories): ?array
     {
         return $this->createQueryBuilder('a')
             ->leftJoin('a.category', 'c')
@@ -112,33 +124,14 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère dans la bdd $maxResults articles triés par date de creation, du plus récent au plus ancien. 
-     * Prend en second paramètre l'id d'une catégorie (category.id)
+     * Récupère $maxResults articles par leurs date de publication et où paroleLibre = true.
      * 
-     * @return array
+     * @param int $maxResults
+     * @param bool article.paroleLibre true
+     * @param string orderBy DESC
+     * @return array|null
      */
-    public function findArticlesByRecentlyPublishedAndByCategory($maxResults, $category): ?array
-    {
-        return $this->createQueryBuilder('a')
-            ->leftJoin('a.category', 'c')
-            ->addSelect('c')
-            ->andWhere('a.category = :category')
-            ->andWhere('a.paroleLibre = :paroleLibre')
-            ->setParameter('category', $category)
-            ->setParameter('paroleLibre', false)
-            ->orderBy('a.createdAt', 'DESC')
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * 
-     * 
-     * @return array
-     */
-    public function findArticlesByRecentlyPublishedAndByParoleLibre($maxResults): ?array
+    public function findArticlesByRecentlyPublishedAndByParoleLibre(int $maxResults): ?array
     {
         return $this->createQueryBuilder('a')
             ->leftJoin('a.category', 'c')
@@ -153,27 +146,83 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Prend en paramètres $maxResults qui sera le nb d'article par ...$categories à afficher, ...$categories étant les id des catégories voulant être fetch. 
-     * La fonction bouclera ensuite sur chaque id et récupèrera les données grâce à findArticlesByRecentlyPublishedAndByCategory()
+     * Récupère $maxResults articles d'une catégorie $categoryId, triés par date de creation du plus récent au plus ancien et où paroleLibre = true ou false.
      * 
-     * @return array
+     * @param int $maxResults
+     * @param int $categoryId
+     * @param bool $paroleLibre false (default)
+     * @param string orderBy DESC
+     * @return array|null
      */
-    public function findArticlesRecentlyPublishedByCategories($maxResults, ...$categories): ?array
+    public function findArticlesByCategory(int $maxResults, int $categoryId, bool $paroleLibre = false): ?array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.category', 'c')
+            ->addSelect('c')
+            ->andWhere('a.category = :category')
+            ->andWhere('a.paroleLibre = :paroleLibre')
+            ->setParameter('category', $categoryId)
+            ->setParameter('paroleLibre', $paroleLibre)
+            ->orderBy('a.createdAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Récupère $maxResults articles d'une catégorie $categoryId, triés par date de creation du plus récent au plus ancien et où paroleLibre = true.
+     * 
+     * @param int $maxResults
+     * @param int $categoryId
+     * @param bool article.paroleLibre true
+     * @param string orderBy DESC 
+     * @return array|null
+     */
+    public function findArticlesByCategoryAndParoleLibre(int $maxResults, int $categoryId): ?array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.category', 'c')
+            ->addSelect('c')
+            ->andWhere('a.category = :category')
+            ->andWhere('a.paroleLibre = :paroleLibre')
+            ->setParameter('category', $categoryId)
+            ->setParameter('paroleLibre', true)
+            ->orderBy('a.createdAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Récupère $maxResults articles par id présent dans le tableau d'ids $categories.\
+     * La fonction boucle sur chaque id puis récupère, stock dans le tableau $article grâce à la fonction findArticlesByCategory(), et renvoie ces données.
+     * 
+     * @param int $maxResults
+     * @param array $categories
+     * @param callable findArticlesByCategory
+     * @return array|null $articles
+     */
+    public function findArticlesRecentlyPublishedByCategories(int $maxResults, array $categories): ?array
     {
         $articles = [];
         foreach ($categories as $category) {
-            $articles[] = $this->findArticlesByRecentlyPublishedAndByCategory($maxResults, $category);
+            $articles[] = $this->findArticlesByCategory($maxResults, $category);
         }
         return $articles;
     }
 
     /**
-     * Récupère dans la bdd $maxResults articles triés par le nombre de likes qu'ils possèdent. 
-     * Prend en second paramètre l'id d'une catégorie (category.id)
+     * Récupère tous les articles, parole libre ou non, d'une catégorie $categoruId selon leurs popularité (nombre de likes).
      * 
-     * @return array
+     * @param bool IN_USE false
+     * @param int $maxResults
+     * @param int $categoryId
+     * @param string orderBy nombre de likes DESC
+     * @return array|null
      */
-    public function findByPopularityOfCategory($maxResults, $categoryId)
+    public function findByPopularityOfCategory(int $maxResults, int $categoryId)
     {
         return $this->createQueryBuilder("a")
             ->leftJoin("a.category", "c")
@@ -189,12 +238,14 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     /**
-     * Prend en paramètres $maxResults qui sera le nb d'article par ...$categories à afficher, ...$categories étant les id des catégories voulant être fetch. 
-     * La fonction bouclera ensuite sur chaque id et récupèrera les données grâce à findByPopularityOfCategory()
+     * Récupère tous les articles, parole libre ou non, des catégories $categories selon leurs popularité (nombre de likes).
      * 
-     * @return array
+     * @param int $maxResults
+     * @param array $categories
+     * @param callable findByPopularityOfCategory
+     * @return array|null $articles
      */
-    public function findByPopularityOfCategories($maxResults, ...$categories): ?array
+    public function findByPopularityOfCategories(int $maxResults, array $categories): ?array
     {
         $articles = [];
         foreach ($categories as $category) {
@@ -203,7 +254,14 @@ class ArticleRepository extends ServiceEntityRepository
         return $articles;
     }
 
-    public function findArticlesByRecentComments($maxResults): ?array
+    /**
+     * Récupère l'article par rapport à la date de publication de son dernier commentaire.
+     * 
+     * @param int $maxResults
+     * @param string orderBy DESC
+     * @return array|null
+     */
+    public function findArticlesByRecentComments(int $maxResults): ?array
     {
         return $this->createQueryBuilder('a')
             ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
@@ -217,7 +275,16 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findArticlesByCategoryAndRecentComments($maxResults, $categoryId): ?array
+    /**
+     * Récupère les articles d'une catégorie où paroleLibre = true ou false ainsi que ses commentaires récents.
+     * 
+     * @param int $maxResults
+     * @param int $categoryId
+     * @param bool $paroleLibre false (default)
+     * @param string orderBy DESC 
+     * @return array|null
+     */
+    public function findArticlesByCategoryAndRecentComments(int $maxResults, int $categoryId, bool $paroleLibre = false): ?array
     {
         return $this->createQueryBuilder('a')
             ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
@@ -225,6 +292,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->join("ac.user", "u")
             ->join("a.category", "c")
             ->where("c.id = :category")
+            ->andWhere("a.paroleLibre = :paroleLibre")
+            ->setParameter("paroleLibre", $paroleLibre)
             ->setParameter("category", $categoryId)
             ->orderBy('ac.createdAt', 'DESC')
             ->setMaxResults($maxResults)
@@ -233,7 +302,44 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findParolesLibresAndRecentComments($maxResults): ?array
+    /**
+     * Récupère tous les articles d'une catégorie où paroleLibre = true ainsi que ses commentaires récents.\
+     * Ce sera les commentaires de la sidebar affichés sur la route /categorie/parole-libre/politique par exemple.
+     * 
+     * @param int $maxResults
+     * @param int $categoryId
+     * @param bool article.paroleLibre true
+     * @param string orderBy DESC 
+     * @return array|null
+     */
+    public function findArticlesParoleLibreByCategoryAndRecentComments(int $maxResults, int $categoryId): ?array
+    {
+        return $this->createQueryBuilder('a')
+            ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
+            ->join("a.articleComments", "ac")
+            ->join("ac.user", "u")
+            ->join("a.category", "c")
+            ->where("c.id = :category")
+            ->andWhere("a.paroleLibre = :paroleLibre")
+            ->setParameter("paroleLibre", true)
+            ->setParameter("category", $categoryId)
+            ->orderBy('ac.createdAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult();
+        ;
+    }
+
+    /**
+     * Récupères tous les articles où paroleLibre = true ainsi que ses commentaires récents.\
+     * Ce sera les commentaires de la  sidebar affichés sur la route /categorie/parole-libre
+     * 
+     * @param int $maxResults
+     * @param bool article.paroleLibre true
+     * @param string orderBy DESC 
+     * @return array|null
+     */
+    public function findParolesLibresAndRecentComments(int $maxResults): ?array
     {
         return $this->createQueryBuilder('a')
             ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
@@ -248,7 +354,6 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult();
         ;
     }
-
     
-    // findSuperAuthors()
+    // TODO: findSuperAuthors()
 }

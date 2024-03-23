@@ -77,7 +77,6 @@
                         e.style="color :" + clrParoleLibre + ";";
                      }
                   })        
-                           
                }
             })
          })
@@ -113,9 +112,13 @@
 
    headerNavLinks.forEach(e => {
       const link = e.querySelector("a");
-      if (link.getAttribute('href') === path) {
-         e.classList.add('active');
+      if(link.getAttribute('href') === path) {
+         if(e.parentElement.classList.contains("header-navlinks")) {
+            e.classList.add('active');
+         } else {
+            e.classList.add("subActive");
+         }
       }
    })
-
+   
 }())
