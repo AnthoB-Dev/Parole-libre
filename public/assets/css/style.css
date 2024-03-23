@@ -679,13 +679,19 @@ a {
   position: relative;
   display: inline-block;
 }
+.container-header-nav .header-navlinks .dropdown .dropbtn {
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: -25px;
+}
 .container-header-nav .header-navlinks .dropdown:hover .dropdown-content {
   display: block;
 }
 .container-header-nav .header-navlinks .dropdown .dropdown-content {
   display: none;
   position: absolute;
-  min-width: 160px;
+  left: -80px;
+  min-width: 150px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
