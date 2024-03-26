@@ -61,6 +61,9 @@ class Article
     #[ORM\Column(nullable: true)]
     private ?bool $paroleLibre = null;
 
+    #[ORM\ManyToOne]
+    private ?User $lastUpdatedBy = null;
+
     public function __construct()
     {
         $this->articleComments = new ArrayCollection();
@@ -317,6 +320,18 @@ class Article
     public function setParoleLibre(?bool $paroleLibre): self
     {
         $this->paroleLibre = $paroleLibre;
+
+        return $this;
+    }
+
+    public function getLastUpdatedBy(): ?User
+    {
+        return $this->lastUpdatedBy;
+    }
+
+    public function setLastUpdatedBy(?User $lastUpdatedBy): static
+    {
+        $this->lastUpdatedBy = $lastUpdatedBy;
 
         return $this;
     }

@@ -65,6 +65,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: ArticleComment::class, orphanRemoval: true)]
     private Collection $articleComments;
 
+    #[ORM\Column]
+    private ?bool $is_author = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -341,5 +344,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getArticleComments(): Collection
     {
         return $this->articleComments;
+    }
+
+    public function isIsAuthor(): ?bool
+    {
+        return $this->is_author;
+    }
+
+    public function setIsAuthor(bool $is_author): static
+    {
+        $this->is_author = $is_author;
+
+        return $this;
     }
 }
