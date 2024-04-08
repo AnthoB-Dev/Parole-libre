@@ -16,6 +16,7 @@
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 /phpunit.xml
+/phpunit.xml.dist
 ###< symfony/phpunit-bridge ###
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
@@ -27,3 +28,5 @@ yarn-error.log
 /Todo.txt
 /AccLocal.txt
 /.vscode/
+/rector.php
+/tests/
