@@ -42,16 +42,41 @@ class AdminController extends AbstractController
     #[Route("/func-delete_unused_images", name: "admin.func.deleteUnused")]
     public function deleteUnusedImages(ArticleRepository $articleRepo, Filesystem $fileSystem, ParameterBagInterface $params): RedirectResponse
     {
+        $articlesImages = [];
         $articles = $articleRepo->findAll();
         $uploadDirectory = $params->get("upload_directory");
         $uDImages = array_diff(scandir($uploadDirectory), array('.', '..'));
+
         foreach ($articles as $article) {
-            $image = $article->getImage();
-            if (!in_array($image, $uDImages)) {
-                $fileSystem->remove($uploadDirectory . "/" . $image);
+            $articlesImages[] = $article->getImage(); 
+        }
+
+        foreach ($uDImages as $uDImage) {
+            if(!in_array($uDImage, $articlesImages)) {
+                $fileSystem->remove($uploadDirectory . "/" . $uDImage);
             }
         }
-        $this->addFlash("success", "Admin : Images non utilisées supprimées avec succès");
+        $this->addFlash("success", "Admin : Images non utilisées supprimées avec succès.");
+        return $this->redirectToRoute("accueil");
+    }
+
+    #[Route("/func-change_default_images", name: "admin.func.changeDefaultImages")]
+    public function changeImages(ArticleRepository $articleRepo, ParameterBagInterface $params): RedirectResponse
+    {
+        $articles = $articleRepo->findAll();
+        $uploadDirectory = $params->get("upload_directory");
+        $uDImages = array_diff(scandir($uploadDirectory), array('.', '..'));
+
+        foreach($articles as $article) {
+            $image = $article->getImage();
+            $randImage = $uDImages[rand(2, 31)];
+            if($image == "default.png" || $image == "default.jpg") {
+                $article->setImage($randImage);
+                $articleRepo->save($article, true);
+            }
+        }
+        
+        $this->addFlash("success", "Admin : Images par défaut changées avec succès.");
         return $this->redirectToRoute("accueil");
     }
     
