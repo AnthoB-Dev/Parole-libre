@@ -22,12 +22,28 @@ class IndexController extends AbstractController
                 $displayedCategories[] = $category->getId();
             }
         }
-        
+         
+        /**
+         * Défini le nombre d'articles "hero" à envoyé sur la page d'accueil
+         */
         $recentHeroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByCategories(3, $displayedCategories);
+        /**
+         * Défini le nombre d'articles "Derniers ajouts" à envoyé sur la page d'accueil
+         */
         $articles = $articleRepository->findArticlesRecentlyPublishedByCategories(2, $displayedCategories);
+        /**
+         * Défini le nombre d'articles "Populaires" à envoyé sur la page d'accueil
+         */
         $popularArticles = $articleRepository->findByPopularityOfCategories(6, $displayedCategories);
-        $lastParoles = $articleRepository->findArticlesByRecentlyPublishedAndByParoleLibre(5);
+        /**
+         * Défini le nombre d'articles de la catégorie "Parole Libre à afficher dans la sidebar de l'accueil
+         */ 
+        $lastParoles = $articleRepository->findArticlesOfParoleLibre(5);
+        /**
+         * Défini le nombre de "Derniers commentaires" de la catégorie "Parole Libre à afficher dans la sidebar de l'accueil
+         */ 
         $lastComments = $articleRepository->findArticlesByRecentComments(10);
+
         $users = $userRepo->findAllAndOrderedByRole("ASC"); // TODO: remove - debug
         $usersToSwitch = [$users[0], $users[9], $users[15],]; // TODO: remove - debug
 

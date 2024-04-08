@@ -2089,16 +2089,23 @@ a {
   column-count: 2;
   text-align: justify;
 }
-.wrapper-body-article .container-article-body .wrapper-article #btnLike {
-  padding: 0.6rem 1.2rem;
-  align-self: flex-end;
+.wrapper-body-article .container-article-body .wrapper-article .container-article-like {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
-.wrapper-body-article .container-article-body .wrapper-article #btnLike a {
+.wrapper-body-article .container-article-body .wrapper-article .container-article-like #btnLike {
+  padding: 0.6rem 0;
+}
+.wrapper-body-article .container-article-body .wrapper-article .container-article-like #btnLike a {
   padding: 0.6rem 1.2rem;
   color: #000000;
 }
-.wrapper-body-article .container-article-body .wrapper-article #btnLike a i {
+.wrapper-body-article .container-article-body .wrapper-article .container-article-like #btnLike a i {
   color: var(--clr-logo-green);
+}
+.wrapper-body-article .container-article-body .wrapper-article .container-article-like span {
+  margin-right: 1.2rem;
 }
 
 .wrapper-body-comments {

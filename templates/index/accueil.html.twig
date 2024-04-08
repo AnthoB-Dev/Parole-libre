@@ -34,13 +34,13 @@
                         {% for heroArticle in recentHeroArticles %}
                             <article class="container-carrousel-cards">
 
-                                <div class="carrousel-article-category bg-{{heroArticle.category.categorySlug}}">
-                                    <h4>{{heroArticle.category.name}}</h4>
+                                <div class="carrousel-article-category bg-{{heroArticle.cSlug}}">
+                                    <h4>{{heroArticle.cName}}</h4>
                                     <h5> {{heroArticle.subtitle}} </h5>
                                 </div>
 
                                 <div class="carrousel-article-image">
-                                    <a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}"> 
+                                    <a href="{{path("article.show", {"categorySlug": heroArticle.cSlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}"> 
                                         <img src="{{asset("upload_directory/" ~ heroArticle.image)}}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
                                         <span>{{heroArticle.imageCaption}}</span>
                                     </a>
@@ -52,24 +52,24 @@
 
                                 <div class="carrousel-article-content">
                                     <p> {{heroArticle.content}} </p>
-                                    <a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">Lire la suite</a>
+                                    <a href="{{path("article.show", {"categorySlug": heroArticle.cSlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">Lire la suite</a>
                                 </div>
 
                                 <div class="carrousel-article-actions">
-                                    <div class="article-action author"><span class="greyedOut">Auteur</span> {{heroArticle.user.pseudo}}</div>
+                                    <div class="article-action author"><span class="greyedOut">Auteur</span> {{heroArticle.uPseudo}}</div>
                                     <div class="article-action publishedAt"><span class="greyedOut">le</span> {{ heroArticle.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}</div>
                                     <div class="article-action likes">
                                         <div>
-											{% if heroArticle.getArticleCommentsCount() != 0 %}
-                                                <p>{{heroArticle.getArticleCommentsCount()}}</p>
+											{% if heroArticle.articleCommentsCount != 0 %}
+                                                <p>{{heroArticle.articleCommentsCount}}</p>
                                             {% else %}
                                                 <p>0</p>
                                             {% endif %}
 											<i class="fa-regular fa-comment-dots"></i>
 										</div>
 										<div>
-											{% if heroArticle.getArticleLikesCount() != 0 %}
-                                                <p>{{heroArticle.getArticleLikesCount()}}</p>
+											{% if heroArticle.articleLikesCount != 0 %}
+                                                <p>{{heroArticle.articleLikesCount}}</p>
                                             {% else %}
                                                 <p>0</p>
                                             {% endif %}
@@ -77,7 +77,7 @@
 										</div>
                                     </div>
                                 </div>
-                                <input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category='{{heroArticle.category.name}}'>
+                                <input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category='{{heroArticle.cName}}'>
 
                             </article>
                         {% endfor %}
@@ -199,8 +199,8 @@
                 <div class="container-body-categories">
 
                     <div class="container-categories-title">
-                        <h2>{{categoryArticles[0].category.name}}</h2>
-                        <a href="{{path("category.show", {"categorySlug": categoryArticles[0].category.categorySlug, "id": categoryArticles[0].category.id} )}}" class="btnShowMore">voir plus</a>
+                        <h2>{{categoryArticles[0].cName}}</h2>
+                        <a href="{{path("category.show", {"categorySlug": categoryArticles[0].cSlug, "id": categoryArticles[0].cId} )}}" class="btnShowMore">voir plus</a>
                     </div>
 
                     <div class="container-categories-content">
@@ -222,26 +222,26 @@
                                     {% if article.paroleLibre != 1 %}
                                         <article class="body-categories-cards-container">
                                             <div class="container-card-image">
-                                                <a href="{{path("article.show", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}"> 
+                                                <a href="{{path("article.show", {"categorySlug": article.cSlug, "id": article.id, "titleSlug": article.titleSlug} )}}"> 
                                                     <img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
                                                 </a>
                                             </div>
                                             <div class="container-card-title">
-                                                <h4 class="txt-{{article.category.categorySlug}}">{{article.title}}</h4>
+                                                <h4 class="txt-{{article.cSlug}}">{{article.title}}</h4>
                                             </div>
                                             <div class="container-card-content">
                                                 <p>{{article.content}}</p>
-                                                <a href="{{path("article.show", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">Lire la suite</a>
+                                                <a href="{{path("article.show", {"categorySlug": article.cSlug, "id": article.id, "titleSlug": article.titleSlug} )}}">Lire la suite</a>
                                             </div>
                                             <div class="container-card-actions">
                                                 <p>
                                                     <span class="greyedOut">Auteur
-                                                    </span>{{article.user.pseudo}}
+                                                    </span>{{article.uPseudo}}
                                                     <span class="greyedOut">le
                                                     </span>{{article.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR')}}
                                                 </p>
                                             </div>
-                                            <input type="hidden" class="articleId" value="{{article.id}}" data-category='{{article.category.name}}'>
+                                            <input type="hidden" class="articleId" value="{{article.id}}" data-category='{{article.cName}}'>
                                         </article>
                                     {% endif %}
                                 {% endfor %}
@@ -262,13 +262,13 @@
                             
                             {% for items in popularArticles %}
                                 {% for popularArticle in items %}
-                                    {% if popularArticle.category.name == categoryArticles[0].category.name %}
+                                    {% if popularArticle.cName == categoryArticles[0].cName %}
                                         <article class="container-body-sidebar-cards">
-                                            <a href="{{path("article.show", {"categorySlug": popularArticle.category.categorySlug, "id": popularArticle.id, "titleSlug": popularArticle.titleSlug})}}#{{popularArticle.id}}"> 
+                                            <a href="{{path("article.show", {"categorySlug": popularArticle.cSlug, "id": popularArticle.id, "titleSlug": popularArticle.titleSlug})}}"> 
                                                 <div class="body-sidebar-cards-author">
                                                     <div class="body-sidebar-cards-author-spans">
                                                         <span class="greyedOut">Par</span>
-                                                        <p>{{popularArticle.user.pseudo}}</p>
+                                                        <p>{{popularArticle.uPseudo}}</p>
                                                     </div>
                                                     <div class="body-sidebar-cards-author-spans">
                                                         <span class="greyedOut">le</span>
@@ -277,7 +277,7 @@
                                                 </div>
                                                 <div class="body-sidebar-cards-content">
                                                     <div class="body-sidebar-cards-content-title">
-                                                        <h5 class="bg-{{popularArticle.category.categorySlug}}">{{popularArticle.subtitle}}</h5>
+                                                        <h5 class="bg-{{popularArticle.cSlug}}">{{popularArticle.subtitle}}</h5>
                                                     </div>
                                                     <div class="body-sidebar-cards-content-content">
                                                         <p>{{popularArticle.title}}</p>

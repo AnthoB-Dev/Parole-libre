@@ -39,28 +39,29 @@ class ArticleCommentRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return ArticleComment[] Returns an array of ArticleComment objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?ArticleComment
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findComments(int $articleId): ?array
+    {
+        return $this->createQueryBuilder("ac")
+            ->select("ac.id,
+                      a.id AS aId,
+                      c.categorySlug AS cSlug,
+                      a.titleSlug as aTitleSlug,
+                      ac.content,
+                      ac.createdAt,
+                      ac.updatedAt,
+                      u.pseudo AS uPseudo,
+                      u.id AS uId,
+                      COUNT(DISTINCT l.id) AS commentLikesCount")
+            ->leftJoin("ac.user", "u")
+            ->leftJoin("ac.commentLikes", "l")
+            ->leftJoin("ac.article", "a")
+            ->leftJoin("a.category", "c")
+            ->where("a.id = :articleId")
+            ->setParameter("articleId", $articleId)
+            ->groupBy("ac.id")
+            ->orderBy('ac.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

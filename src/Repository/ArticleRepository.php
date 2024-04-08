@@ -49,9 +49,18 @@ class ArticleRepository extends ServiceEntityRepository
     public function findAllArticles(): ?array
     {
         return $this->createQueryBuilder("a")
-            ->select("a.id", "a.title", "a.subtitle", "a.image", "a.content", "a.createdAt", "a.updatedAt", "category.name", "user.pseudo")
-            ->join('a.user', 'user')
-            ->join('a.category', 'category')
+            ->select("a.id, 
+                      a.title, 
+                      a.subtitle, 
+                      a.image, 
+                      a.content, 
+                      a.createdAt, 
+                      a.updatedAt, 
+                      c.name AS cName, 
+                      u.pseudo as uPseudo")
+            ->leftJoin('a.user', 'u')
+            ->leftJoin('a.category', 'c')
+            ->groupBy("a.id")
             ->orderBy("a.id", "DESC")
             ->getQuery()
             ->getResult()
@@ -69,10 +78,28 @@ class ArticleRepository extends ServiceEntityRepository
     public function findAllArticlesByCategoryId(int $categoryId, bool $paroleLibre = false): ?array
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.category = :category')
+            ->select("a.id, 
+                      a.title,
+                      a.titleSlug, 
+                      a.image, 
+                      a.imageCaption, 
+                      a.content, 
+                      a.createdAt, 
+                      a.paroleLibre,
+                      c.categorySlug AS cSlug, 
+                      c.name AS cName, 
+                      u.pseudo AS uPseudo, 
+                      COUNT(DISTINCT l.user) AS articleLikesCount,
+                      COUNT(DISTINCT ac.id) AS articleCommentsCount")
+            ->leftJoin("a.category", "c")
+            ->leftJoin("a.user", "u")
+            ->leftJoin("a.articleLikes", "l")
+            ->leftJoin("a.articleComments", "ac")
+            ->where('a.category = :category')
             ->andWhere('a.paroleLibre = :paroleLibre')
             ->setParameter('category', $categoryId)
             ->setParameter('paroleLibre', $paroleLibre)
+            ->groupBy("a.id")
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -89,8 +116,26 @@ class ArticleRepository extends ServiceEntityRepository
     public function findAllArticlesOfParoleLibre(): ?array
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.paroleLibre = :paroleLibre')
+            ->select("a.id, 
+                      a.title,
+                      a.titleSlug, 
+                      a.image, 
+                      a.imageCaption, 
+                      a.content, 
+                      a.createdAt, 
+                      a.paroleLibre,
+                      c.categorySlug AS cSlug, 
+                      c.name AS cName, 
+                      u.pseudo AS uPseudo, 
+                      COUNT(DISTINCT l.user) AS articleLikesCount,
+                      COUNT(DISTINCT ac.id) AS articleCommentsCount")
+            ->leftJoin("a.category", "c")
+            ->leftJoin("a.user", "u")
+            ->leftJoin("a.articleLikes", "l")
+            ->leftJoin("a.articleComments", "ac")
+            ->where('a.paroleLibre = :paroleLibre')
             ->setParameter('paroleLibre', true)
+            ->groupBy("a.id")
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -99,7 +144,7 @@ class ArticleRepository extends ServiceEntityRepository
 
     /**
      * Récupère $maxResults articles selon un tableau d'ids de catégories $categories, triés par date de creation du plus récent au plus ancien et où paroleLibre = false.
-     * Ce qui permet de récupérer $maxResults articles de charque catégories existante, modulo ParoleLibre puisque défini en false.
+     * Ce qui permet de récupérer $maxResults articles de chaque catégories existante, modulo ParoleLibre puisque défini en false.
      * 
      * @param int $maxResults
      * @param array $categories
@@ -110,10 +155,26 @@ class ArticleRepository extends ServiceEntityRepository
     public function findArticlesByRecentlyPublishedAndByCategories(int $maxResults, array $categories): ?array
     {
         return $this->createQueryBuilder('a')
+            ->select("a.id, 
+                      a.subtitle, 
+                      a.image, 
+                      a.imageCaption, 
+                      a.title, 
+                      a.titleSlug,
+                      a.content, 
+                      a.createdAt,
+                      c.name AS cName,
+                      c.categorySlug AS cSlug, 
+                      u.pseudo AS uPseudo, 
+                      COUNT(DISTINCT l.id) AS articleLikesCount,
+                      COUNT(DISTINCT ac.id) AS articleCommentsCount")
             ->leftJoin('a.category', 'c')
-            ->addSelect('c')
-            ->andWhere('a.category IN (:categories)')
+            ->leftJoin('a.user', 'u')
+            ->leftJoin('a.articleLikes', 'l')
+            ->leftJoin('a.articleComments', 'ac')
+            ->where('a.category IN (:categories)')
             ->andWhere('a.paroleLibre = :paroleLibre')
+            ->groupBy("a.id")
             ->setParameter('categories', $categories)
             ->setParameter('paroleLibre', false)
             ->orderBy('a.createdAt', 'DESC')
@@ -131,13 +192,31 @@ class ArticleRepository extends ServiceEntityRepository
      * @param string orderBy DESC
      * @return array|null
      */
-    public function findArticlesByRecentlyPublishedAndByParoleLibre(int $maxResults): ?array
+    public function findArticlesOfParoleLibre(int $maxResults): ?array
     {
         return $this->createQueryBuilder('a')
+            ->select("a.id, 
+                      a.image, 
+                      a.imageCaption, 
+                      a.title, 
+                      a.subtitle,
+                      a.titleSlug, 
+                      a.content, 
+                      a.createdAt, 
+                      a.paroleLibre, 
+                      c.name AS cName, 
+                      c.id AS cId, 
+                      c.categorySlug AS cSlug, 
+                      u.pseudo AS uPseudo,
+                      COUNT(DISTINCT l.user) AS articleLikesCount,
+                      COUNT(DISTINCT ac.id) AS articleCommentsCount")
             ->leftJoin('a.category', 'c')
-            ->addSelect('c')
-            ->andWhere('a.paroleLibre = :paroleLibre')
+            ->leftJoin("a.user", "u")
+            ->leftJoin("a.articleLikes", "l")
+            ->leftJoin("a.articleComments", "ac")
+            ->where('a.paroleLibre = :paroleLibre')
             ->setParameter('paroleLibre', true)
+            ->groupBy("a.id")
             ->orderBy('a.createdAt', 'DESC')
             ->setMaxResults($maxResults)
             ->getQuery()
@@ -157,37 +236,30 @@ class ArticleRepository extends ServiceEntityRepository
     public function findArticlesByCategory(int $maxResults, int $categoryId, bool $paroleLibre = false): ?array
     {
         return $this->createQueryBuilder('a')
+            ->select("a.id, 
+                      a.image, 
+                      a.imageCaption, 
+                      a.title, 
+                      a.subtitle,
+                      a.titleSlug, 
+                      a.content, 
+                      a.createdAt, 
+                      a.paroleLibre, 
+                      c.name AS cName, 
+                      c.id AS cId, 
+                      c.categorySlug AS cSlug, 
+                      u.pseudo AS uPseudo,
+                      COUNT(DISTINCT l.id) AS articleLikesCount,
+                      COUNT(DISTINCT ac.id) AS articleCommentsCount")
             ->leftJoin('a.category', 'c')
-            ->addSelect('c')
-            ->andWhere('a.category = :category')
+            ->leftJoin("a.user", "u")
+            ->leftJoin("a.articleLikes", "l")
+            ->leftJoin("a.articleComments", "ac")
+            ->where('a.category = :category')
             ->andWhere('a.paroleLibre = :paroleLibre')
             ->setParameter('category', $categoryId)
             ->setParameter('paroleLibre', $paroleLibre)
-            ->orderBy('a.createdAt', 'DESC')
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * Récupère $maxResults articles d'une catégorie $categoryId, triés par date de creation du plus récent au plus ancien et où paroleLibre = true.
-     * 
-     * @param int $maxResults
-     * @param int $categoryId
-     * @param bool article.paroleLibre true
-     * @param string orderBy DESC 
-     * @return array|null
-     */
-    public function findArticlesByCategoryAndParoleLibre(int $maxResults, int $categoryId): ?array
-    {
-        return $this->createQueryBuilder('a')
-            ->leftJoin('a.category', 'c')
-            ->addSelect('c')
-            ->andWhere('a.category = :category')
-            ->andWhere('a.paroleLibre = :paroleLibre')
-            ->setParameter('category', $categoryId)
-            ->setParameter('paroleLibre', true)
+            ->groupBy("a.id")
             ->orderBy('a.createdAt', 'DESC')
             ->setMaxResults($maxResults)
             ->getQuery()
@@ -216,7 +288,6 @@ class ArticleRepository extends ServiceEntityRepository
     /**
      * Récupère tous les articles, parole libre ou non, d'une catégorie $categoruId selon leurs popularité (nombre de likes).
      * 
-     * @param bool IN_USE false
      * @param int $maxResults
      * @param int $categoryId
      * @param string orderBy nombre de likes DESC
@@ -225,12 +296,23 @@ class ArticleRepository extends ServiceEntityRepository
     public function findByPopularityOfCategory(int $maxResults, int $categoryId)
     {
         return $this->createQueryBuilder("a")
+            ->select("a.id, 
+                      a.title, 
+                      a.titleSlug, 
+                      a.createdAt, 
+                      a.subtitle, 
+                      c.categorySlug AS cSlug, 
+                      c.id AS cId, 
+                      c.name AS cName, 
+                      COUNT(l.id) AS likesCount, 
+                      u.pseudo AS uPseudo")
             ->leftJoin("a.category", "c")
             ->leftJoin("a.articleLikes", "l")
+            ->leftJoin("a.user", "u")
             ->andWhere("c.id = :category")
             ->setParameter("category", $categoryId)
             ->groupBy("a.id")
-            ->orderBy("COUNT(l.id)", "DESC")
+            ->orderBy("likesCount", "DESC")
             ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
@@ -258,16 +340,29 @@ class ArticleRepository extends ServiceEntityRepository
      * Récupère l'article par rapport à la date de publication de son dernier commentaire.
      * 
      * @param int $maxResults
+     * @param bool $paroleLibre false (default)
      * @param string orderBy DESC
      * @return array|null
      */
-    public function findArticlesByRecentComments(int $maxResults): ?array
+    public function findArticlesByRecentComments(int $maxResults, $paroleLibre = false): ?array
     {
         return $this->createQueryBuilder('a')
-            ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
+            ->select("a.id, 
+                    a.title, 
+                    a.titleSlug, 
+                    a.paroleLibre, 
+                    ac.id AS acId, 
+                    ac.content AS acContent, 
+                    ac.createdAt AS acCreatedAt,  
+                    c.name AS cName, 
+                    c.categorySlug AS cSlug, 
+                    u.pseudo AS uPseudo")
             ->leftJoin("a.articleComments", "ac")
-            ->leftJoin("ac.user", "u")
             ->leftJoin("a.category", "c")
+            ->leftJoin("ac.user", "u")
+            ->where("a.paroleLibre = :paroleLibre")
+            ->setParameter("paroleLibre", $paroleLibre)
+            ->groupBy("a.id")
             ->orderBy('ac.createdAt', 'DESC')
             ->setMaxResults($maxResults)
             ->getQuery()
@@ -287,10 +382,18 @@ class ArticleRepository extends ServiceEntityRepository
     public function findArticlesByCategoryAndRecentComments(int $maxResults, int $categoryId, bool $paroleLibre = false): ?array
     {
         return $this->createQueryBuilder('a')
-            ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
-            ->join("a.articleComments", "ac")
-            ->join("ac.user", "u")
-            ->join("a.category", "c")
+            ->select("a.id, 
+                      a.title, 
+                      a.titleSlug, 
+                      c.name AS cName, 
+                      c.categorySlug AS cSlug, 
+                      ac.id AS acId, 
+                      ac.content AS acContent,  
+                      ac.createdAt AS acCreatedAt, 
+                      u.pseudo AS uPseudo")
+            ->leftJoin("a.articleComments", "ac")
+            ->leftJoin("a.category", "c")
+            ->leftJoin("a.user", "u")
             ->where("c.id = :category")
             ->andWhere("a.paroleLibre = :paroleLibre")
             ->setParameter("paroleLibre", $paroleLibre)
@@ -315,14 +418,23 @@ class ArticleRepository extends ServiceEntityRepository
     public function findArticlesParoleLibreByCategoryAndRecentComments(int $maxResults, int $categoryId): ?array
     {
         return $this->createQueryBuilder('a')
-            ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
-            ->join("a.articleComments", "ac")
-            ->join("ac.user", "u")
-            ->join("a.category", "c")
+            ->select("a.id, 
+                      c.name AS cName, 
+                      a.title, 
+                      a.titleSlug, 
+                      ac.id as cId, 
+                      ac.content AS acContent, 
+                      ac.createdAt AS acCreatedAt, 
+                      c.categorySlug AS cSlug,  
+                      u.pseudo AS uPseudo")
+            ->leftJoin("a.articleComments", "ac")
+            ->leftJoin("ac.user", "u")
+            ->leftJoin("a.category", "c")
             ->where("c.id = :category")
             ->andWhere("a.paroleLibre = :paroleLibre")
             ->setParameter("paroleLibre", true)
             ->setParameter("category", $categoryId)
+            ->groupBy("a.id")
             ->orderBy('ac.createdAt', 'DESC')
             ->setMaxResults($maxResults)
             ->getQuery()
@@ -342,11 +454,19 @@ class ArticleRepository extends ServiceEntityRepository
     public function findParolesLibresAndRecentComments(int $maxResults): ?array
     {
         return $this->createQueryBuilder('a')
-            ->select("a.id, c.name, a.title, a.titleSlug, ac.id as cId, ac.content, ac.createdAt, c.categorySlug, u.pseudo")
-            ->join("a.articleComments", "ac")
-            ->join("ac.user", "u")
-            ->join("a.category", "c")
-            ->andWhere("a.paroleLibre = :paroleLibre")
+            ->select("a.id, 
+                      c.name AS cName, 
+                      a.title,  
+                      a.titleSlug, 
+                      ac.id AS acId, 
+                      ac.content AS acContent, 
+                      ac.createdAt AS acCreatedAt, 
+                      c.categorySlug AS cSlug, 
+                      u.pseudo AS uPseudo")
+            ->leftJoin("a.articleComments", "ac")
+            ->leftJoin("ac.user", "u")
+            ->leftJoin("a.category", "c")
+            ->where("a.paroleLibre = :paroleLibre")
             ->setParameter("paroleLibre", true)
             ->orderBy('ac.createdAt', 'DESC')
             ->setMaxResults($maxResults)

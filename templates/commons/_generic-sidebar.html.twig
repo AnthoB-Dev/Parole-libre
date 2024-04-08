@@ -18,7 +18,7 @@
 						<div class="body-sidebar-cards-author">
 							<div class="body-sidebar-cards-author-spans">
 								<span class="greyedOut">Par</span>
-								<p>{{parole.user.pseudo}}</p>
+								<p>{{parole.uPseudo}}</p>
 							</div>
 							<div class="body-sidebar-cards-author-spans">
 								<span class="greyedOut">le</span>
@@ -27,7 +27,7 @@
 						</div>
 						<div class="body-sidebar-cards-content">
 							<div class="body-sidebar-cards-content-title">
-								<h5>{{parole.subTitle}}</h5>
+								<h5>{{parole.subtitle}}</h5>
 							</div>
 							<div class="body-sidebar-cards-content-content">
 								<p>{{parole.title}}</p>
@@ -56,26 +56,26 @@
 			{% for comment in lastComments %}
 				
 				<article class="parole-card">
-					<a href="{{ path("article.show", {"categorySlug": comment.categorySlug, "id": comment.id, "titleSlug": comment.titleSlug}) }}#{{comment.cId}}">
+					<a href="{{ path("article.show", {"categorySlug": comment.cSlug, "id": comment.id, "titleSlug": comment.titleSlug}) }}#{{comment.acId}}">
 						<div class="container-body-sidebar-cards">
 							<div class="body-sidebar-cards-author">
 								<div class="body-sidebar-cards-author-spans">
 									<span class="greyedOut">Par</span>
-									<p>{{comment.pseudo}}</p>
+									<p>{{comment.uPseudo}}</p>
 								</div>
 								<div class="body-sidebar-cards-author-spans">
 									<span class="greyedOut">le</span>
-									<p>{{comment.createdAt|format_datetime(pattern='dd/MM/yy', locale='fr_FR') }}</p>
+									<p>{{comment.acCreatedAt|format_datetime(pattern='dd/MM/yy', locale='fr_FR') }}</p>
 									<span class="greyedOut">à</span>
-									<p>{{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i')}}</p>
+									<p>{{ comment.acCreatedAt|date('H') }}h{{ comment.acCreatedAt|date('i')}}</p>
 								</div>
 							</div>
 							<div class="body-sidebar-cards-content">
-								<div class="body-sidebar-cards-content-title txt-{{comment.categorySlug}}">
+								<div class="body-sidebar-cards-content-title txt-{{comment.cSlug}}">
 									<h5>{{comment.title}}</h5>
 								</div>
 								<div class="body-sidebar-cards-content-content">
-									<p>{{comment.content}}</p>
+									<p>{{comment.acContent}}</p>
 								</div>
 							</div>
 						</div>

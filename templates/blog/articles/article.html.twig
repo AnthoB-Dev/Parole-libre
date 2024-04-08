@@ -64,23 +64,25 @@
                         {{article.content | nl2br}}
                      </p>
                   </div>
-
-                  {% if app.user %}
-                     {% if isArticleLiked(article.id) %}
-                        <div id="btnLike" class="info-pop" data-descr="Je n'aime plus">
-                           <a href="{{path("article.like", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-solid fa-thumbs-up"></i></a>
-                        </div>
+                  <div class="container-article-like">
+                     {% if app.user %}
+                        {% if isArticleLiked(article.id) %}
+                           <div id="btnLike" class="info-pop" data-descr="Je n'aime plus">
+                              <a href="{{path("article.like", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-solid fa-thumbs-up"></i></a>
+                           </div>
+                        {% else %}
+                           <div id="btnLike" class="info-pop" data-descr="J'aime">
+                              <a href="{{path("article.like", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-regular fa-thumbs-up"></i></a>
+                           </div>
+                        {% endif %}
                      {% else %}
-                        <div id="btnLike" class="info-pop" data-descr="J'aime">
-                           <a href="{{path("article.like", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-regular fa-thumbs-up"></i></a>
+                        <div id="btnLike">
+                           <span>{{article.articleLikesCount}}</span>
+                           <p>Si vous avez aimer cet article, <a href="{{path("login")}}">connectez-vous</a> et laissez un j'aime</p>
                         </div>
                      {% endif %}
-                  {% else %}
-                     <div id="btnLike">
-                        <p>Si vous avez aimer cet article, <a href="{{path("login")}}">connectez-vous</a> et laissez un j'aime</p>
-                     </div>
-                  {% endif %}
-
+                     <span>{{article.articleLikesCount}}</span>
+                  </div>
                </div>
 
             </div>
@@ -89,6 +91,7 @@
          <div class="wrapper-body-comments" id="commentaries">
             <div class="container-comments-header">
                <h2>Commentaires</h2>
+               <span>{{article.articleCommentsCount}}</span>
             </div>
             {% if articleComments %}
                {% for comment in articleComments %}
@@ -96,7 +99,7 @@
                      <div class="container-comment">
                         <div class="comment-author">
                            <p>
-                              <span class="spanRed">{{comment.user.pseudo}}</span>
+                              <span class="spanRed">{{comment.uPseudo}}</span>
                               <span class="greyedOut">le</span>
                               {{ comment.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }} 
                               <span class="greyedOut">à</span> {{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i') }}</span>
@@ -109,39 +112,39 @@
                         </div>
                         <div class="comment-content">
                            <p>{{comment.content}}</p>
-                           {% if app.user and app.user == comment.user or app.user and is_granted("ROLE_ADMIN") %}
+                           {# {% if app.user and app.user.pseudo == comment.uPseudo or app.user and is_granted("ROLE_ADMIN") %}
                               {{ form_start(updateForms[comment.id], {"attr": {"class": "hidden"}}) }}
                                  {{ form_row(updateForms[comment.id].content) }}
                                  <button type="submit">Modifier</button>
                               {{ form_end(updateForms[comment.id]) }}
-                           {% endif %}
+                           {% endif %} #}
                         </div>
                         <div class="comment-actions">
                            <div class="action-likes">
                               {% if app.user %}
                                  {% if isCommentLiked(comment.id) %}
-                                    <a class="info-pop" data-descr="Je n'aime plus" href="{{path("comment.like", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id} )}}#{{comment.id}}">
+                                    <a class="info-pop" data-descr="Je n'aime plus" href="{{path("comment.like", {"categorySlug": comment.cSlug, "id": comment.aId, "titleSlug": comment.aTitleSlug, "commentId": comment.id} )}}#{{comment.id}}">
                                        <i class="fa-solid fa-thumbs-up"></i>
                                     </a>
                                  {% else %}
-                                    <a class="info-pop" data-descr="J'aime" href="{{path("comment.like", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id} )}}#{{comment.id}}">
+                                    <a class="info-pop" data-descr="J'aime" href="{{path("comment.like", {"categorySlug": comment.cSlug, "id": comment.aId, "titleSlug": comment.aTitleSlug, "commentId": comment.id} )}}#{{comment.id}}">
                                        <i class="fa-regular fa-thumbs-up"></i>
                                     </a>
                                  {% endif %}
                               {% else %}
                                  <div style="display: inline;">
-                                    <i class="fa-regular fa-thumbs-up" style="display: inline; color: var(--clr-logo-green); cursor: auto;"></i>
+                                    <i class="fa-regular fa-thumbs-up" style="display: inline; color: var(--clr-logo-green); cursor: auto;"></i><span></span>
                                  </div>
                               {% endif %}
                               <span>
-                                 {% if comment.getCommentLikesCount() != 0 %}
-                                    {{comment.getCommentLikesCount()}}
+                                 {% if comment.commentLikesCount != 0 %}
+                                    {{comment.commentLikesCount}}
                                  {% endif %}
                               </span>
                            </div>
                            <div class="action-icons">
                               {% if app.user and is_granted("ROLE_USER") %}
-                                 {% if comment.user == app.user or is_granted("ROLE_ADMIN") %}
+                                 {% if comment.uId == app.user.id or is_granted("ROLE_ADMIN") %}
                                     <i class="fas fa-pencil-alt editIcon"></i>
                                     <i class="fas fa-undo cancelIcon hidden"></i>
                                  {% endif %}
@@ -154,7 +157,7 @@
                               {% endif %}
 
                               {% if app.user and is_granted("ROLE_ADMIN") %}
-                                 <form action="{{ path("comment.delete", {"categorySlug": comment.article.category.categorySlug, "id": comment.article.id, "titleSlug": comment.article.titleSlug, "commentId": comment.id}) }}" method="post" class="comment_delete_form">
+                                 <form action="{{ path("comment.delete", {"categorySlug": comment.cSlug, "id": comment.aId, "titleSlug": comment.aTitleSlug, "commentId": comment.id}) }}" method="post" class="comment_delete_form">
                                     <button type="submit" name="_method" value="DELETE">
                                        <i class="fa-solid fa-trash-can"></i>
                                     </button>

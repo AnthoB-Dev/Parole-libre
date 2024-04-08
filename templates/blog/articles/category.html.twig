@@ -14,7 +14,7 @@
 
 {% block main %}
 
-	{% if app.request.attributes.get("_route")|starts_with("category") %}
+	{% if app.current_route starts with 'category.' %}
 		<section class="container-content-header" style="padding-top: 0">
 
 			<div class="container-carrousel-header">
@@ -30,16 +30,24 @@
 							{% for heroArticle in heroArticles %}
 								<article class="container-carrousel-cards">
 
-									<div class="carrousel-article-category bg-{{heroArticle.category.categorySlug}}">
-										<h4>{{heroArticle.category.name}}</h4>
+									<div class="carrousel-article-category bg-{{heroArticle.cSlug}}">
+										<h4>{{heroArticle.cName}}</h4>
 										<h5>{{heroArticle.subtitle}}</h5>
 									</div>
 
 									<div class="carrousel-article-image">
-										<a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">
-											<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
-											<span>{{heroArticle.imageCaption}}</span>
-										</a>
+										{% if heroArticle.cName != "Parole Libre" %}
+											<a href="{{path("article.show", {"categorySlug": heroArticle.cSlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">
+												<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+												<span>{{heroArticle.imageCaption}}</span>
+											</a>
+										{% else %}
+											<a href="{{path("article.show.paroleLibre", {"categorySlug": heroArticle.cSlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">
+												<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+												<span>{{heroArticle.imageCaption}}</span>
+											</a>
+										{% endif %}
+										
 									</div>
 
 									<div class="carrousel-article-title">
@@ -48,28 +56,32 @@
 
 									<div class="carrousel-article-content">
 										<p>{{heroArticle.content}}</p>
-										<a href="{{path("article.show", {"categorySlug": heroArticle.category.categorySlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
+										{% if heroArticle.cName != "Parole Libre" %}
+											<a href="{{path("article.show", {"categorySlug": heroArticle.cSlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
+										{% else %}
+											<a href="{{path("article.show.paroleLibre", {"categorySlug": heroArticle.cSlug, "id": heroArticle.id, "titleSlug": heroArticle.titleSlug} )}}">Lire la suite</a>
+										{% endif %}
 									</div>
 
 									<div class="carrousel-article-actions">
 										<div class="article-action author">
-											<span class="greyedOut">Auteur</span> {{heroArticle.user.pseudo}}
+											<span class="greyedOut">Auteur</span> {{heroArticle.uPseudo}}
 										</div>
 										<div class="article-action publishedAt">
 											<span class="greyedOut">le</span> {{ heroArticle.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }}
 										</div>
 										<div class="article-action likes">
 											<div>
-												{% if heroArticle.getArticleCommentsCount() != 0 %}
-													<p>{{heroArticle.getArticleCommentsCount()}}</p>
+												{% if heroArticle.articleCommentsCount != 0 %}
+													<p>{{heroArticle.articleCommentsCount}}</p>
 												{% else %}
 													<p>0</p>
 												{% endif %}
 												<i class="fa-regular fa-comment-dots"></i>
 											</div>
 											<div>
-												{% if heroArticle.getArticleLikesCount() != 0 %}
-													<p>{{heroArticle.getArticleLikesCount()}}</p>
+												{% if heroArticle.articleLikesCount != 0 %}
+													<p>{{heroArticle.articleLikesCount}}</p>
 												{% else %}
 													<p>0</p>
 												{% endif %}
@@ -77,7 +89,7 @@
 											</div>
 										</div>
 									</div>
-									<input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category="{{heroArticle.category.name}}">
+									<input type="hidden" class="articleId" value="{{heroArticle.id}}" data-category="{{heroArticle.cName}}">
 
 								</article>
 							{% endfor %}
@@ -122,11 +134,14 @@
 				<div class="container-body-category-articles">
 
 				{% for article in articles %}
-			
 					<article class="container-body-category-article">
-						<div class="pastille bg-{{article.category.categorySlug}}"></div>
+						<div class="pastille bg-{{article.cSlug}}"></div>
 
-						<a href="{{path("article.show", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
+						{% if article.paroleLibre %}
+						<a href="{{path("article.show.paroleLibre", {"categorySlug": article.cSlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
+						{% else %}
+						<a href="{{path("article.show", {"categorySlug": article.cSlug, "id": article.id, "titleSlug": article.titleSlug} )}}">
+						{% endif %}
 
 							<div class="wrapper-category-image">
 								<img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
@@ -134,14 +149,14 @@
 
 							<div class="wrapper-category-content">
 
-								<h3 class="txt-{{article.category.categorySlug}}">{{article.title}}</h3>
+								<h3 class="txt-{{article.cSlug}}">{{article.title}}</h3>
 
 								<p>{{article.content}}</p>
 								
 								<div class="container-content-footer">
 									
 									<div class="article-action author">
-										<span class="greyedOut">Auteur</span> <span class="spanRed">{{article.user.pseudo}}</span>
+										<span class="greyedOut">Auteur</span> <span class="spanRed">{{article.uPseudo}}</span>
 									</div>
 
 									<div class="article-action publishedAt">
@@ -150,24 +165,24 @@
 									
 									<div class="article-action likes">
 										<div>
-											{% if article.getArticleCommentsCount() != 0 %}
-                                    <p>{{article.getArticleCommentsCount()}}</p>
-                                 {% else %}
-                                    <p>0</p>
-                                 {% endif %}
+											{% if article.articleCommentsCount != 0 %}
+												<p>{{article.articleCommentsCount}}</p>
+											{% else %}
+												<p>0</p>
+											{% endif %}
 											<i class="fa-regular fa-comment-dots"></i>
 										</div>
 										<div>
-											{% if article.getArticleLikesCount() != 0 %}
-                                    <p>{{article.getArticleLikesCount()}}</p>
-                                 {% else %}
-                                    <p>0</p>
-                                 {% endif %}
+											{% if article.articleLikesCount != 0 %}
+                                    			<p>{{article.articleLikesCount}}</p>
+											{% else %}
+												<p>0</p>
+											{% endif %}
 											<i class="fa-regular fa-thumbs-up"></i>
 										</div>
 									</div>
 									
-									<input type="hidden" class="articleId" value="{{article.id}}" data-category="{{article.category.name}}">
+									<input type="hidden" class="articleId" value="{{article.id}}" data-category="{{article.cName}}">
 								</div>
 							</div>
 						</a>

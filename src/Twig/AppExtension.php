@@ -3,8 +3,11 @@
 namespace App\Twig;
 
 use App\Entity\User;
+use App\Entity\Article;
 use App\Entity\ArticleLike;
 use App\Entity\CommentLike;
+use App\Repository\ArticleLikeRepository;
+use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentLikeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,12 +19,19 @@ use Twig\TwigFunction;
 class AppExtension extends AbstractExtension
 {
    private $categoryRepository;
+   private $articleRepository;
    private $entityManager;
    private $security;
 
-   public function __construct(EntityManagerInterface $entityManager, Security $security, CategoryRepository $categoryRepository, CommentLikeRepository $commentLikeRepository)
+   public function __construct(
+      EntityManagerInterface $entityManager, 
+      Security $security, 
+      CategoryRepository $categoryRepository, 
+      CommentLikeRepository $commentLikeRepository,
+      ArticleRepository $articleRepository)
    {
       $this->categoryRepository = $categoryRepository;
+      $this->articleRepository = $articleRepository;
       $this->entityManager = $entityManager;
       $this->security = $security;
    }
@@ -32,10 +42,12 @@ class AppExtension extends AbstractExtension
          new TwigFunction('getCategories', [$this, 'getCategories']),
          new TwigFunction('isArticleLiked', [$this, 'isArticleLiked']),
          new TwigFunction('isCommentLiked', [$this, 'isCommentLiked']),
+         new TwigFunction('getArticleLikesCount', [$this, 'getArticleLikesCount']),
+         new TwigFunction('getArticleCommentsCount', [$this, 'getArticleCommentsCount']),
       ];
    }
 
-   public function getCategories()
+   public function getCategories(): array
    {
       return $this->categoryRepository->findAll();
    }
@@ -85,5 +97,25 @@ class AppExtension extends AbstractExtension
       ]);
 
       return $commentLike !== null;
+   }
+
+   public function getArticleLikesCount(int $articleId): int
+   {
+      $articleRepository = $this->entityManager->getRepository(Article::class);
+      $article = $articleRepository->findOneBy(["id" => $articleId]);
+      
+      $articleLikesCount = $article->getArticleLikesCount();
+
+      return $articleLikesCount;      
+   }
+
+   public function getArticleCommentsCount(int $articleId): int
+   {
+      $articleRepository = $this->entityManager->getRepository(Article::class);
+      $article = $articleRepository->findOneBy(["id" => $articleId]);
+      
+      $articleCommentsCount = $article->getArticleCommentsCount();
+
+      return $articleCommentsCount;      
    }
 }

@@ -25,6 +25,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class BlogController extends AbstractController
 {
@@ -41,48 +42,39 @@ class BlogController extends AbstractController
      * -- Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
      */
     #[Route("/categorie/{categorySlug}", name:"category.show", requirements: ["categorySlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
-    public function categoryPage(ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug): Response
+    #[Route("/categorie/parole-libre/{categorySlug}", name:"category.show.paroleLibre", requirements: ["categorySlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
+    public function categoryPage(Request $request, ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug): Response
     {
-        if($categorySlug !== "accueil") {
+        $currentRoute = $request->attributes->get('_route');
+
+        if($currentRoute === "category.show") {
+
             $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
             $id = $category->getId();
-        
-            if($categorySlug !== "parole-libre" && $id !== 8) {
-                $heroArticles = $articleRepository->findArticlesByCategory(3, $id);
-                $articles = $articleRepository->findAllArticlesByCategoryId($id);
-                $category = $articles[0]->getCategory()->getName();
-                $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
+    
+            $heroArticles = $articleRepository->findArticlesByCategory(3, $id);
+            $articles = $articleRepository->findAllArticlesByCategoryId($id);
+            $category = $articles[0]["cName"];
+            $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id);
+
+        } elseif($currentRoute === "category.show.paroleLibre") {
+
+            if($categorySlug !== "articles") {
+                $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
+                $id = $category->getId();
+    
+                $heroArticles = $articleRepository->findArticlesByCategory(3, $id, true);
+                $articles = $articleRepository->findAllArticlesByCategoryId($id, true);
+                $category = "Parole Libre - " . $category->getName();
+                $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id, true);
+                
             } else {
-                $heroArticles = $articleRepository->findArticlesByRecentlyPublishedAndByParoleLibre(3);
+                $heroArticles = $articleRepository->findArticlesOfParoleLibre(3);
                 $articles = $articleRepository->findAllArticlesOfParoleLibre();
                 $category = "Parole Libre";
                 $lastCategoryComments = $articleRepository->findParolesLibresAndRecentComments(10);
             }
         }
-
-        return $this->render('blog/articles/category.html.twig', [
-            "heroArticles" => $heroArticles,
-            "articles" => $articles,
-            "category" => $category,
-            "lastCategoryComments" => $lastCategoryComments,
-        ]);
-    }
-
-    /**
-     * - Category Parole Libre : \
-     * -- Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig) et où article.paroleLibre = true.
-     * TODO: Rendre accessible autrement qu'en tapant l'url
-     */
-    #[Route('/categorie/parole-libre/{categorySlug}', name:'category.paroleLibre.show', requirements: ["categorySlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
-    public function categoryPageAndParoleLibre(CategoryRepository $categoryRepository, ArticleRepository $articleRepository, $categorySlug): Response
-    {
-        $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
-        $id = $category->getId();
-        $category = $category->getName();
-        
-        $heroArticles = $articleRepository->findArticlesByCategory(3, $id, true);
-        $articles = $articleRepository->findAllArticlesByCategoryId($id, true);
-        $lastCategoryComments = $articleRepository->findArticlesByCategoryAndRecentComments(10, $id, true);
 
         return $this->render('blog/articles/category.html.twig', [
             "heroArticles" => $heroArticles,
@@ -102,54 +94,71 @@ class BlogController extends AbstractController
      */
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}", name:"article.show", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["GET", "POST", "DELETE"])]
     #[Route("/categorie/parole-libre/{categorySlug}/{titleSlug}-{id}", name:"article.show.paroleLibre", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["GET", "POST", "DELETE"])]
-    public function showArticle(Security $security, Request $request, ArticleRepository $articleRepository, int $id, ArticleCommentRepository $articleCommentRepository, CategoryRepository $categoryRepository, string $categorySlug, string $titleSlug): Response
+    public function showArticle(Security $security, Request $request, SerializerInterface $serializer, ArticleRepository $articleRepository, int $id, ArticleCommentRepository $articleCommentRepository, CategoryRepository $categoryRepository, string $categorySlug, string $titleSlug): Response
     {
+        $currentRoute = $request->attributes->get("_route");
         $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
         $articleByRouteId = $articleRepository->find($id) ?: null;
         $categoryChecker = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]) ?: null;
-        $routeIsParoleLibre = strpos($request->getPathInfo(), "/categorie/parole-libre") === 0 ? true : false;
+        
+        if($currentRoute === "article.show") {
 
-        // Définition de la variable $article selon si le titleSlug ou l'id fourni dans l'url correspond bien à un article existant
-        // Dans le cas où il n'y aurait pas de correspondance et que ni le slug ni l'id n'est un article valide
-        // Je prépare une redirection, soit vers la catégorie s'il est elle même valide ($categoryChecker), soit vers l'accueil si aucun des paramètres fourni ne sont valident
-        if(isset($articleByRouteSlug)) {
-            $article = $articleByRouteSlug;
+            if(isset($articleByRouteSlug)) {
+                $article = $articleByRouteSlug;
+            } elseif(isset($articleByRouteId)) {
+                $article = $articleByRouteId;
+            } elseif(!isset($articleByRouteSlug) && !isset($articleByRouteId)) {
+                if($categoryChecker) {
+                    return $this->redirectToRoute("category.show", [
+                        "categorySlug" => $categorySlug
+                    ]);
+                } else {
+                    return $this->redirectToRoute("accueil");
+                }
+            }
 
-        } elseif(isset($articleByRouteId)) {
-            $article = $articleByRouteId;
-            
-        } elseif(!isset($articleByRouteSlug) && !isset($articleByRouteId)) {
-
-            if($categoryChecker) {
-                return $this->redirectToRoute("category.show", [
-                    "categorySlug" => $categorySlug
+            if($articleByRouteId !== $articleByRouteSlug ||  
+                   $categorySlug !== $article->getCategory()->getCategorySlug()) {
+                return $this->redirectToRoute("article.show", [
+                    "categorySlug" => $article->getCategory()->getCategorySlug(),
+                    "titleSlug" => $article->getTitleSlug(),
+                    "id" => $article->getId(),
                 ]);
-            } else {
-                return $this->redirectToRoute("accueil");
+            } elseif($article->isParoleLibre()) {
+                return $this->redirectToRoute("article.show.paroleLibre", [
+                    "categorySlug" => $article->getCategory()->getCategorySlug(),
+                    "titleSlug" => $article->getTitleSlug(),
+                    "id" => $article->getId(),
+                ]);
+            }
+
+        } elseif($currentRoute === "article.show.paroleLibre") {
+
+            if(isset($articleByRouteSlug)) {
+                $article = $articleByRouteSlug;
+            } elseif(isset($articleByRouteId)) {
+                $article = $articleByRouteId;
+            } elseif(!isset($articleByRouteSlug) && !isset($articleByRouteId)) {
+                if($categoryChecker) {
+                    return $this->redirectToRoute("category.show.paroleLibre", [
+                        "categorySlug" => $categorySlug
+                    ]);
+                } else {
+                    return $this->redirectToRoute("accueil");
+                }
+            }
+    
+            if($articleByRouteId !== $articleByRouteSlug ||  
+                   $categorySlug !== $article->getCategory()->getCategorySlug()) {
+                return $this->redirectToRoute("article.show.paroleLibre", [
+                    "categorySlug" => $article->getCategory()->getCategorySlug(),
+                    "titleSlug" => $article->getTitleSlug(),
+                    "id" => $article->getId(),
+                ]);
             }
         }
-
-        // Vérification de l'url pour déterminer si le slug et l'id correspondent bien au même article
-        // Si ce n'est pas le cas je redirige une nouvelle fois vers l'article en reparametrant les slugs et l'id de la route de l'article (qui est forcément défini à ce stade grâce aux conditions précedente)
-        // Et enfin si l'article est un "Parole Libre" je redirige vers cette fonction mais avec une route différente
-        if($articleByRouteId !== $articleByRouteSlug 
-           ||  $categorySlug !== $article->getCategory()->getCategorySlug()) {
-
-            return $this->redirectToRoute("article.show", [
-                "categorySlug" => $article->getCategory()->getCategorySlug(),
-                "titleSlug" => $article->getTitleSlug(),
-                "id" => $article->getId(),
-            ]);
-
-        } elseif($article->isParoleLibre() && !$routeIsParoleLibre) {
-            return $this->redirectToRoute("article.show.paroleLibre", [
-                "categorySlug" => $article->getCategory()->getCategorySlug(),
-                "titleSlug" => $article->getTitleSlug(),
-                "id" => $article->getId(),
-            ]);
-        }
         
-        $articleComments = $articleCommentRepository->findBy(["article" => $id], ["createdAt" => "DESC"]);
+        $articleComments = $articleCommentRepository->findComments($article->getId());
         $articleCategory = $article->getCategory()->getName();
         $updateForms = [];
         
@@ -171,31 +180,30 @@ class BlogController extends AbstractController
                 "id" => $id, 
             ]);
         }
-        
-        foreach($articleComments as $articleComment) {
 
-            $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
-                'action' => $this->generateUrl('comment.update', [
-                    "categorySlug" => $categorySlug,
-                    "id" => $articleComment->getArticle()->getId(),
-                    "titleSlug" => $titleSlug, 
-                    "commentId" => $articleComment->getId(),
-                ]),
-                'method' => 'POST',
-            ]);
-            $updateForm->handleRequest($request);
-            $updateForms[$articleComment->getId()] = $updateForm->createView();
+        // foreach($articleComments as $articleComment) {
+        //     $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
+        //         'action' => $this->generateUrl('comment.update', [
+        //             "categorySlug" => $categorySlug,
+        //             "id" => $articleComment["aId"],
+        //             "titleSlug" => $titleSlug, 
+        //             "commentId" => $articleComment["cId"],
+        //         ]),
+        //         'method' => 'POST',
+        //     ]);
+        //     $updateForm->handleRequest($request);
+        //     $updateForms[$articleComment["aId"]] = $updateForm->createView();
     
-            if($updateForm->isSubmitted() && $updateForm->isValid()) {
-                $articleCommentRepository->save($articleComment, true);
-                $this->addFlash('succcess', 'Commentaire mis à jour');
-                return $this->redirectToRoute('article.show', [
-                    "categorySlug" => $categorySlug, 
-                    "titleSlug" => $article->getCategory()->getCategorySlug(),
-                    "id" => $id,
-                ]);
-            }
-        }
+        //     if($updateForm->isSubmitted() && $updateForm->isValid()) {
+        //         $articleCommentRepository->save($articleComment, true);
+        //         $this->addFlash('succcess', 'Commentaire mis à jour');
+        //         return $this->redirectToRoute('article.show', [
+        //             "categorySlug" => $categorySlug, 
+        //             "titleSlug" => $article->getCategory()->getCategorySlug(),
+        //             "id" => $id,
+        //         ]);
+        //     }
+        // }
 
         return $this->render("blog/articles/article.html.twig", [
             "article" => $article,
