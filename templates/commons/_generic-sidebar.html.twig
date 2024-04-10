@@ -13,27 +13,28 @@
 			{% for parole in lastParoles %}
 		
 				<article class="parole-card">
-
-					<div class="container-body-sidebar-cards">
-						<div class="body-sidebar-cards-author">
-							<div class="body-sidebar-cards-author-spans">
-								<span class="greyedOut">Par</span>
-								<p>{{parole.uPseudo}}</p>
+					<a href="{{ path("article.show.paroleLibre", {"categorySlug": parole.cSlug, "id": parole.id, "titleSlug": parole.titleSlug}) }}">
+						<div class="container-body-sidebar-cards">
+							<div class="body-sidebar-cards-author">
+								<div class="body-sidebar-cards-author-spans">
+									<span class="greyedOut">Par</span>
+									<p>{{parole.uPseudo}}</p>
+								</div>
+								<div class="body-sidebar-cards-author-spans">
+									<span class="greyedOut">le</span>
+									<p>{{parole.createdAt|format_datetime(pattern='dd/MM/yy', locale='fr_FR')}}</p>
+								</div>
 							</div>
-							<div class="body-sidebar-cards-author-spans">
-								<span class="greyedOut">le</span>
-								<p>{{parole.createdAt|format_datetime(pattern='dd/MM/yy', locale='fr_FR')}}</p>
+							<div class="body-sidebar-cards-content">
+								<div class="body-sidebar-cards-content-title bg-{{parole.cSlug}} !important">
+									<h5>{{parole.subtitle}}</h5>
+								</div>
+								<div class="body-sidebar-cards-content-content">
+									<p>{{parole.title}}</p>
+								</div>
 							</div>
 						</div>
-						<div class="body-sidebar-cards-content">
-							<div class="body-sidebar-cards-content-title">
-								<h5>{{parole.subtitle}}</h5>
-							</div>
-							<div class="body-sidebar-cards-content-content">
-								<p>{{parole.title}}</p>
-							</div>
-						</div>
-					</div>
+					</a>
 				</article>
 
 			{% endfor %}

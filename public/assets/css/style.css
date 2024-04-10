@@ -1409,13 +1409,16 @@ a {
 .container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card:last-child {
   padding-bottom: 1rem;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a {
+  color: var(--clr-black);
+}
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards {
   display: flex;
   border: solid 1px #87878C;
   box-shadow: 0 1px 2px 0px;
   min-height: 75px;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-author {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-author {
   display: flex;
   flex-basis: 30%;
   flex-direction: column;
@@ -1423,41 +1426,40 @@ a {
   padding: 5px;
   gap: 10px;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-author .body-sidebar-cards-author-spans {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-author .body-sidebar-cards-author-spans {
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
   align-items: baseline;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-author .body-sidebar-cards-author-spans p {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-author .body-sidebar-cards-author-spans p {
   font-family: "roboto_slabmedium";
   font-size: 10px;
   color: var(--clr-logo-red);
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-content {
   display: flex;
   flex-basis: 70%;
   flex-direction: column;
   padding: 5px;
   border-left: dashed 1px #D0D0D2;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content p {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-content p {
   padding: 5px 0;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-title {
-  background-color: var(--clr-paroleLibre);
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-title {
   color: #ffffff;
   text-transform: uppercase;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-title h5 {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-title h5 {
   padding: 5px;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-content {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-content p {
+.container-content-body .wrapper-body-sidebar .container-sidebar .wrapper-sidebar-parole .container-parole-cards .parole-card a .container-body-sidebar-cards .body-sidebar-cards-content .body-sidebar-cards-content-content p {
   font-family: "roboto_slabmedium";
   font-size: 11px;
 }
