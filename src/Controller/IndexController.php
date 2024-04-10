@@ -45,7 +45,7 @@ class IndexController extends AbstractController
         $lastComments = $articleRepository->findArticlesByRecentComments(10);
 
         $users = $userRepo->findAllAndOrderedByRole("ASC"); // TODO: remove - debug
-        $usersToSwitch = [$users[0], $users[9], $users[15],]; // TODO: remove - debug
+        $usersToSwitch = [$users[0], $users[8], $users[9], $users[15], $users[17]]; // TODO: remove - debug
 
         return $this->render("index/accueil.html.twig", [
             "recentHeroArticles" => $recentHeroArticles,

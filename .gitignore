@@ -30,3 +30,4 @@ yarn-error.log
 /.vscode/
 /rector.php
 /tests/
+public/assets/css/style.css.map

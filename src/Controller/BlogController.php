@@ -16,6 +16,7 @@ use App\Repository\CommentLikeRepository;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +43,7 @@ class BlogController extends AbstractController
      * -- Read : Affiche les articles d'une catégorie (page blog/articles/category.html.twig)
      */
     #[Route("/categorie/{categorySlug}", name:"category.show", requirements: ["categorySlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
-    #[Route("/categorie/parole-libre/{categorySlug}", name:"category.show.paroleLibre", requirements: ["categorySlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
+    #[Route("/categorie/parole-libre/{categorySlug}", name:"category.show.paroleLibre", methods: ["GET", "POST"])]
     public function categoryPage(Request $request, ArticleRepository $articleRepository, CategoryRepository $categoryRepository, string $categorySlug): Response
     {
         $currentRoute = $request->attributes->get('_route');
@@ -61,6 +62,7 @@ class BlogController extends AbstractController
 
             if($categorySlug !== "articles") {
                 $category = $categoryRepository->findOneBy(["categorySlug" => $categorySlug]);
+                $category ?: $category = $categoryRepository->findOneBy(["categorySlug" => "parole-libre"]);
                 $id = $category->getId();
     
                 $heroArticles = $articleRepository->findArticlesByCategory(3, $id, true);
@@ -219,11 +221,8 @@ class BlogController extends AbstractController
      * -- Create : Ajout d'un article.
      */
     #[Route("/auteur/ajouter", name: "article.add", methods: ["GET", "POST"])]
-    #[IsGranted("ROLE_WRITER")]
-    public function newParoleLibre(Request $request, ArticleRepository $articleRepository): Response
+    public function newParoleLibre(Request $request, Article $article, ArticleRepository $articleRepository, EntityManagerInterface $em): Response
     {
-        $article = new Article();
-
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
@@ -248,7 +247,7 @@ class BlogController extends AbstractController
                     . $extension)
                 ;
 
-                $file->move($this->getParameter("upload_directory"), $newFileName);
+                $file->move($this->getParameter("upload_directory_images_articles"), $newFileName);
                 $article->setImage($newFileName);
             } else {
                 $article->setImage("000-default_article_image.jpg");
@@ -256,15 +255,16 @@ class BlogController extends AbstractController
 
             $articleRepository->save($article, true);
             $this->addFlash("success", "Article ajouté avec succès.");
-
+            
             return $this->redirectToRoute("article.show", [
                 "categorySlug" => $article->getCategory()->getCategorySlug(), 
                 "titleSlug" => $article->getTitleSlug(),
                 "id" => $article->getId(),
             ]);
-        }
 
-        $this->addFlash("error", "L'article n'a pu être ajouté");
+        } elseif($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash("error", "L'article n'a pu être ajouté car le contenu n'est pas valide.");
+        }
 
         return $this->render("blog/articles/newArticle.html.twig", [
             "form" => $form,
@@ -308,12 +308,12 @@ class BlogController extends AbstractController
             
             if($form->isSubmitted() && $form->isValid()) {
                 
-                $file = $form->getData()->getImage();
                 $oldImage = $article->getImage();
+                $file = $form->get("image")->getData();
                 $date = new DateTime();
                 $formatedDate = $date->format("U"); // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)
 
-                if(empty($file) || $file !== $oldImage) { 
+                if(empty($file) || $file->getClientOriginalName() !== $oldImage) { 
                     $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     $extension = $file->guessExtension();
                     $newFileName = 
@@ -326,7 +326,8 @@ class BlogController extends AbstractController
                         . $extension)
                     ;
                     
-                    $file->move($this->getParameter("upload_directory"), $newFileName);
+                    $file->move($this->getParameter("upload_directory_images_articles"), $newFileName);
+                    $fileSystem->remove($params->get("upload_directory_images_articles") . "/" . $oldImage);
                     $fileSystem->remove($params->get("upload_directory") . "/" . $oldImage);
                     $article->setImage($newFileName);
                 } 

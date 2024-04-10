@@ -38,12 +38,12 @@
 									<div class="carrousel-article-image">
 										{% if heroArticle.cName != "Parole Libre" %}
 											<a href="{{path("article.show", {"categorySlug": heroArticle.cSlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">
-												<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+												<img src="{{ asset("upload_directory/images/articles/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
 												<span>{{heroArticle.imageCaption}}</span>
 											</a>
 										{% else %}
 											<a href="{{path("article.show.paroleLibre", {"categorySlug": heroArticle.cSlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}">
-												<img src="{{ asset("upload_directory/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+												<img src="{{ asset("upload_directory/images/articles/" ~ heroArticle.image) }}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
 												<span>{{heroArticle.imageCaption}}</span>
 											</a>
 										{% endif %}
@@ -144,7 +144,7 @@
 						{% endif %}
 
 							<div class="wrapper-category-image">
-								<img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
+								<img src="{{asset("upload_directory/images/articles/" ~ article.image)}}" alt="{{article.imageCaption}}">
 							</div>
 
 							<div class="wrapper-category-content">

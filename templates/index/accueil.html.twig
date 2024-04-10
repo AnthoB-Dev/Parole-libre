@@ -15,7 +15,6 @@
                 <a href="{{impersonation_path(switch.email)}}" style="color: #000"><i class="fa-solid fa-bug"></i> {{switch.roles[0]}}</a>
             </li>  
             {% endfor %}
-            <a href="{{path("accueil")}}?_switch_user=_exit"><i class="fa-solid fa-bug-slash"></i></a>
         </ul>
     {% endif %} 
 
@@ -41,7 +40,7 @@
 
                                 <div class="carrousel-article-image">
                                     <a href="{{path("article.show", {"categorySlug": heroArticle.cSlug, "titleSlug": heroArticle.titleSlug, "id": heroArticle.id} )}}"> 
-                                        <img src="{{asset("upload_directory/" ~ heroArticle.image)}}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
+                                        <img src="{{asset("upload_directory/images/articles/" ~ heroArticle.image)}}" alt="Image de présentation de l'article '{{heroArticle.title}}'">
                                         <span>{{heroArticle.imageCaption}}</span>
                                     </a>
                                 </div>
@@ -126,7 +125,7 @@
                     <article class="categories-content-authors-cards">
 
                         <div class="authors-card-image">
-                            <img src="{{asset("upload_directory/default_user.jpg")}}" alt="">
+                            <img src="{{asset("upload_directory/images/profiles/" ~ "default_user.jpg")}}" alt="">
                         </div>
                         <div class="authors-card-name">
                             <h4>Prénom Nom</h4>
@@ -143,7 +142,7 @@
                     <article class="categories-content-authors-cards">
 
                         <div class="authors-card-image">
-                            <img src="{{asset("upload_directory/default_user.jpg")}}" alt="">
+                            <img src="{{asset("upload_directory/images/profiles/" ~ "default_user.jpg")}}" alt="">
                         </div>
                         <div class="authors-card-name">
                             <h4>Prénom Nom</h4>
@@ -160,7 +159,7 @@
                     <article class="categories-content-authors-cards">
 
                         <div class="authors-card-image">
-                            <img src="{{asset("upload_directory/default_user.jpg")}}" alt="">
+                            <img src="{{asset("upload_directory/images/profiles/" ~ "default_user.jpg")}}" alt="">
                         </div>
                         <div class="authors-card-name">
                             <h4>Prénom Nom</h4>
@@ -177,7 +176,7 @@
                     <article class="categories-content-authors-cards">
 
                         <div class="authors-card-image">
-                            <img src="{{asset("upload_directory/default_user.jpg")}}" alt="">
+                            <img src="{{asset("upload_directory/images/profiles/" ~ "default_user.jpg")}}" alt="">
                         </div>
                         <div class="authors-card-name">
                             <h4>Prénom Nom</h4>
@@ -223,7 +222,7 @@
                                         <article class="body-categories-cards-container">
                                             <div class="container-card-image">
                                                 <a href="{{path("article.show", {"categorySlug": article.cSlug, "id": article.id, "titleSlug": article.titleSlug} )}}"> 
-                                                    <img src="{{asset("upload_directory/" ~ article.image)}}" alt="{{article.imageCaption}}">
+                                                    <img src="{{asset("upload_directory/images/articles/" ~ article.image)}}" alt="{{article.imageCaption}}">
                                                 </a>
                                             </div>
                                             <div class="container-card-title">

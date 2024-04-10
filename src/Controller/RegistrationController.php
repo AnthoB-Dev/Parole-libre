@@ -36,8 +36,10 @@ class RegistrationController extends AbstractController
             
             if($form->get('isWriter')->getData() == true) {
                 $user->setRoles(["ROLE_WRITER"]);
+                $user->setIsAuthor(true);
             } else {
                 $user->setRoles(["ROLE_USER"]);
+                $user->setIsAuthor(false);
             }
             $user->setIsBanned(false);
 
