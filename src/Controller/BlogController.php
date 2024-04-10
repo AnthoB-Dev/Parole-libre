@@ -160,16 +160,16 @@ class BlogController extends AbstractController
             }
         }
         
-        $articleComments = $articleCommentRepository->findComments($article->getId());
-        $articleCategory = $article->getCategory()->getName();
+        $articleComments = $articleCommentRepository->findBy(["article" => $article->getId()]);
+        $category = $article->getCategory();
         $updateForms = [];
         
         $comment = new ArticleComment();
         $date = new DateTimeImmutable("now", new DateTimeZone("Europe/Paris"));
-        
+
         $commentForm = $this->createForm(ArticleCommentType::class, $comment);
         $commentForm->handleRequest($request);
-
+        
         if($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setCreatedAt($date);
             $comment->setUser($security->getUser());
@@ -182,34 +182,36 @@ class BlogController extends AbstractController
                 "id" => $id, 
             ]);
         }
+        
+        foreach($articleComments as $articleComment) {
+            
+            $updateForm = $this->createForm(ArticleCommentType::class, $comment, [
+                'action' => $this->generateUrl('comment.update', [
+                    "categorySlug" => $categorySlug,
+                    "id" => $article->getId(),
+                    "titleSlug" => $titleSlug, 
+                    "commentId" => $articleComment->getId(),
+                ]),
+                'method' => 'POST',
+            ]);
 
-        // foreach($articleComments as $articleComment) {
-        //     $updateForm = $this->createForm(ArticleCommentType::class, $articleComment, [
-        //         'action' => $this->generateUrl('comment.update', [
-        //             "categorySlug" => $categorySlug,
-        //             "id" => $articleComment["aId"],
-        //             "titleSlug" => $titleSlug, 
-        //             "commentId" => $articleComment["cId"],
-        //         ]),
-        //         'method' => 'POST',
-        //     ]);
-        //     $updateForm->handleRequest($request);
-        //     $updateForms[$articleComment["aId"]] = $updateForm->createView();
+            $updateForm->handleRequest($request);
+            $updateForms[$articleComment->getId()] = $updateForm->createView();
     
-        //     if($updateForm->isSubmitted() && $updateForm->isValid()) {
-        //         $articleCommentRepository->save($articleComment, true);
-        //         $this->addFlash('succcess', 'Commentaire mis à jour');
-        //         return $this->redirectToRoute('article.show', [
-        //             "categorySlug" => $categorySlug, 
-        //             "titleSlug" => $article->getCategory()->getCategorySlug(),
-        //             "id" => $id,
-        //         ]);
-        //     }
-        // }
+            if($updateForm->isSubmitted() && $updateForm->isValid()) {
+                $articleCommentRepository->save($articleComment, true);
+                $this->addFlash('succcess', 'Commentaire mis à jour');
+                return $this->redirectToRoute('article.show', [
+                    "categorySlug" => $categorySlug, 
+                    "titleSlug" => $article->getCategory()->getCategorySlug(),
+                    "id" => $id,
+                ]);
+            }
+        }
 
         return $this->render("blog/articles/article.html.twig", [
             "article" => $article,
-            "category" => $articleCategory,
+            "category" => $category,
             "articleComments" => $articleComments,
             "commentForm" => $commentForm,
             'updateForms' => $updateForms,

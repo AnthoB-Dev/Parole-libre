@@ -18,7 +18,7 @@
 
                   <div class="article-header-infos-box" id="article-category">
                      <span id="article-category-span">
-                        {{article.category.name}}
+                        {{category.name}}
                      </span>
                   </div>
                   <div>
@@ -68,11 +68,11 @@
                      {% if app.user %}
                         {% if isArticleLiked(article.id) %}
                            <div id="btnLike" class="info-pop" data-descr="Je n'aime plus">
-                              <a href="{{path("article.like", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-solid fa-thumbs-up"></i></a>
+                              <a href="{{path("article.like", {"categorySlug": category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-solid fa-thumbs-up"></i></a>
                            </div>
                         {% else %}
                            <div id="btnLike" class="info-pop" data-descr="J'aime">
-                              <a href="{{path("article.like", {"categorySlug": article.category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-regular fa-thumbs-up"></i></a>
+                              <a href="{{path("article.like", {"categorySlug": category.categorySlug, "id": article.id, "titleSlug": article.titleSlug})}}"><i class="fa-regular fa-thumbs-up"></i></a>
                            </div>
                         {% endif %}
                      {% else %}
@@ -99,7 +99,7 @@
                      <div class="container-comment">
                         <div class="comment-author">
                            <p>
-                              <span class="spanRed">{{comment.uPseudo}}</span>
+                              <span class="spanRed">{{comment.user.pseudo}}</span>
                               <span class="greyedOut">le</span>
                               {{ comment.createdAt|format_datetime(pattern='d MMMM yyyy', locale='fr_FR') }} 
                               <span class="greyedOut">à</span> {{ comment.createdAt|date('H') }}h{{ comment.createdAt|date('i') }}</span>
@@ -112,22 +112,22 @@
                         </div>
                         <div class="comment-content">
                            <p>{{comment.content}}</p>
-                           {# {% if app.user and app.user.pseudo == comment.uPseudo or app.user and is_granted("ROLE_ADMIN") %}
+                           {% if app.user and app.user.pseudo == comment.user.pseudo or app.user and is_granted("ROLE_ADMIN") %}
                               {{ form_start(updateForms[comment.id], {"attr": {"class": "hidden"}}) }}
                                  {{ form_row(updateForms[comment.id].content) }}
                                  <button type="submit">Modifier</button>
                               {{ form_end(updateForms[comment.id]) }}
-                           {% endif %} #}
+                           {% endif %}
                         </div>
                         <div class="comment-actions">
                            <div class="action-likes">
                               {% if app.user %}
                                  {% if isCommentLiked(comment.id) %}
-                                    <a class="info-pop" data-descr="Je n'aime plus" href="{{path("comment.like", {"categorySlug": comment.cSlug, "id": comment.aId, "titleSlug": comment.aTitleSlug, "commentId": comment.id} )}}#{{comment.id}}">
+                                    <a class="info-pop" data-descr="Je n'aime plus" href="{{path("comment.like", {"categorySlug": category.categorySlug, "id": article.id, "titleSlug": article.titleSlug, "commentId": comment.id} )}}#{{comment.id}}">
                                        <i class="fa-solid fa-thumbs-up"></i>
                                     </a>
                                  {% else %}
-                                    <a class="info-pop" data-descr="J'aime" href="{{path("comment.like", {"categorySlug": comment.cSlug, "id": comment.aId, "titleSlug": comment.aTitleSlug, "commentId": comment.id} )}}#{{comment.id}}">
+                                    <a class="info-pop" data-descr="J'aime" href="{{path("comment.like", {"categorySlug": category.categorySlug, "id": article.id, "titleSlug": article.titleSlug, "commentId": comment.id} )}}#{{comment.id}}">
                                        <i class="fa-regular fa-thumbs-up"></i>
                                     </a>
                                  {% endif %}
@@ -144,7 +144,7 @@
                            </div>
                            <div class="action-icons">
                               {% if app.user and is_granted("ROLE_USER") %}
-                                 {% if comment.uId == app.user.id or is_granted("ROLE_ADMIN") %}
+                                 {% if comment.user.id == app.user.id or is_granted("ROLE_ADMIN") %}
                                     <i class="fas fa-pencil-alt editIcon"></i>
                                     <i class="fas fa-undo cancelIcon hidden"></i>
                                  {% endif %}
@@ -157,7 +157,7 @@
                               {% endif %}
 
                               {% if app.user and is_granted("ROLE_ADMIN") %}
-                                 <form action="{{ path("comment.delete", {"categorySlug": comment.cSlug, "id": comment.aId, "titleSlug": comment.aTitleSlug, "commentId": comment.id}) }}" method="post" class="comment_delete_form">
+                                 <form action="{{ path("comment.delete", {"categorySlug": category.categorySlug, "id": article.id, "titleSlug": article.titleSlug, "commentId": comment.id}) }}" method="post" class="comment_delete_form">
                                     <button type="submit" name="_method" value="DELETE">
                                        <i class="fa-solid fa-trash-can"></i>
                                     </button>
