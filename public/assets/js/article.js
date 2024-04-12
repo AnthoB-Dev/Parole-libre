@@ -3,6 +3,7 @@
    const articleCategorySpan = document.querySelector("#article-category-span");
    const articleTitle = document.querySelector(".article-header-title");
    const editIcons = document.querySelectorAll(".editIcon");
+   const undoIcons = document.querySelectorAll(".cancelIcon");
    const formsOfSuppr = document.querySelectorAll(".comment_delete_form");
 
    const clrPolitique = "#FF4E00";
@@ -108,24 +109,19 @@
 
       if (parent) {
          const commentContent = parent.querySelector(".comment-content");
+         const textArea = commentContent.querySelector("#article_comment_content");
+         textArea.innerText = commentContent.querySelector("p").textContent;
          const commentActions = parent.querySelector(".comment-actions");
          const icons = commentActions.querySelector(".action-icons");
          const iconPencil = icons.querySelector(".editIcon");
          const iconUndo = icons.querySelector(".cancelIcon");
          const form = commentContent.querySelector("form");
          const paragraph = commentContent.querySelector("p");
-
-         if (commentContent.firstElementChild) {
-            if (!paragraph.classList.contains("hidden")) {
-               form.classList.toggle("hidden");
-               paragraph.classList.toggle("hidden");
-               iconPencil.classList.toggle("hidden");
-               iconUndo.classList.toggle("hidden");
-               iconUndo.addEventListener("click", () =>
-                  toggleCommentEditForm(editIcon)
-               );
-            }
-         }
+         
+         form.classList.toggle("hidden");
+         paragraph.classList.toggle("hidden");
+         iconPencil.classList.toggle("hidden");
+         iconUndo.classList.toggle("hidden");
       }
    };
 
@@ -165,10 +161,21 @@
    /**
     * Si la variable editIcons n'est pas null, qu'il y a donc des bouton de modifications présent sur la page, ajoute un eventListener sur chacun d'eux et lance la fonction toggleCommentEditForm
     */
-   if (editIcons) {
+   if(editIcons) {
       editIcons.forEach((editIcon) => {
          editIcon.addEventListener("click", () => {
             toggleCommentEditForm(editIcon);
+         });
+      });
+   }
+
+   /**
+    * Si la variable undoIcons n'est pas null, qu'il y a donc des bouton de retour présent sur la page, ajoute un eventListener sur chacun d'eux et lance la fonction toggleCommentEditForm
+    */
+   if(undoIcons) {
+      undoIcons.forEach((undoIcon) => {
+         undoIcon.addEventListener("click", () => {
+            toggleCommentEditForm(undoIcon);
          });
       });
    }
