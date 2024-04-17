@@ -13,6 +13,7 @@ use App\Repository\ArticleLikeRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentLikeRepository;
+use App\Security\Voter\ArticleVoter;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -160,7 +161,7 @@ class BlogController extends AbstractController
             }
         }
         
-        $articleComments = $articleCommentRepository->findBy(["article" => $article->getId()]);
+        $articleComments = $articleCommentRepository->findBy(["article" => $article->getId()], ["createdAt" => "DESC"]);
         $category = $article->getCategory();
         $updateForms = [];
         
@@ -278,85 +279,76 @@ class BlogController extends AbstractController
      * -- Update : Modification d'un article posté.
      */
     #[Route("/auteur/modifier/{titleSlug}-{id}", name:"article.edit", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["GET", "POST"])]
-    #[IsGranted("ROLE_WRITER")]
-    public function editParoleLibre(Request $request, Security $security, ParameterBagInterface $params, Filesystem $fileSystem, Article $article, ArticleRepository $articleRepository, int $id, string $titleSlug): Response
+    #[IsGranted(ArticleVoter::EDIT, subject: "article")]
+    public function editParoleLibre(Request $request, ParameterBagInterface $params, Filesystem $fileSystem, Article $article, ArticleRepository $articleRepository, int $id, string $titleSlug): Response
     {
-        if($security->getUser() === $article->getUser() || $security->isGranted("ROLE_ADMIN")) {
-            $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
-            $articleByRouteId = $articleRepository->findOneBy(["id" => $id]) ?: null;
-    
-            // Définition de la variable $article selon si le titleSlug ou l'id fourni dans l'url correspond bien à un article existant
-            // Dans le cas où il n'y aurait pas de correspondance et que ni le slug ni l'id n'est un article valide, redireciton vers accueil
-            if (isset($articleByRouteSlug)) {
-                $article = $articleByRouteSlug;
-            } elseif (isset($articleByRouteId)) {
-                $article = $articleByRouteId;
-            } elseif (!isset($articleByRouteSlug) && !isset($articleByRouteId)) {
-                return $this->redirectToRoute("accueil");
-            }
-    
-            // Vérification de l'url pour déterminer si le slug et l'id correspondent bien au même article
-            // Si ce n'est pas le cas je redirige une nouvelle fois vers l'article en reparametrant les slugs et l'id de la route de l'article (qui est forcément défini à ce stade grâce aux conditions précedente)
-            if ($articleByRouteId !== $articleByRouteSlug) {
-    
-                return $this->redirectToRoute("article.edit", [
-                    "titleSlug" => $article->getTitleSlug(),
-                    "id" => $article->getId(),
-                ]);
-            }
-            
-            $form = $this->createForm(ArticleType::class, $article);
-            $form->handleRequest($request);
-            
-            if($form->isSubmitted() && $form->isValid()) {
-                
-                $oldImage = $article->getImage();
-                $file = $form->get("image")->getData();
-                $date = new DateTime();
-                $formatedDate = $date->format("U"); // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)
+        $articleByRouteSlug = $articleRepository->findOneBy(["titleSlug" => $titleSlug]) ?: null;
+        $articleByRouteId = $articleRepository->findOneBy(["id" => $id]) ?: null;
 
-                if(empty($file) || $file->getClientOriginalName() !== $oldImage) { 
-                    $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    $extension = $file->guessExtension();
-                    $newFileName = 
-                        $formatedDate 
-                        . "-" 
-                        . strtolower(str_replace([" ", "-"], "_", $fileName) 
-                        . "-" 
-                        . uniqid() 
-                        . "." 
-                        . $extension)
-                    ;
-                    
-                    $file->move($this->getParameter("upload_directory_images_articles"), $newFileName);
-                    $fileSystem->remove($params->get("upload_directory_images_articles") . "/" . $oldImage);
-                    $fileSystem->remove($params->get("upload_directory") . "/" . $oldImage);
-                    $article->setImage($newFileName);
-                } 
-                $this->addFlash("success", "Article modifié avec succès.");
-                
-                $articleRepository->save($article, true);
+        // Définition de la variable $article selon si le titleSlug ou l'id fourni dans l'url correspond bien à un article existant
+        // Dans le cas où il n'y aurait pas de correspondance et que ni le slug ni l'id n'est un article valide, redireciton vers accueil
+        if (isset($articleByRouteSlug)) {
+            $article = $articleByRouteSlug;
+        } elseif (isset($articleByRouteId)) {
+            $article = $articleByRouteId;
+        } elseif (!isset($articleByRouteSlug) && !isset($articleByRouteId)) {
+            return $this->redirectToRoute("accueil");
+        }
 
-                return $this->redirectToRoute("article.show.paroleLibre", [
-                    "categorySlug" => $article->getCategory()->getCategorySlug(),
-                    "titleSlug" => $article->getTitleSlug(),
-                    "id" => $article->getId(),
-                ]);
-            }
-    
-            return $this->render("blog/articles/editArticle.html.twig", [
-                "form" => $form,
-                "articleTitle" => $article->getTitle(),
-                "articleImage" => $article->getImage(),
-                "article" => $article,
+        // Vérification de l'url pour déterminer si le slug et l'id correspondent bien au même article
+        // Si ce n'est pas le cas je redirige une nouvelle fois vers l'article en reparametrant les slugs et l'id de la route de l'article (qui est forcément défini à ce stade grâce aux conditions précedente)
+        if ($articleByRouteId !== $articleByRouteSlug) {
+
+            return $this->redirectToRoute("article.edit", [
+                "titleSlug" => $article->getTitleSlug(),
+                "id" => $article->getId(),
+            ]);
+        }
+        
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()) {
+            
+            $oldImage = $article->getImage();
+            $file = $form->get("image")->getData();
+            $date = new DateTime();
+            $formatedDate = $date->format("U"); // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)
+
+            if(empty($file) || $file->getClientOriginalName() !== $oldImage) { 
+                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->guessExtension();
+                $newFileName = 
+                    $formatedDate 
+                    . "-" 
+                    . strtolower(str_replace([" ", "-"], "_", $fileName) 
+                    . "-" 
+                    . uniqid() 
+                    . "." 
+                    . $extension)
+                ;
+                
+                $file->move($this->getParameter("upload_directory_images_articles"), $newFileName);
+                $fileSystem->remove($params->get("upload_directory_images_articles") . "/" . $oldImage);
+                $fileSystem->remove($params->get("upload_directory") . "/" . $oldImage);
+                $article->setImage($newFileName);
+            } 
+            $this->addFlash("success", "Article modifié avec succès.");
+            
+            $articleRepository->save($article, true);
+
+            return $this->redirectToRoute("article.show.paroleLibre", [
+                "categorySlug" => $article->getCategory()->getCategorySlug(),
+                "titleSlug" => $article->getTitleSlug(),
+                "id" => $article->getId(),
             ]);
         }
 
-        $this->addFlash("error", "Vous ne pouvez pas modifé cet article car vous n'en n'êtes pas l'auteur.");
-        return $this->redirectToRoute("article.show", [
-            "categorySlug" => $article->getCategory()->getCategorySlug(),
-            "titleSlug" => $article->getTitleSlug(),
-            "id" => $article->getId(),
+        return $this->render("blog/articles/editArticle.html.twig", [
+            "form" => $form,
+            "articleTitle" => $article->getTitle(),
+            "articleImage" => $article->getImage(),
+            "article" => $article,
         ]);
     }
 
@@ -434,15 +426,12 @@ class BlogController extends AbstractController
      * -- Delete : Suppression d'un commentaire.
      */
     #[Route("/categorie/{categorySlug}/{titleSlug}-{id}/{commentId}/delete", name:"comment.delete", requirements: ["id" => "\d+", "titleSlug" => "[a-z0-9-]+"], methods: ["DELETE"])]
-    public function delComment(Security $security, ArticleCommentRepository $articleCommentRepository, int $id, int $commentId, string $categorySlug, string $titleSlug): RedirectResponse
+    public function delComment(ArticleCommentRepository $articleCommentRepository, int $id, int $commentId, string $categorySlug, string $titleSlug): RedirectResponse
     {
         $comment = $articleCommentRepository->findOneBy(["id" => $commentId]);
-        if($security->getUser() == $comment->getUser() || $security->isGranted("ROLE_ADMIN")) {
-            $comment = $articleCommentRepository->remove($comment, true);
-            $this->addFlash("success", "Le commentaire a été supprimé.");
-        } else {
-            $this->addFlash("error", "Le commentaire n'a pas été supprimé car vous n'êtes pas son auteur.");
-        }
+        // $this->denyAccessUnlessGranted(CommentVoter::DELETE, $comment);
+        $comment = $articleCommentRepository->remove($comment, true);
+        $this->addFlash("success", "Le commentaire a été supprimé.");
 
         return $this->redirectToRoute("article.show", [
             "categorySlug" => $categorySlug, 
