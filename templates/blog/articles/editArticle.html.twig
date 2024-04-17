@@ -45,7 +45,7 @@
                               {{ form_widget(form.image, {"attr": {"required": false}}) }}
                            </label>
                         </div>
-                        <img class="image-swap" id="image" src="{{asset("upload_directory/" ~ articleImage)}}" alt="">
+                        <img class="image-swap" id="image" src="{{asset("upload_directory/images/articles/" ~ articleImage)}}" alt="">
                         {{form_row(form.imageCaption)}}
                      </div>
 
